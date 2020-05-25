@@ -1,9 +1,14 @@
 import React from 'react';
-import {StyleSheet, Platform, View, Text, StatusBar} from 'react-native';
+import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
 
+import Header from '../../components/Header';
 class HomeScreen extends React.Component {
   render() {
-    return <View style={styles.container}></View>;
+    return (
+      <View style={styles.container}>
+        <Header />
+      </View>
+    );
   }
 }
 

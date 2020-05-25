@@ -1,0 +1,9 @@
+export const icBurger = require('./icBurger.png');
+export const icChat = require('./icChat.png');
+export const icLogo = require('./icLogo.png');
+export const icMain = require('./icMain.png');
+export const icMenu = require('./icMenu.png');
+export const icMoney = require('./icMoney.png');
+export const icRight = require('./icRight.png');
+export const icStore = require('./icStore.png');
+export const icUser = require('./icUser.png');

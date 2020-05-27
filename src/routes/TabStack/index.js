@@ -25,7 +25,6 @@ export default createAppContainer(
         tabBarOptions: {
           showLabel: false,
         },
-
         tabBarIcon: ({focused, horizontal, tintColor}) => {
           const {routeName} = navigation.state;
 
@@ -56,7 +55,7 @@ export default createAppContainer(
               source={iconName}
               style={[
                 styles.icon,
-                {tintColor: focused ? '#000000' : '#E0E2EF'},
+                {tintColor: focused ? '#000000' : '#B7B6BB'},
               ]}
             />
           );

@@ -7,3 +7,16 @@ export const icMoney = require('./icMoney.png');
 export const icRight = require('./icRight.png');
 export const icStore = require('./icStore.png');
 export const icUser = require('./icUser.png');
+
+export const img1 = require('./img1.png');
+export const img2 = require('./img2.png');
+export const img3 = require('./img3.png');
+export const layer1 = require('./layer1.png');
+
+export const icAdd = require('./icAdd.png');
+export const icLeft = require('./icLeft.png');
+export const icRemove = require('./icRemove.png');
+
+export const icTop = require('./icTop.png');
+
+export const icFilter = require('./icFilter.png');

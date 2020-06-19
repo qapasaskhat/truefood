@@ -32,8 +32,8 @@ class TopList extends React.Component {
           style={{backgroundColor: 'white'}}
           imageStyle={{width: '100%'}}>
           <View style={{width: 10, height: 10}} />
-          {[{}, {}, {}].map((item, index) => (
-            <TopCard />
+          {[1, 2, 3].map((item, index) => (
+            <TopCard item={item} />
           ))}
         </ScrollView>
         <Button />

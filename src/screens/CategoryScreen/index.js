@@ -4,15 +4,14 @@ import {
   Image,
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
-  ImageBackground,
   Dimensions,
 } from 'react-native';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
 import FilterButton from '../../components/FilterButton';
-import {layer1, icTop, icFilter} from '../../assets';
+import Background from '../../components/Background';
+import {icTop} from '../../assets';
 import {PopularCard} from '../../components/Card';
 const {width, height} = Dimensions.get('window');
 
@@ -29,6 +28,11 @@ class CategoryScreen extends React.Component {
   state = {
     page: 1,
   };
+  componentDidMount() {
+    this.props.navigation.setParams({
+      openDrawer: () => this.props.navigation.openDrawer(),
+    });
+  }
   render() {
     const {navigation} = this.props;
     const {page} = this.state;
@@ -36,44 +40,39 @@ class CategoryScreen extends React.Component {
       <View style={styles.container}>
         <Header />
         <ButtonUser />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{flex: 1}}
-          bounces={false}
-          contentContainerStyle={{paddingBottom: 0}}>
-          <ImageBackground
-            style={styles.imaContainer}
-            imageStyle={styles.imgStyle}
-            source={layer1}>
-            <View style={{flex: 1, padding: 12.5}}>
-              <Text style={styles.title}>Горячие блюда</Text>
-              <View style={styles.view}>
-                {['по популярности', 'по цене'].map((item) => (
-                  <Tag item={item} />
-                ))}
-              </View>
-              <FilterButton />
-              <View style={{marginTop: 10}}>
-                {[{}, {}, {}, {}, {}].map((item) => (
-                  <PopularCard navigation={navigation} />
-                ))}
-              </View>
-              <View style={styles.pagination}>
-                {[1, 2, 3, 4].map((item) => (
-                  <TouchableOpacity onPress={() => this.setState({page: item})}>
-                    <Text
-                      style={{
-                        color: page === item ? '#FE1935' : '#08050B',
-                        fontFamily: 'OpenSans-SemiBold',
-                      }}>
-                      {item}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+        <Background>
+          <View style={{flex: 1, padding: 12.5}}>
+            <Text style={styles.title}>Горячие блюда</Text>
+            <View style={styles.view}>
+              {['по популярности', 'по цене'].map((item) => (
+                <Tag item={item} />
+              ))}
             </View>
-          </ImageBackground>
-        </ScrollView>
+            <FilterButton />
+            <View style={{marginTop: 10}}>
+              {[{}, {}, {}, {}, {}].map((item, index) => (
+                <PopularCard
+                  navigation={navigation}
+                  coinVisible={true}
+                  key={index}
+                />
+              ))}
+            </View>
+            <View style={styles.pagination}>
+              {[1, 2, 3, 4].map((item) => (
+                <TouchableOpacity onPress={() => this.setState({page: item})}>
+                  <Text
+                    style={{
+                      color: page === item ? '#FE1935' : '#08050B',
+                      fontFamily: 'OpenSans-SemiBold',
+                    }}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </Background>
       </View>
     );
   }

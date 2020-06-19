@@ -22,7 +22,7 @@ const Button = () => {
 
 class PopularList extends React.Component {
   render() {
-    const {navigation} = this.props;
+    const {navigation, dispatch} = this.props;
     return (
       <View>
         <ImageBackground
@@ -32,8 +32,13 @@ class PopularList extends React.Component {
           source={layer1}>
           <View style={{padding: 10}}>
             <Text style={styles.title}>Популярные блюда</Text>
-            {[{}, {}, {}].map((item, index) => (
-              <PopularCard key={index} navigation={navigation} />
+            {[1, 2, 3].map((item, index) => (
+              <PopularCard
+                dispatch={dispatch}
+                key={item}
+                navigation={navigation}
+                coinVisible={false}
+              />
             ))}
             <Button />
           </View>

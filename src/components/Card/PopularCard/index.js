@@ -4,7 +4,7 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key, navigation} = this.props;
+    const {key, navigation, coinVisible} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen')}
@@ -14,7 +14,7 @@ class PopularCard extends React.Component {
           style={styles.foodImg}
           source={{
             uri:
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0Ii6AjpDUAE_dWSrsXHh5GJTWmialB8kMJ5P7qwP2M9ByqW4Y&usqp=CAU',
+              'https://alimero.ru/uploads/images/18/76/55/2019/08/05/3e0c56.png',
           }}
         />
         <View style={styles.body}>
@@ -24,21 +24,17 @@ class PopularCard extends React.Component {
           </Text>
           <View style={styles.bottom}>
             <Text style={styles.price}>395 ₸</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={icMoney}
-                style={{width: 15, height: 15, resizeMode: 'contain'}}
-              />
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
-                  marginLeft: 5,
-                }}>
-                170
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.btnView}>
+            {coinVisible && (
+              <View style={styles.horizontal}>
+                <Image source={icMoney} style={styles.icMoney} />
+                <Text style={styles.coinTXT}>170</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              onPress={() =>
+                this.props.dispatch({type: 'ADD_BASKET', payload: {}})
+              }
+              style={styles.btnView}>
               <Text style={styles.btnText}>в корзину</Text>
             </TouchableOpacity>
           </View>
@@ -57,6 +53,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderColor: '#E9E9E9',
   },
+  horizontal: {flexDirection: 'row', alignItems: 'center'},
   title: {
     color: '#08050B',
     fontFamily: 'OpenSans-SemiBold',
@@ -105,6 +102,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'OpenSans-Bold',
     fontSize: 12,
+  },
+  coinTXT: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 12,
+    marginLeft: 5,
+  },
+  icMoney: {
+    width: 15,
+    height: 15,
+    resizeMode: 'contain',
   },
 });
 

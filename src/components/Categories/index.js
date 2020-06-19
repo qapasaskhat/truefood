@@ -18,8 +18,9 @@ class Categories extends React.Component {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{}}
         style={styles.scroll}>
-        {categories.map((item) => (
+        {categories.map((item, index) => (
           <TouchableOpacity
+            key={index}
             onPress={() => this.props.navigation.navigate('CategoryScreen')}
             style={styles.btn}>
             <View />

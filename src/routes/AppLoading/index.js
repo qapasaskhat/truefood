@@ -10,7 +10,7 @@ class AuthLoading extends Component {
     this.rehydrated = false;
   }
   componentDidMount() {
-    this.props.navigation.navigate('TabStack');
+    this.props.navigation.navigate('AuhtStack');
   }
 
   render() {
@@ -26,12 +26,11 @@ class AuthLoading extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   rehydrated: state._persist.rehydrated,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getCategories: (...args) => dispatch(getCategories(...args)),
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 

@@ -13,12 +13,15 @@ import {icAdd} from '../../../assets';
 class TopCard extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={styles.containerBtn} key={'smallCard'}>
+      <TouchableOpacity
+        key={this.props.item}
+        style={styles.containerBtn}
+        key={'smallCard'}>
         <Image
           style={{width: width / 2, height: 120, borderRadius: 5}}
           source={{
             uri:
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0Ii6AjpDUAE_dWSrsXHh5GJTWmialB8kMJ5P7qwP2M9ByqW4Y&usqp=CAU',
+              'https://cdn.segodnya.ua/i/image_650x434/media/image/5e2/846/8af/5e28468af1aa4.jpg',
           }}
         />
         <View style={{padding: 5, paddingTop: 8}}>

@@ -16,7 +16,11 @@ export const appReducer = (state = initialState.app, action) => {
       return {
         ...state,
       };
-
+    case `ADD_BASKET`:
+      return {
+        ...state,
+        basket: [...state.basket, action.payload],
+      };
     default:
       return state;
   }

@@ -6,7 +6,9 @@ class Button extends React.Component {
     const {styleBtn, styleText} = this.props;
     return (
       <TouchableOpacity style={[styles.btnView, styleBtn && styleBtn]}>
-        <Text style={[styles.btnText, styleText && styleText]}>в корзину</Text>
+        <Text style={[styles.btnText, styleText && styleText]}>
+          {this.props.title}
+        </Text>
       </TouchableOpacity>
     );
   }

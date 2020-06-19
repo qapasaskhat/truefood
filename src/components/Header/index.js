@@ -8,24 +8,75 @@ import {
   Dimensions,
 } from 'react-native';
 
-import {icBurger, icLogo, icChat} from '../../assets/index';
+import {
+  icBurger,
+  icLogo,
+  icChat,
+  icMoney,
+  icProfile,
+  icClose,
+} from '../../assets/index';
 
 class Header extends React.Component {
   render() {
-    return (
-      <View key={'header'} style={styles.container}>
-        <TouchableOpacity>
-          <Image source={icBurger} style={styles.icBurger} />
-        </TouchableOpacity>
-        <Image source={icLogo} style={styles.icLogo} />
-        <TouchableOpacity>
-          <View style={styles.number}>
-            <Text style={styles.txtNumber}>3</Text>
+    const {openDrawer, type, onPressUser} = this.props;
+    if (type === 'profile') {
+      return (
+        <View style={styles.profileContainer}>
+          <View>
+            <Text style={styles.textProfile}>Профиль</Text>
           </View>
-          <Image source={icChat} style={styles.icChat} />
-        </TouchableOpacity>
-      </View>
-    );
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={[styles.horizontal, {marginRight: 30}]}>
+              <Image source={icMoney} style={styles.icMoney} />
+              <Text style={styles.countText}>140</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => onPressUser()}
+              style={styles.profileBtn}>
+              <Image
+                source={icProfile}
+                style={{width: 18, height: 18, resizeMode: 'contain'}}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else if (type === 'close') {
+      return (
+        <View style={styles.profileContainer}>
+          <View>
+            <Text style={styles.textProfile}>{this.props.title}</Text>
+          </View>
+          <TouchableOpacity>
+            <Image
+              source={icClose}
+              style={{
+                width: 18,
+                height: 18,
+                resizeMode: 'contain',
+                tintColor: 'black',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View key={'header'} style={styles.container}>
+          <TouchableOpacity onPress={() => openDrawer()}>
+            <Image source={icBurger} style={styles.icBurger} />
+          </TouchableOpacity>
+          <Image source={icLogo} style={styles.icLogo} />
+          <TouchableOpacity>
+            <View style={styles.number}>
+              <Text style={styles.txtNumber}>3</Text>
+            </View>
+            <Image source={icChat} style={styles.icChat} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
   }
 }
 
@@ -66,6 +117,52 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   icChat: {width: 36, height: 28, resizeMode: 'contain'},
+  horizontal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  countText: {
+    fontSize: 14,
+    fontFamily: 'OpenSans-SemiBold',
+  },
+  icMoney: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    marginRight: 5,
+  },
+  profileContainer: {
+    zIndex: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+    backgroundColor: 'white',
+    padding: 10,
+  },
+  textProfile: {fontFamily: 'OpenSans-SemiBold', fontSize: 16},
+  profileBtn: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 50,
+  },
 });
 
 export default Header;

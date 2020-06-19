@@ -1,12 +1,13 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
-import {BasketScreen} from '../../screens';
+import {BasketScreen, DeliveryScreen} from '../../screens';
 
 const StoreStack = createAppContainer(
   createStackNavigator(
     {
       BasketScreen,
+      DeliveryScreen,
     },
     {
       initialRouteName: 'BasketScreen',

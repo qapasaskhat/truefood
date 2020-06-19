@@ -17,9 +17,9 @@ import TagList from './TagList';
 import Button from '../../components/Button';
 import {icLeft, icMoney, icAdd, icRemove} from '../../assets';
 
-const BackButton = () => {
+const BackButton = ({onBack}) => {
   return (
-    <TouchableOpacity style={styles.btnBack}>
+    <TouchableOpacity onPress={() => onBack()} style={styles.btnBack}>
       <Image source={icLeft} style={styles.icLeft} />
     </TouchableOpacity>
   );
@@ -35,9 +35,15 @@ class CardScreen extends React.Component {
     ],
   };
 
-  _changeSize = i => {
+  componentDidMount() {
+    this.props.navigation.setParams({
+      openDrawer: () => this.props.navigation.openDrawer(),
+    });
+  }
+
+  _changeSize = (i) => {
     let newSize = [...this.state.size];
-    newSize.map(item => {
+    newSize.map((item) => {
       if (item.name === i.name) {
         item.active = true;
       } else {
@@ -47,7 +53,7 @@ class CardScreen extends React.Component {
     this.setState({size: newSize});
   };
 
-  _changeCount = type => {
+  _changeCount = (type) => {
     const {count} = this.state;
     if (type === 'add') {
       this.setState({count: count + 1});
@@ -81,14 +87,15 @@ class CardScreen extends React.Component {
     );
   };
   render() {
+    const {navigation} = this.props;
     return (
       <View style={styles.container}>
-        <Header />
+        <Header openDrawer={() => navigation.openDrawer()} />
         <ButtonUser />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
-          <BackButton />
+          <BackButton onBack={() => navigation.goBack()} />
           <Slider />
           {this._renderBody()}
           <View key={'bottom'} style={{padding: 10}}>

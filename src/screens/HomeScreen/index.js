@@ -15,21 +15,25 @@ import ButtonUser from '../../components/ButtonUser';
 import Categories from '../../components/Categories';
 import PopularList from './PopularList';
 import TopList from './TopList';
+import {connect} from 'react-redux';
 
-const {width, height} = Dimensions.get('window');
-import {icAdd} from '../../assets';
 class HomeScreen extends React.Component {
+  componentDidMount() {
+    this.props.navigation.setParams({
+      openDrawer: () => this.props.navigation.openDrawer(),
+    });
+  }
   render() {
-    const {navigation} = this.props;
+    const {navigation, dispatch} = this.props;
     return (
       <View style={styles.container}>
-        <Header />
+        <Header openDrawer={() => navigation.openDrawer()} />
         <ButtonUser />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
-          <Categories navigation={navigation} />
-          <PopularList navigation={navigation} />
+          <Categories navigation={navigation} dispatch={dispatch} />
+          <PopularList navigation={navigation} dispatch={dispatch} />
           <TopList />
         </ScrollView>
       </View>
@@ -84,4 +88,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = (state) => ({
+  basket: state.appReducer.basket,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

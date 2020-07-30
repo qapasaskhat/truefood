@@ -19,6 +19,7 @@ const Input = ({item}) => (
       placeholder={item.placeholder}
       placeholderTextColor={'#08050B'}
       style={styles.niput}
+      secureTextEntry ={item.password}
     />
   </View>
 );
@@ -39,6 +40,7 @@ class LoginScreen extends React.Component {
         onChangeText: (text) => {
           this.setState({first_name: text});
         },
+        password: false
       },
       {
         title: 'Введите email',
@@ -47,6 +49,7 @@ class LoginScreen extends React.Component {
         onChangeText: (text) => {
           this.setState({email: text});
         },
+        password: false
       },
       {
         title: 'Введите пароль',
@@ -55,6 +58,7 @@ class LoginScreen extends React.Component {
         onChangeText: (text) => {
           this.setState({password: text});
         },
+        password: true
       },
     ];
     return (
@@ -81,7 +85,7 @@ class LoginScreen extends React.Component {
           {this.list.map((item) => (
             <Input item={item} />
           ))}
-          <Button title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
+          <Button onPress={()=>{this.props.navigation.navigate('TabStack')}} title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text

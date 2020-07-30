@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 
 class AuthLoading extends Component {
@@ -21,7 +21,9 @@ class AuthLoading extends Component {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-        }}></View>
+        }}>
+          <ActivityIndicator />
+        </View>
     );
   }
 }

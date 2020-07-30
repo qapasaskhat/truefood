@@ -51,6 +51,10 @@ const categories = [
     name: 'Сэндвич',
     url: img1,
   },
+  {
+    name: 'KFC',
+    url: img3
+  }
 ];
 
 const styles = StyleSheet.create({

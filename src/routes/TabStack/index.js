@@ -42,7 +42,11 @@ const AppContainer = createAppContainer(
             )
               defaultHandler();
             else {
-              navigation.dispatch(NavigationActions.back());
+              if (nextRoute === prevRoute) {
+                defaultHandler();
+              } else {
+                navigation.dispatch(NavigationActions.back());
+              }
             }
           } else {
             if (nextRoute.key === 'MenuStack') {

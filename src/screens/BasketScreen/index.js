@@ -5,6 +5,7 @@ import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
 
 import BasketCard from '../../components/BasketCard';
+import Button from '../../components/Button';
 
 class BasketScreen extends React.Component {
   componentDidMount() {
@@ -21,9 +22,18 @@ class BasketScreen extends React.Component {
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
             <Text style={styles.h1}>Корзина</Text>
-            {[{}, {}, {}].map((item) => (
+            {[{}, {}].map((item) => (
               <BasketCard />
             ))}
+            <Button
+              onPress={() => this.props.navigation.navigate('DeliveryScreen')}
+              title={'Оформить за 2 950 ₸'}
+            />
+            <Button
+              title={'Добавить еще блюда'}
+              styleBtn={styles.styleBtn}
+              styleText={styles.styleText}
+            />
           </View>
         </Background>
       </View>
@@ -36,6 +46,16 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-SemiBold',
     fontSize: 20,
     marginBottom: 20,
+  },
+  styleBtn: {
+    marginTop: 10,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#FE1935',
+  },
+  styleText: {
+    color: '#08050B',
+    fontFamily: 'OpenSans-SemiBold',
   },
 });
 

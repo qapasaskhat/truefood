@@ -15,6 +15,7 @@ import {
   icMoney,
   icProfile,
   icClose,
+  icBack,
 } from '../../assets/index';
 
 class Header extends React.Component {
@@ -40,6 +41,28 @@ class Header extends React.Component {
               />
             </TouchableOpacity>
           </View>
+        </View>
+      );
+    } else if (type === 'back') {
+      return (
+        <View style={[styles.profileContainer, {justifyContent: 'flex-start'}]}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.goBack()}
+            style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View>
+              <Image
+                source={icBack}
+                style={{
+                  width: 18,
+                  height: 18,
+                  resizeMode: 'contain',
+                }}
+              />
+            </View>
+            <View style={{marginLeft: 10}}>
+              <Text style={styles.textProfile}>{this.props.title}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       );
     } else if (type === 'close') {

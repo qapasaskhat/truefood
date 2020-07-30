@@ -154,7 +154,7 @@ class CardScreen extends React.Component {
             </View>
           </View>
 
-          <Button styleBtn={{margin: 10}} />
+          <Button title='Заказать' styleBtn={{margin: 10}} />
         </ScrollView>
       </View>
     );

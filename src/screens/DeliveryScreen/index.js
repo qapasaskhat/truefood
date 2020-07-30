@@ -52,7 +52,7 @@ class DeliveryScreen extends React.Component {
         <View key={'description'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Пожелания ко всему заказу</Text>
           <TextInput
-            placeholder={'Напишите свои пожеланияк заказу'}
+            placeholder={'Напишите свои пожелания к заказу'}
             placeholderTextColor={''}
             style={{height: 150, borderRadius: 20}}
             multiline={true}
@@ -120,7 +120,11 @@ class DeliveryScreen extends React.Component {
             />
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
-          <Button title={'Перейти к оплате'} styleBtn={{margin: 10}} />
+          <Button
+            onPress={() => this.props.navigation.navigate('PayScreen')}
+            title={'Перейти к оплате'}
+            styleBtn={{margin: 10}}
+          />
         </Background>
       </View>
     );

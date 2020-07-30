@@ -32,7 +32,7 @@ class PopularList extends React.Component {
           source={layer1}>
           <View style={{padding: 10}}>
             <Text style={styles.title}>Популярные блюда</Text>
-            {[1, 2, 3].map((item, index) => (
+            {[1, 2, 3,4].map((item, index) => (
               <PopularCard
                 dispatch={dispatch}
                 key={item}

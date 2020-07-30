@@ -30,7 +30,9 @@ class UserScreen extends React.Component {
     return (
       <View style={styles.view}>
         {menu.map((item) => (
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('OrderScreen')}
+            style={styles.btn}>
             <Text style={styles.title}>{item.title}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View style={[styles.horizontal, {marginRight: 30}]}>

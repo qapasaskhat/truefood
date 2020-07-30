@@ -14,7 +14,7 @@ const MyApp = createStackNavigator(
   {
     headerMode: 'none',
     mode: 'card',
-    initialRouteName: 'TabStack',
+    initialRouteName: 'AppLoading',
   },
 );
 

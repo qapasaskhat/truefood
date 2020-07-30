@@ -1,9 +1,18 @@
 import React from 'react';
 import {StyleSheet, Platform, View, Text, StatusBar} from 'react-native';
+import Header from '../../components/Header'
 
 class SettingScreen extends React.Component {
   render() {
-    return <View style={styles.container}></View>;
+    const { navigation } = this.props
+    return (
+    <View style={styles.container}>
+      <Header openDrawer={() => navigation.openDrawer()} />
+      <Text>
+        Setting
+      </Text>
+    </View>
+    )
   }
 }
 

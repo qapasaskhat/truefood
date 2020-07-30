@@ -32,18 +32,22 @@ const list = [
   {
     name: 'Настройки',
     icon: icSettings,
+    routeName: 'SettingScreen'
   },
   {
     name: 'История заказов',
     icon: icList,
+    routeName: 'HistoryOrder'
   },
   {
     name: 'О нас / Контакты',
     icon: icFlag,
+    routeName: 'AboutScreen'
   },
   {
     name: 'Обратная связь или помощь',
     icon: icGroup,
+    routeName: ''
   },
 ];
 
@@ -56,7 +60,12 @@ class CustomComponent extends Component {
         </TouchableOpacity>
         <Image source={icLogo} style={styles.icLogo} />
         {list.map((item) => (
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity 
+            style={styles.btn} 
+            onPress={()=>{
+              this.props.navigation.navigate(item.routeName)
+            }}
+            >
             <Image source={item.icon} style={styles.icon} />
             <Text style={styles.textBtn}>{item.name}</Text>
           </TouchableOpacity>

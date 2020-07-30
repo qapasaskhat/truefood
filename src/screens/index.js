@@ -10,3 +10,6 @@ export {default as HistoryOrder} from './HistoryOrder';
 export {default as Incoming} from './Incoming';
 export {default as LoginScreen} from './LoginScreen';
 export {default as RegisterScreen} from './RegisterScreen';
+export {default as PayScreen} from './PayScreen';
+export {default as OrderScreen} from './OrderScreen';
+export { default as AboutScreen } from './AboutScreen'

@@ -44,3 +44,15 @@ export const icFrame = require('./icFrame.png');
 export const icFrame2 = require('./icFrame2.png');
 
 export const icDown = require('./icDown.png');
+
+export const icGoogle = require('./icGoogle.png');
+
+export const icApple = require('./icApple.png');
+
+export const shtih = require('./shtih.png');
+
+export const icBack = require('./icBack.png');
+
+export const icDinner = require('./icDinner.png');
+
+export const icVilka = require('./icVilka.png');

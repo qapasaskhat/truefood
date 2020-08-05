@@ -7,7 +7,7 @@ class SettingScreen extends React.Component {
     const { navigation } = this.props
     return (
     <View style={styles.container}>
-      <Header openDrawer={() => navigation.openDrawer()} />
+      <Header type='back' goBack={()=>{navigation.goBack()}} />
       <Text>
         Setting
       </Text>

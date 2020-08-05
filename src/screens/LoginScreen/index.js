@@ -31,6 +31,10 @@ class LoginScreen extends React.Component {
     password: '',
   };
 
+  login=()=>{
+    console.log(`login: ${this.state.email}; password: ${this.state.password}`);
+  }
+
   render() {
     this.list = [
       {
@@ -74,9 +78,9 @@ class LoginScreen extends React.Component {
         <Text style={styles.register}>Авторизация</Text>
         <View style={{margin: 20}}>
           {this.list.map((item) => (
-            <Input item={item} />
+            <Input key={`key${item.title}`} item={item} />
           ))}
-          <Button onPress={()=>{}} title={'Войти'} styleBtn={{marginTop: 30}} />
+          <Button onPress={()=>{this.login()}} title={'Войти'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text

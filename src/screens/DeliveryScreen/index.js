@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
 
+
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -9,28 +10,54 @@ import CalendarButton from '../../components/Button/CalendarButton';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import RadioButton from '../../components/RadioButton';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment'
 const options = [
-  {label: 'Доставка', value: true},
-  {label: 'Забрать из True Food', value: false},
+  {label: 'Доставка', value: false},
+  {label: 'Забрать из True Food', value: true},
 ];
+const CalendarView=({active})=>(
+  active?<View style={{
+    position: 'absolute',
+    width:'100%',
+    height: '100%',
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    zIndex: 1111,
+  }}>
+    <View style={{
+      width:'80%',
+      height: '60%',
+      borderRadius: 11,
+    }}>
+    </View>
+  </View>:null
+)
 
 class DeliveryScreen extends React.Component {
   state = {
     type: false,
     number: '87479081898',
     address: [
-      {name: ' Manhattan', active: true},
-      {name: ' Dubai', active: false},
-      {name: ' Boston', active: false},
-      {name: ' Geneva', active: false},
-      {name: ' Tokyo', active: false},
+      {name: ' Manhattan', active: false,id:0},
+      {name: ' Dubai', active: false,id:1},
+      {name: ' Boston', active: false,id:2},
+      {name: ' Geneva', active: false,id:3},
+      {name: ' Tokyo', active: false,id:4},
     ],
+    calendarActive: false,
+    dateOrder: 'Сегодня, в 14:30',
+    date: new Date(Date.now())
   };
 
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    this.setState({
+      dateOrder: `Сегодня, в ${moment(this.state.date)}`
+    })
   }
 
   _renderWith = () => {
@@ -38,7 +65,7 @@ class DeliveryScreen extends React.Component {
       <View style={styles.view}>
         <View key={'calendar'}>
           <Text style={styles.h2}>Заберу заказ в:</Text>
-          <CalendarButton title={'Сегодня, в 14:30'} />
+          <CalendarButton title={this.state.dateOrder} />
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Ваш номер телефона</Text>
@@ -60,19 +87,57 @@ class DeliveryScreen extends React.Component {
         </View>
       </View>
     );
-  };
+  }
 
+  _radioBtn=(id)=>{
+    this.setState({
+      address: [
+        {name: ' Manhattan', active: false,id:0},
+        {name: ' Dubai', active: false,id:1},
+        {name: ' Boston', active: false,id:2},
+        {name: ' Geneva', active: false,id:3},
+        {name: ' Tokyo', active: false,id:4},
+      ],
+    })
+    this.setState(state=>{
+      const address = state.address.map(i=>
+        i.id === id?
+        {...i, active: true}:i);
+        return {address}
+    })
+  }
+
+  onChange=(date)=>{
+    console.log(moment(date.nativeEvent.timestamp).format('lll'));
+    this.setState({
+      date: date.nativeEvent.timestamp,
+      dateOrder: moment(date.nativeEvent.timestamp).format('lll').toString()
+    })
+  }
   _renderWithout = () => {
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
           {this.state.address.map((item) => (
-            <RadioButton item={item} />
+            <RadioButton item={item} radioBtn={()=>{this._radioBtn(item.id)}}/>
           ))}
         </View>
         <View key={'calendar'} style={{paddingTop: 10}}>
           <Text style={styles.h2}>Заберу заказ в:</Text>
-          <CalendarButton title={'Сегодня, в 14:30'} />
+          <CalendarButton onPress={()=>{
+            this.setState({
+              calendarActive: true
+            })
+          }} title={`Сегодня, в ${this.state.date}`} />
+          {this.state.calendarActive?<DateTimePicker
+              testID="dateTimePicker"
+              value={this.state.date}
+              mode={'time'}
+              is24Hour={true}
+              display='default'
+              locale='ru-RU'
+              onChange={(date)=>this.onChange(date)}
+            />:null}
         </View>
         <View key={'cabinet'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Введите номер кабинета</Text>
@@ -102,7 +167,8 @@ class DeliveryScreen extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Header />
+        {/* <CalendarView active={this.state.calendarActive}/> */}
+        <Header openDrawer={()=>this.props.navigation.openDrawer()}/>
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>

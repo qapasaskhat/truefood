@@ -12,9 +12,10 @@ const {width, height} = Dimensions.get('window');
 import {icAdd} from '../../../assets';
 class TopCard extends React.Component {
   render() {
+    const {item,name} = this.props
     return (
       <TouchableOpacity
-        key={this.props.item}
+        key={item}
         style={styles.containerBtn}
         key={'smallCard'}>
         <Image
@@ -25,9 +26,9 @@ class TopCard extends React.Component {
           }}
         />
         <View style={{padding: 5, paddingTop: 8}}>
-          <Text style={styles.foodText}>Салат Цезарь{'\n'}с курицей</Text>
+        <Text style={styles.foodText}>{item.name}</Text>
           <View style={styles.bottom}>
-            <Text style={styles.price}>395 ₸</Text>
+            <Text style={styles.price}>{item.variations && item.variations[0].price} ₸</Text>
             <TouchableOpacity style={styles.btnView}>
               <Image
                 source={icAdd}

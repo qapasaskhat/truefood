@@ -15,7 +15,7 @@ const AppContainer = createAppContainer(
     {
       HomeStack: HomeStack,
       UserStack: UserStack,
-      StoreStack: StoreStack,
+      Store: StoreStack,
       MenuStack: MenuStack,
     },
     {
@@ -68,7 +68,7 @@ const AppContainer = createAppContainer(
               iconName = icUser;
               break;
             }
-            case 'StoreStack': {
+            case 'Store': {
               iconName = icStore;
               break;
             }

@@ -20,7 +20,7 @@ import {
 
 class Header extends React.Component {
   render() {
-    const {openDrawer, type, onPressUser} = this.props;
+    const {openDrawer, type, onPressUser, close, goBack} = this.props;
     if (type === 'profile') {
       return (
         <View style={styles.profileContainer}>
@@ -47,7 +47,7 @@ class Header extends React.Component {
       return (
         <View style={[styles.profileContainer, {justifyContent: 'flex-start'}]}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.goBack()}
+            onPress={goBack}
             style={{flexDirection: 'row', alignItems: 'center'}}>
             <View>
               <Image
@@ -71,7 +71,7 @@ class Header extends React.Component {
           <View>
             <Text style={styles.textProfile}>{this.props.title}</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>close()}>
             <Image
               source={icClose}
               style={{
@@ -93,7 +93,7 @@ class Header extends React.Component {
           <Image source={icLogo} style={styles.icLogo} />
           <TouchableOpacity>
             <View style={styles.number}>
-              <Text style={styles.txtNumber}>3</Text>
+              <Text style={styles.txtNumber}>1</Text>
             </View>
             <Image source={icChat} style={styles.icChat} />
           </TouchableOpacity>
@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
   },
   number: {
     backgroundColor: 'red',
-    width: 15,
-    height: 15,
+    width: 16,
+    height: 16,
     borderRadius: 10,
     position: 'absolute',
     justifyContent: 'center',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   txtNumber: {
     color: 'white',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: 'bold',
   },
   icChat: {width: 36, height: 28, resizeMode: 'contain'},

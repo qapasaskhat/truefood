@@ -7,15 +7,17 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
+  FlatList
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 import {TopCard} from '../../../components/Card';
 import {icRight} from '../../../assets';
-const Button = () => {
+const Button = ({text}) => {
   return (
     <TouchableOpacity style={styles.view}>
-      <Text style={styles.txt}>Смотреть все популярные блюда</Text>
+      <Text style={styles.txt}>{text}</Text>
       <Image source={icRight} resizeMode={'contain'} style={styles.icon} />
     </TouchableOpacity>
   );
@@ -23,20 +25,33 @@ const Button = () => {
 
 class TopList extends React.Component {
   render() {
+    const { items, loading} = this.props;
     return (
       <View key={'top'} style={{backgroundColor: 'white'}}>
         <Text style={styles.title}>Топ блюда недели</Text>
-        <ScrollView
+        {loading? <ActivityIndicator /> :<ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={{backgroundColor: 'white'}}
           imageStyle={{width: '100%'}}>
           <View style={{width: 10, height: 10}} />
-          {[1, 2, 3,4].map((item, index) => (
-            <TopCard item={item} />
-          ))}
-        </ScrollView>
-        <Button />
+          
+          <FlatList 
+          data={items}
+          horizontal
+          ListEmptyComponent={
+            <Text style={{
+              fontSize: 12,
+              fontFamily: 'OpenSans-SemiBold',
+              fontWeight: '100'
+            }}>Пусто</Text>
+          }
+          renderItem={({item})=> {return(
+            <TopCard key={`${item}`} item={item}  />
+          )}}
+           />
+        </ScrollView>}
+        <Button text='Смотреть все топ блюд недели'/>
       </View>
     );
   }

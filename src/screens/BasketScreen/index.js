@@ -15,9 +15,10 @@ class BasketScreen extends React.Component {
   }
 
   render() {
+    const {navigation, dispatch} = this.props;
     return (
       <View style={{flex: 1}}>
-        <Header />
+        <Header openDrawer={() => navigation.openDrawer()}/>
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
@@ -25,15 +26,16 @@ class BasketScreen extends React.Component {
             {[{}, {}].map((item) => (
               <BasketCard />
             ))}
-            <Button
-              onPress={() => this.props.navigation.navigate('DeliveryScreen')}
-              title={'Оформить за 2 950 ₸'}
-            />
-            <Button
-              title={'Добавить еще блюда'}
-              styleBtn={styles.styleBtn}
-              styleText={styles.styleText}
-            />
+            
+              <Button
+                onPress={() => this.props.navigation.navigate('DeliveryScreen')}
+                title={`Оформить за ${2950} ₸`}
+              />
+              <Button
+                title={'Добавить еще блюда'}
+                styleBtn={styles.styleBtn}
+                styleText={styles.styleText}
+              />
           </View>
         </Background>
       </View>
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
   },
   styleBtn: {
     marginTop: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#FE1935',
   },

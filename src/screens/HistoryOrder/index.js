@@ -57,6 +57,9 @@ class UserScreen extends React.Component {
             console.log('fewewf');
             this.props.navigation.navigate('EditProifle');
           }}
+          close={()=>{
+            this.props.navigation.goBack()
+          }}
         />
         <Background source={icFrame2} style={styles.bgContainer}>
           {this.renderBody()}

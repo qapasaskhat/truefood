@@ -26,7 +26,7 @@ class Slider extends React.Component {
     return (
       <View style={{}}>
         <Pagination
-          dotsLength={[{}, {}, {}, {}].length}
+          dotsLength={[{}, {}, {},{},].length}
           activeDotIndex={activeSlide}
           containerStyle={styles.conStyle}
           dotStyle={styles.dot}

@@ -6,23 +6,33 @@ import {
   Text,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
+  FlatList
 } from 'react-native';
 
 import {PopularCard} from '../../../components/Card';
 import {layer1, icRight} from '../../../assets';
+import axios from 'axios'
 
-const Button = () => {
+const Button = ({text}) => {
   return (
     <TouchableOpacity style={styles.view}>
-      <Text style={styles.txt}>Смотреть все популярные блюда</Text>
+      <Text style={styles.txt}>{text}</Text>
       <Image source={icRight} resizeMode={'contain'} style={styles.icon} />
     </TouchableOpacity>
   );
 };
 
 class PopularList extends React.Component {
+  state={
+
+  }
+  addBasket=(item)=>{
+    const api = `http://truefood.chat-bots.kz/api/basket/mobile?cart[0][quantity]=1&cart[0][product]=1&cart[0][selected_variation]=1`
+    //axios.post
+  }
   render() {
-    const {navigation, dispatch} = this.props;
+    const {navigation, dispatch, items, loading, } = this.props;
     return (
       <View>
         <ImageBackground
@@ -30,18 +40,30 @@ class PopularList extends React.Component {
           style={styles.imaContainer}
           imageStyle={styles.imgStyle}
           source={layer1}>
-          <View style={{padding: 10}}>
+          {
+            loading?<ActivityIndicator />:
+            <View style={{padding: 10}}>
             <Text style={styles.title}>Популярные блюда</Text>
-            {[1, 2, 3,4].map((item, index) => (
+            <FlatList 
+            data={items}
+            renderItem={({item})=>(
               <PopularCard
                 dispatch={dispatch}
+                name={item.name}
+                id={item.id}
+                price={item.variations[0].price}
                 key={item}
+                desc = {item.slug}
                 navigation={navigation}
                 coinVisible={false}
+                onPress={()=>{
+                  this.addBasket(item)
+                }}
               />
-            ))}
-            <Button />
-          </View>
+            )}
+            />
+            <Button text='Смотреть все популярные блюда' />
+          </View>}
         </ImageBackground>
       </View>
     );

@@ -30,24 +30,28 @@ const socail = [
 
 const list = [
   {
+    id: 0,
     name: 'Настройки',
     icon: icSettings,
     routeName: 'SettingScreen'
   },
   {
+    id: 1,
     name: 'История заказов',
     icon: icList,
     routeName: 'HistoryOrder'
   },
   {
+    id: 2,
     name: 'О нас / Контакты',
     icon: icFlag,
     routeName: 'AboutScreen'
   },
   {
+    id: 3,
     name: 'Обратная связь или помощь',
     icon: icGroup,
-    routeName: ''
+    routeName: 'SupportScreen'
   },
 ];
 
@@ -62,6 +66,7 @@ class CustomComponent extends Component {
         {list.map((item) => (
           <TouchableOpacity 
             style={styles.btn} 
+            key={`${item.id}`}
             onPress={()=>{
               this.props.navigation.navigate(item.routeName)
             }}
@@ -71,6 +76,10 @@ class CustomComponent extends Component {
           </TouchableOpacity>
         ))}
         <TouchableOpacity
+        onPress={()=>{
+          //alert('gifts')
+          this.props.navigation.navigate('DiscountScreen')
+        }}
           style={[
             styles.btn,
             {backgroundColor: 'rgba(254, 25, 53, 0.08)', borderBottomWidth: 0},

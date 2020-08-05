@@ -31,11 +31,15 @@ class LoginScreen extends React.Component {
     password: '',
   };
 
+  register =()=>{
+    const {first_name, email, password} = this.state
+    console.log(`name: ${first_name} ; login: ${email}; passowrd: ${password}`);
+  }
   render() {
     this.list = [
       {
         title: 'Введите имя',
-        placeholder: 'Малик',
+        placeholder: 'Имя',
         value: this.state.first_name,
         onChangeText: (text) => {
           this.setState({first_name: text});
@@ -97,7 +101,10 @@ class LoginScreen extends React.Component {
             У вас уже есть аккаунт?
           </Text>
           <Text
-            onPress={() => this.props.navigation.navigate('LoginScreen')}
+            onPress={() => {
+              this.register()
+              this.props.navigation.navigate('LoginScreen')
+            }}
             style={{
               color: '#FE1935',
               fontFamily: 'OpenSans-Regular',

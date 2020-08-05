@@ -3,7 +3,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import React, {Component} from 'react';
 import {Animated, Easing, Dimensions} from 'react-native';
-import {HomeScreen, CardScreen, CategoryScreen, SettingScreen, AboutScreen} from '../../screens';
+import {HomeScreen, CardScreen, CategoryScreen, SettingScreen, AboutScreen, SupportScreen, DiscountScreen, GetGiftCard} from '../../screens';
 import CustomComponent from '../../components/CustomComponent';
 
 const {width} = Dimensions.get('window');
@@ -17,7 +17,10 @@ const HomeStack = createAppContainer(
           CardScreen,
           CategoryScreen,
           SettingScreen,
-          AboutScreen
+          AboutScreen,
+          SupportScreen,
+          DiscountScreen,
+          GetGiftCard
         },
         {
           initialRouteName: 'HomeScreen',

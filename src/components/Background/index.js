@@ -4,12 +4,12 @@ import {layer1} from '../../assets';
 
 class Background extends React.Component {
   render() {
-    const {source, style} = this.props;
+    const {source, style,type} = this.props;
 
     return (
-      <ImageBackground
+      type==='red'? <ImageBackground
         style={styles.imaContainer}
-        imageStyle={[styles.imgStyle, style && style]}
+        imageStyle={[styles.imgStyle, style && style,{tintColor: '#FFDEDE', backgroundColor:'#FFF4F4'}]}
         source={source ? source : layer1}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -18,7 +18,19 @@ class Background extends React.Component {
           contentContainerStyle={{}}>
           {this.props.children}
         </ScrollView>
-      </ImageBackground>
+      </ImageBackground>:
+      <ImageBackground
+      style={styles.imaContainer}
+      imageStyle={[styles.imgStyle, style && style]}
+      source={source ? source : layer1}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, width: '100%', height: '100%'}}
+        bounces={false}
+        contentContainerStyle={{}}>
+        {this.props.children}
+      </ScrollView>
+    </ImageBackground>
     );
   }
 }
@@ -40,8 +52,10 @@ const styles = StyleSheet.create({
     overflow: 'visible',
     backfaceVisibility: 'visible',
     flex: 1,
+    //tintColor: '#FFDEDE',
     // width: '100%',
     // height: '100%',
+    //backgroundColor: '#FFF4F4',
   },
 });
 

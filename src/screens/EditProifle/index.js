@@ -10,6 +10,7 @@ import {
 import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import { icDown } from '../../assets'
 
 const Input = ({item}) => (
   <View style={{marginTop: 10}}>
@@ -57,11 +58,32 @@ class EditProifle extends React.Component {
     ];
     return (
       <View style={styles.container}>
-        <Header type={'close'} title={'Редактировать профиль'} />
+        <Header type={'close'} title={'Редактировать профиль'} close={()=>{this.props.navigation.goBack()}} />
         <View style={{padding: 12.5, backgroundColor: 'white'}}>
           {this.list.map((item) => (
             <Input item={item} />
           ))}
+          <Text style={[styles.h2,{marginTop:10}]}>Введите дату рождения</Text>
+          <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+            <View style={styles.calendar}>
+              <Text style={styles.calendarTxt}>12</Text>
+              <TouchableOpacity>
+              <Image source={icDown} style={styles.downImg}/>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.calendar}>
+              <Text style={styles.calendarTxt}>сентябрь</Text>
+              <TouchableOpacity>
+              <Image source={icDown} style={styles.downImg}/>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.calendar}>
+              <Text style={styles.calendarTxt}>1980</Text>
+              <TouchableOpacity>
+              <Image source={icDown} style={styles.downImg}/>
+              </TouchableOpacity>
+            </View>
+          </View>
           <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} />
         </View>
       </View>
@@ -86,6 +108,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
     shadowRadius: 0,
   },
+  calendar:{
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+    paddingVertical: 12,
+    borderRadius: 60,
+    paddingHorizontal:10,
+    alignItems:'center'
+  },
+  downImg:{
+    tintColor: '#FE1935',
+    width: 16,
+    height: 16,
+    resizeMode: 'contain'
+  },
+  calendarTxt: {
+    fontSize: 16,
+    lineHeight: 30,
+    color: '#08050B',
+    fontWeight: 'normal',
+    fontFamily: 'OpenSans-SemiBold',
+    marginRight: 16
+  }
 });
 
 export default EditProifle;

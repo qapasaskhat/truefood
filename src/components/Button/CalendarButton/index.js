@@ -5,9 +5,9 @@ import {icCalendar} from '../../../assets';
 
 class Button extends React.Component {
   render() {
-    const {styleBtn, styleText} = this.props;
+    const {styleBtn, styleText, onPress} = this.props;
     return (
-      <TouchableOpacity style={[styles.btnView, styleBtn && styleBtn]}>
+      <TouchableOpacity onPress={()=>onPress()} style={[styles.btnView, styleBtn && styleBtn]}>
         <Text style={[styles.btnText, styleText && styleText]}>
           {this.props.title}
         </Text>

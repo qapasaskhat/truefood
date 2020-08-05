@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {img1, img2, img3} from '../../assets';
 const {width} = Dimensions.get('window');
+
 class Categories extends React.Component {
   render() {
     return (

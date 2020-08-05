@@ -56,3 +56,13 @@ export const icBack = require('./icBack.png');
 export const icDinner = require('./icDinner.png');
 
 export const icVilka = require('./icVilka.png');
+
+export const about = require('./about.png')
+
+export const media = require('./media.png')
+
+export const chat = require('./chat.png')
+
+export const img001 = require('./001.png')
+export const img002 = require('./002.png')
+export const img003 = require('./003.png')

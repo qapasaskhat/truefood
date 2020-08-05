@@ -1,19 +1,21 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 
-const Button = ({item}) => {
+const Button = ({item,radioBtn}) => {
   return (
     <TouchableOpacity
       style={[
         styles.bg,
         item.active ? {borderColor: '#FE1935'} : {borderColor: '#DCDCDC'},
-      ]}>
+      ]}
+      onPress={radioBtn}
+      >
       <View style={[item.active && styles.activeInner]}></View>
     </TouchableOpacity>
   );
 };
 
-const RadioButton = ({item}) => {
+const RadioButton = ({item, radioBtn}) => {
   return (
     <View
       style={{
@@ -21,7 +23,7 @@ const RadioButton = ({item}) => {
         alignItems: 'center',
         marginTop: 10,
       }}>
-      <Button item={item} />
+      <Button item={item} radioBtn={radioBtn}/>
       <Text
         style={{
           marginLeft: 5,

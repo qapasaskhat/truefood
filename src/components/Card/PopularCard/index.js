@@ -4,10 +4,10 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key, navigation, coinVisible} = this.props;
+    const {key, navigation, coinVisible, image, name, price,desc, id, onPress} = this.props;
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('CardScreen')}
+        onPress={() => navigation.navigate('CardScreen',{param: id})}
         style={styles.container}
         key={key}>
         <Image
@@ -18,12 +18,12 @@ class PopularCard extends React.Component {
           }}
         />
         <View style={styles.body}>
-          <Text style={styles.title}>Стейк Рибай</Text>
+          <Text style={styles.title}>{name}</Text>
           <Text style={styles.description}>
-            Состав блюда: свинина,{'\n'}специи, лук, перец
+            {desc}
           </Text>
           <View style={styles.bottom}>
-            <Text style={styles.price}>395 ₸</Text>
+            <Text style={styles.price}>{price} ₸</Text>
             {coinVisible && (
               <View style={styles.horizontal}>
                 <Image source={icMoney} style={styles.icMoney} />
@@ -31,8 +31,9 @@ class PopularCard extends React.Component {
               </View>
             )}
             <TouchableOpacity
-              onPress={() =>
-                this.props.dispatch({type: 'ADD_BASKET', payload: {}})
+              onPress={() =>{
+                onPress()
+                this.props.dispatch({type: 'ADD_BASKET', payload: {}})}
               }
               style={styles.btnView}>
               <Text style={styles.btnText}>в корзину</Text>

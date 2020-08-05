@@ -10,6 +10,8 @@ import {
   Dimensions,
 } from 'react-native';
 
+import axios from 'axios'
+
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
 import Categories from '../../components/Categories';
@@ -18,13 +20,127 @@ import TopList from './TopList';
 import {connect} from 'react-redux';
 
 class HomeScreen extends React.Component {
+
+  state={
+    popularProduct: {
+      loading: false,
+      products: [],
+      error: null
+    },
+    topList:{
+      loading: false,
+      products: [],
+      error: null
+    },
+    category:{
+      loading: false,
+      category: [],
+      error: null
+    }
+  }
+
+  getPopularProduct=()=>{
+    const api = 'http://truefood.chat-bots.kz/api/products?popular=1'
+    this.setState({
+      popularProduct: {
+        ...this.state.popularProduct, loading: true
+      }
+    })
+    axios.get(api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        popularProduct: {
+          products: response.data,
+          loading: false}
+      })
+    }).catch(err=>{
+      this.setState({
+        popularProduct:{
+          error: err,
+          loading: false}
+      })
+    })
+  }
+  getCategory=()=>{
+    const api = 'http://truefood.chat-bots.kz/api/categories'
+    this.setState({
+      category: {
+        ...this.state.category, loading: true
+      }
+    })
+    axios.get(api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        category: {
+          products: response.data,
+          loading: false}
+      })
+    }).catch(err=>{
+      this.setState({
+        category:{
+          error: err,
+          loading: false}
+      })
+    })
+  }
+  getTopList=()=>{
+    const api = 'http://truefood.chat-bots.kz/api/products?dishOfTheWeek=1'
+    this.setState({
+      topList: {
+        ...this.state.topList, loading: true
+      }
+    })
+    axios.get(api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        topList: {
+          products: response.data,
+          loading: false}
+      })
+    }).catch(err=>{
+      this.setState({
+        topList:{
+          error: err,
+          loading: false}
+      })
+    })
+  }
+
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    this.getPopularProduct()
+    this.getTopList()
+    this.getCategory()
+
+    // const card = [
+    //   {
+    //     'quantity': '1',
+    //     'product': '1',
+    //     'selected_variation': '1',
+    //     'phone': '87007007070',
+    //     'payment_type_id': '1',
+    //     'delivery_place_id': '1'
+    //   }
+    // ]
+    // fetch('http://truefood.chat-bots.kz/api/orders/pickup',{
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(card)
+    // }).then(response=>{
+    //   console.log(response)
+    // }).catch(error=>{
+    //   console.log(error)
+    // })
+
   }
   render() {
     const {navigation, dispatch} = this.props;
+    const { popularProduct, topList } = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
@@ -33,8 +149,12 @@ class HomeScreen extends React.Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
           <Categories navigation={navigation} dispatch={dispatch} />
-          <PopularList navigation={navigation} dispatch={dispatch} />
-          <TopList />
+          <PopularList 
+            loading={popularProduct.loading} 
+            items={popularProduct.products} 
+            navigation={navigation} 
+            dispatch={dispatch} />
+          <TopList items={topList.products} loading={topList.loading} />
         </ScrollView>
       </View>
     );
@@ -77,7 +197,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   btnText: {

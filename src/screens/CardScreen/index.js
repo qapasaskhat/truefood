@@ -7,7 +7,10 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
+
+import axios from 'axios'
 
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -33,12 +36,41 @@ class CardScreen extends React.Component {
       {name: '240 гр', active: false},
       {name: '520 гр', active: false},
     ],
+    product:{
+      loading: false,
+      error: null,
+      item: {}
+    }
   };
 
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    this.getProduct(this.props.navigation.getParam('param'))
+  }
+
+  getProduct=(id)=>{
+    const api = `http://truefood.chat-bots.kz/api/products/${id}`
+    this.setState({
+      product: {
+        ...this.state.product, loading: true
+      }
+    })
+    axios.get(api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        product: {
+          item: response.data,
+          loading: false}
+      })
+    }).catch(err=>{
+      this.setState({
+        product:{
+          error: err,
+          loading: false}
+      })
+    })
   }
 
   _changeSize = (i) => {
@@ -64,22 +96,21 @@ class CardScreen extends React.Component {
     }
   };
   _renderBody = () => {
+    const { product } = this.state
     return (
       <View key={'meduim'} style={styles.width}>
-        <Text style={styles.name}>Стейк Рибай</Text>
+        <Text style={styles.name}>{product.item.name}</Text>
         <Text style={styles.description}>
-          Для приготовления этого блюда используются самые свежие обычные и
-          {'/n'}
-          тигровые креветки
+          {product.item.description}
         </Text>
         <Text style={styles.sostav}>
-          Состав блюда: свинина, специи, лук, перец
+          {product.item.slug}
         </Text>
         <View style={styles.bottom}>
-          <Text style={styles.price}>395 ₸</Text>
+          <Text style={styles.price}>{product.item.variations && product.item.variations[0].price} ₸</Text>
           <View style={styles.money}>
             <Image source={icMoney} style={styles.icMoney} />
-            <Text style={styles.count}>170</Text>
+            <Text style={styles.count}>{product.item.variations && product.item.variations[0].cashback}</Text>
           </View>
         </View>
         <TagList />
@@ -88,11 +119,12 @@ class CardScreen extends React.Component {
   };
   render() {
     const {navigation} = this.props;
+    const {product} = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
         <ButtonUser />
-        <ScrollView
+        {product.loading? <ActivityIndicator /> :<ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
           <BackButton onBack={() => navigation.goBack()} />
@@ -155,7 +187,7 @@ class CardScreen extends React.Component {
           </View>
 
           <Button title='Заказать' styleBtn={{margin: 10}} />
-        </ScrollView>
+        </ScrollView>}
       </View>
     );
   }

@@ -13,3 +13,6 @@ export {default as RegisterScreen} from './RegisterScreen';
 export {default as PayScreen} from './PayScreen';
 export {default as OrderScreen} from './OrderScreen';
 export { default as AboutScreen } from './AboutScreen'
+export { default as SupportScreen } from './SupportScreen'
+export { default as DiscountScreen} from './DiscountScreen'
+export { default as GetGiftCard } from './GetGiftCard'

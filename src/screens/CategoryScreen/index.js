@@ -13,6 +13,8 @@ import FilterButton from '../../components/FilterButton';
 import Background from '../../components/Background';
 import {icTop} from '../../assets';
 import {PopularCard} from '../../components/Card';
+import axios from 'axios'
+
 const {width, height} = Dimensions.get('window');
 
 const Tag = ({item}) => (
@@ -27,11 +29,39 @@ const Tag = ({item}) => (
 class CategoryScreen extends React.Component {
   state = {
     page: 1,
+    product:{
+      loading: false,
+      error: null,
+      items: []
+    }
   };
+  getProduct=(categoryId)=>{
+    const api =`http://truefood.chat-bots.kz/api/products?category=${categoryId}`
+    this.setState({
+      product: {
+        ...this.state.product, loading: true
+      }
+    })
+    axios.get(api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        product: {
+          items: response.data,
+          loading: false}
+      })
+    }).catch(err=>{
+      this.setState({
+        product:{
+          error: err,
+          loading: false}
+      })
+    })
+  }
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    this.getProduct(1)
   }
   render() {
     const {navigation} = this.props;

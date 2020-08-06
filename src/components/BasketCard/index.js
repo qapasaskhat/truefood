@@ -46,7 +46,7 @@ class BasketScreen extends React.Component {
     }
   };
 
-  _renderHeader = () => {
+  _renderHeader = (item) => {
     return (
       <View key={'header'} style={styles.container}>
         <Image
@@ -63,17 +63,16 @@ class BasketScreen extends React.Component {
               style={{width: 20, height: 20, resizeMode: 'contain'}}
             />
           </TouchableOpacity>
-          <Text style={styles.title}>Стейк Рибай</Text>
+        <Text style={styles.title}>{item.name}</Text>
           <Text style={styles.description}>
-            Состав блюда: свинина,{'\n'}специи, лук, перец
+            {item.slug}
           </Text>
           <View style={styles.bottom}>
             <View style={styles.horizontal}>
               <Image source={icMoney} style={styles.icMoney} />
-              <Text style={styles.coinTXT}>170</Text>
+              <Text style={styles.coinTXT}>{item.variations && item.variations[0].cashback}</Text>
             </View>
-
-            <Text style={styles.price}>395 ₸</Text>
+            <Text style={styles.price}>{item.variations && item.variations[0].price} ₸</Text>
           </View>
         </View>
       </View>
@@ -198,9 +197,10 @@ class BasketScreen extends React.Component {
     this.setState({activeSections});
   };
   render() {
+    const { item } = this.props
     return (
       <View key={'basketCard'} style={styles.shadow}>
-        {this._renderHeader()}
+        {this._renderHeader(item)}
         {this._renderBottom()}
         <Accordion
           sections={SECTIONS}

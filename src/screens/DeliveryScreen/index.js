@@ -38,7 +38,7 @@ const CalendarView=({active})=>(
 class DeliveryScreen extends React.Component {
   state = {
     type: false,
-    number: '87479081898',
+    numberPhone: '87479081898',
     address: [
       {name: ' Manhattan', active: false,id:0},
       {name: ' Dubai', active: false,id:1},
@@ -48,7 +48,8 @@ class DeliveryScreen extends React.Component {
     ],
     calendarActive: false,
     dateOrder: 'Сегодня, в 14:30',
-    date: new Date(Date.now())
+    date: new Date(Date.now()),
+    number: null
   };
 
   componentDidMount() {
@@ -141,14 +142,21 @@ class DeliveryScreen extends React.Component {
         </View>
         <View key={'cabinet'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Введите номер кабинета</Text>
-          <TextInput placeholder={'20'} />
+          <TextInput 
+            placeholder={'20'}
+            value={this.state.number}
+            onChangeText={(text) => {
+              this.setState({number: text});
+            }}
+            
+             />
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Ваш номер телефона</Text>
           <TextInput
-            value={this.state.number}
+            value={this.state.numberPhone}
             onChangeText={(text) => {
-              this.setState({number: text});
+              this.setState({numberPhone: text});
             }}
           />
         </View>
@@ -181,7 +189,7 @@ class DeliveryScreen extends React.Component {
               selectedTextStyle={styles.text}
               height={55}
               options={options}
-              initial={this.state.type ? 0 : 1}
+              initial={0}
               onPress={(value) => this.setState({type: value})}
             />
             {this.state.type ? this._renderWith() : this._renderWithout()}

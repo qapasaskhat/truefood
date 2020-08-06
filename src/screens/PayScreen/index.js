@@ -17,10 +17,6 @@ const {width, height} = Dimensions.get('window');
 import {icApple, icGoogle, shtih} from '../../assets';
 import {TextInput} from 'react-native-gesture-handler';
 import Button from '../../components/Button';
-const options = [
-  {label: 'НАЛИЧНЫМИ', value: true},
-  {label: 'КАРТОЙ', value: false},
-];
 
 const PayButton = ({source}) => (
   <TouchableOpacity style={styles.payButton}>
@@ -32,7 +28,11 @@ const PayButton = ({source}) => (
 );
 class DeliveryScreen extends React.Component {
   state = {
-    type: 0,
+    type: true,
+    options: [
+      {label: 'НАЛИЧНЫМИ', value: true},
+      {label: 'КАРТОЙ', value: false},
+    ]
   };
 
   componentDidMount() {
@@ -49,6 +49,7 @@ class DeliveryScreen extends React.Component {
           <TextInput
             style={{height: 50, borderRadius: 50, flex: 1}}
             placeholder={'1234 1234 1234 1234'}
+            maxLength={16}
             placeholderTextColor={'#B7B6BB'}
           />
           <TouchableOpacity>
@@ -63,6 +64,7 @@ class DeliveryScreen extends React.Component {
             <TextInput
               style={{height: 50, borderRadius: 50, flex: 1}}
               placeholder={'12/34'}
+              maxLength={4}
               placeholderTextColor={'#B7B6BB'}
             />
           </View>
@@ -73,6 +75,8 @@ class DeliveryScreen extends React.Component {
             <TextInput
               style={{height: 50, borderRadius: 50, flex: 1}}
               placeholder={'123'}
+              maxLength={3}
+              keyboardType='numeric'
               placeholderTextColor={'#B7B6BB'}
             />
           </View>
@@ -83,7 +87,7 @@ class DeliveryScreen extends React.Component {
         <View style={styles.view1}>
           <TextInput
             style={{height: 50, borderRadius: 50, flex: 1}}
-            placeholder={'info@gmail.com'}
+            placeholder={'ИМЯ ФАМИЛИЯ'}
             placeholderTextColor={'#B7B6BB'}
           />
         </View>
@@ -110,17 +114,17 @@ class DeliveryScreen extends React.Component {
             textStyle={styles.text}
             selectedTextStyle={styles.text}
             height={55}
-            options={options}
-            initial={this.state.type ? 0 : 1}
-            onPress={(value) => this.setState({type: value})}
+            options={this.state.options}
+            initial={1}
+            onPress={(value) => this.setState({type: !this.state.type})}
           />
           <View>
-            <View style={styles.horizontal}>
+            {this.state.type && <View style={styles.horizontal}>
               <PayButton source={icGoogle} />
               <PayButton source={icApple} />
-            </View>
+            </View>}
             <View style={styles.line} />
-            {this.card()}
+            {this.state.type ? this.card() : this.noCard()} 
             <View style={{marginTop: 15}}>
               <Text style={{fontFamily: 'OpenSans-SemiBold'}}>
                 Сумма заказа

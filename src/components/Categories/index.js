@@ -13,19 +13,20 @@ const {width} = Dimensions.get('window');
 
 class Categories extends React.Component {
   render() {
+    const {category} = this.props
     return (
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{}}
         style={styles.scroll}>
-        {categories.map((item, index) => (
+        {category && category.map((item, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => this.props.navigation.navigate('CategoryScreen')}
+            onPress={() => this.props.navigation.navigate('CategoryScreen',{id: {id: item.id,name: item.name}})}
             style={styles.btn}>
             <View />
-            <Image source={item.url} style={styles.img} />
+            <Image source={img3} style={styles.img} />
             <Text style={styles.name}>{item.name}</Text>
           </TouchableOpacity>
         ))}

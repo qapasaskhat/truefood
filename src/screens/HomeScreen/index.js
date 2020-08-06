@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import axios from 'axios'
-
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
 import Categories from '../../components/Categories';
@@ -72,7 +71,7 @@ class HomeScreen extends React.Component {
       console.log(response.data)
       this.setState({
         category: {
-          products: response.data,
+          category: response.data,
           loading: false}
       })
     }).catch(err=>{
@@ -119,9 +118,6 @@ class HomeScreen extends React.Component {
     //     'quantity': '1',
     //     'product': '1',
     //     'selected_variation': '1',
-    //     'phone': '87007007070',
-    //     'payment_type_id': '1',
-    //     'delivery_place_id': '1'
     //   }
     // ]
     // fetch('http://truefood.chat-bots.kz/api/orders/pickup',{
@@ -140,7 +136,7 @@ class HomeScreen extends React.Component {
   }
   render() {
     const {navigation, dispatch} = this.props;
-    const { popularProduct, topList } = this.state
+    const { popularProduct, topList, category } = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
@@ -148,13 +144,13 @@ class HomeScreen extends React.Component {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
-          <Categories navigation={navigation} dispatch={dispatch} />
+          <Categories category={category.category} navigation={navigation} dispatch={dispatch} />
           <PopularList 
             loading={popularProduct.loading} 
             items={popularProduct.products} 
             navigation={navigation} 
             dispatch={dispatch} />
-          <TopList items={topList.products} loading={topList.loading} />
+          <TopList dispatch={dispatch} items={topList.products} loading={topList.loading} />
         </ScrollView>
       </View>
     );

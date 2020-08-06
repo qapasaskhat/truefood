@@ -29,7 +29,10 @@ class TopCard extends React.Component {
         <Text style={styles.foodText}>{item.name}</Text>
           <View style={styles.bottom}>
             <Text style={styles.price}>{item.variations && item.variations[0].price} ₸</Text>
-            <TouchableOpacity style={styles.btnView}>
+            <TouchableOpacity style={styles.btnView} onPress={()=>{
+              //console.log(item)
+              this.props.dispatch({type: 'ADD_BASKET', payload: item})
+            }}>
               <Image
                 source={icAdd}
                 style={{width: 20, height: 20, resizeMode: 'contain'}}

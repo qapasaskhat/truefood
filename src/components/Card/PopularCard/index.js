@@ -4,7 +4,7 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key, navigation, coinVisible, image, name, price,desc, id, onPress} = this.props;
+    const {key,item, navigation, coinVisible, image, name, price,desc, id, onPress} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen',{param: id})}
@@ -33,7 +33,7 @@ class PopularCard extends React.Component {
             <TouchableOpacity
               onPress={() =>{
                 onPress()
-                this.props.dispatch({type: 'ADD_BASKET', payload: {}})}
+                this.props.dispatch({type: 'ADD_BASKET', payload: item} )}
               }
               style={styles.btnView}>
               <Text style={styles.btnText}>в корзину</Text>
@@ -55,40 +55,18 @@ const styles = StyleSheet.create({
     borderColor: '#E9E9E9',
   },
   horizontal: {flexDirection: 'row', alignItems: 'center'},
-  title: {
-    color: '#08050B',
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 20,
-  },
+  title: {color: '#08050B',fontFamily: 'OpenSans-SemiBold',fontSize: 20,},
   foodImg: {
     width: '30%',
     height: 120,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
-  body: {
-    width: '70%',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  title: {
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 16,
-  },
-  description: {
-    color: '#B7B6BB',
-    fontFamily: 'OpenSans-Regular',
-  },
-  bottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  price: {
-    color: '#08050B',
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 16,
-  },
+  body: {width: '70%',justifyContent: 'space-between',padding: 10,},
+  title: {fontFamily: 'OpenSans-SemiBold',fontSize: 16,},
+  description: {color: '#B7B6BB',fontFamily: 'OpenSans-Regular',},
+  bottom: {flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center',},
+  price: {color: '#08050B',fontFamily: 'OpenSans-SemiBold',fontSize: 16,},
   btnView: {
     backgroundColor: '#FE1935',
     alignItems: 'center',
@@ -104,16 +82,8 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 12,
   },
-  coinTXT: {
-    fontFamily: 'OpenSans-SemiBold',
-    fontSize: 12,
-    marginLeft: 5,
-  },
-  icMoney: {
-    width: 15,
-    height: 15,
-    resizeMode: 'contain',
-  },
+  coinTXT: {fontFamily: 'OpenSans-SemiBold',fontSize: 12,marginLeft: 5,},
+  icMoney: {width: 15,height: 15,resizeMode: 'contain',},
 });
 
 export default PopularCard;

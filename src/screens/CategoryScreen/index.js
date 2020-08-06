@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  FlatList
 } from 'react-native';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -61,18 +62,19 @@ class CategoryScreen extends React.Component {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
-    this.getProduct(1)
+    console.log(this.props.navigation.getParam('id').name)
+    this.getProduct(this.props.navigation.getParam('id').id)
   }
   render() {
     const {navigation} = this.props;
-    const {page} = this.state;
+    const {page,product} = this.state;
     return (
       <View style={styles.container}>
         <Header />
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
-            <Text style={styles.title}>Горячие блюда</Text>
+            <Text style={styles.title}>{navigation.getParam('id').name}</Text>
             <View style={styles.view}>
               {['по популярности', 'по цене'].map((item) => (
                 <Tag item={item} />
@@ -80,16 +82,28 @@ class CategoryScreen extends React.Component {
             </View>
             <FilterButton />
             <View style={{marginTop: 10}}>
-              {[{}, {}, {}, {}, {}].map((item, index) => (
+              <FlatList data={product.items}
+              renderItem={({item,index})=>(
+                <PopularCard navigation={navigation} coinVisible={true} key={index}/>
+              )}
+              ListEmptyComponent={
+                <Text style={{
+                  textAlign: 'center',
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontWeight: '200'
+                }}>пусто</Text>
+              }
+               />
+              {/* {product.items &&  product.items.map((item, index) => (
                 <PopularCard
                   navigation={navigation}
                   coinVisible={true}
                   key={index}
                 />
-              ))}
+              ))} */}
             </View>
-            <View style={styles.pagination}>
-              {[1, 2, 3, 4].map((item) => (
+            { product.items.length !==0 && <View style={styles.pagination}>
+              {  [1, 2, 3, 4].map((item) => (
                 <TouchableOpacity onPress={() => this.setState({page: item})}>
                   <Text
                     style={{
@@ -100,7 +114,7 @@ class CategoryScreen extends React.Component {
                   </Text>
                 </TouchableOpacity>
               ))}
-            </View>
+            </View>}
           </View>
         </Background>
       </View>

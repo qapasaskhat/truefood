@@ -31,7 +31,13 @@ class LoginScreen extends React.Component {
     password: '',
   };
 
+validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
   register =()=>{
+    console.log( this.validateEmail(this.state.email))
     const {first_name, email, password} = this.state
     console.log(`name: ${first_name} ; login: ${email}; passowrd: ${password}`);
   }
@@ -89,7 +95,10 @@ class LoginScreen extends React.Component {
           {this.list.map((item) => (
             <Input item={item} />
           ))}
-          <Button onPress={()=>{this.props.navigation.navigate('TabStack')}} title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
+          <Button onPress={()=>{
+              this.register()
+              this.props.navigation.navigate('TabStack')
+              }} title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text
@@ -102,7 +111,6 @@ class LoginScreen extends React.Component {
           </Text>
           <Text
             onPress={() => {
-              this.register()
               this.props.navigation.navigate('LoginScreen')
             }}
             style={{

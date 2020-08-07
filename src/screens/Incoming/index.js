@@ -15,6 +15,10 @@ const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
 class Incoming extends React.Component {
+  constructor(props){
+    super(props)
+    this.state={}
+  }
   renderBody = () => {
     const menu = [
       {

@@ -144,7 +144,7 @@ class HomeScreen extends React.Component {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
-          <Categories category={category.category} navigation={navigation} dispatch={dispatch} />
+          <Categories category={category.category.categories} navigation={navigation} dispatch={dispatch} />
           <PopularList 
             loading={popularProduct.loading} 
             items={popularProduct.products} 

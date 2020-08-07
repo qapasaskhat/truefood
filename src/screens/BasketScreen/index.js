@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image, FlatList} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, FlatList, ActivityIndicator} from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -7,14 +7,21 @@ import ButtonUser from '../../components/ButtonUser';
 import BasketCard from '../../components/BasketCard';
 import Button from '../../components/Button';
 import { connect } from 'react-redux';
+import axios from 'axios'
 
 class BasketScreen extends React.Component {
+
+  state={
+    basketProduct: [],
+    loading: false
+  }
 
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     console.log(this.props.basket.length)
+    this.getBasket()
   }
 
   getAllMoney=()=>{
@@ -25,25 +32,48 @@ class BasketScreen extends React.Component {
     })
     return money
   }
+  getBasket=()=>{
+    const { basket } = this.props
+    let api = 'http://truefood.chat-bots.kz/api/basket/mobile?'
+    for(let i=0; i<basket.length; i++){
+      api = api + `cart[${i}][product]=${1}&cart[0][selected_variation]=${1}`
+    }
+    console.log(api)
+      var config = {
+        method: 'get',
+        url: api,
+        headers: { }
+      };
+      
+      axios(config)
+      .then( (response) =>{
+        console.log(response.data.cart);
+        this.setState({basketProduct: response.data.cart})
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   render() {
     const {navigation, dispatch, basket} = this.props;
+    const { basketProduct, loading } = this.state
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={() => navigation.openDrawer()}/>
         <ButtonUser />
         <Background>
-          <View style={{flex: 1, padding: 12.5}}>
-            
+         { loading?<ActivityIndicator />:
+          <View style={{flex: 1, padding: 12.5}}>  
             <FlatList 
-            data={basket}
+            data={basketProduct}
             ListFooterComponent={
               <View>
                 {
                   basket.length !== 0
                 ?
                 <Button
-                onPress={() => this.props.navigation.navigate('DeliveryScreen')}
+                onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: basketProduct})}
                 title={`Оформить за ${this.getAllMoney()} ₸`}
               />: null}
               <Button
@@ -64,7 +94,7 @@ class BasketScreen extends React.Component {
               <Text style={styles.h1}>Пусто</Text>
             }
              />
-          </View>
+          </View>}
         </Background>
       </View>
     );

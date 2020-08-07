@@ -12,6 +12,8 @@ import Button from '../../components/Button';
 import RadioButton from '../../components/RadioButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
+import axios from 'axios'
+
 const options = [
   {label: 'Доставка', value: false},
   {label: 'Забрать из True Food', value: true},
@@ -38,18 +40,12 @@ const CalendarView=({active})=>(
 class DeliveryScreen extends React.Component {
   state = {
     type: false,
-    numberPhone: '87479081898',
-    address: [
-      {name: ' Manhattan', active: false,id:0},
-      {name: ' Dubai', active: false,id:1},
-      {name: ' Boston', active: false,id:2},
-      {name: ' Geneva', active: false,id:3},
-      {name: ' Tokyo', active: false,id:4},
-    ],
+    numberPhone: '',
     calendarActive: false,
     dateOrder: 'Сегодня, в 14:30',
     date: new Date(Date.now()),
-    number: null
+    number: null,
+    locations: []
   };
 
   componentDidMount() {
@@ -59,6 +55,55 @@ class DeliveryScreen extends React.Component {
     this.setState({
       dateOrder: `Сегодня, в ${moment(this.state.date)}`
     })
+    console.log(this.props.navigation.getParam('basket'))
+    this.getPlace()
+    //this.delivery()
+  }
+  getPlace=()=>{
+    axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
+      console.log(response.data.locations)
+      this.setState({
+        locations: response.data.locations
+      })
+      this.setState(state=>{
+        const locations = state.locations.map(i=>
+          i.id === i.id?
+          {...i, active: false}:i);
+          return {locations}
+      })
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
+  pickup=()=>{
+
+  }
+  delivery=()=>{
+    
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('phone', '87073039917');
+    data.append('cart[0]', '{"quantity":1,"variation_id":1}');
+    data.append('payment_type_id', '2');
+    data.append('delivery_place_id', '1');
+    data.append('cabinet_number', '1');
+
+    var config = {
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
+      headers: { 
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw', 
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   _renderWith = () => {
@@ -91,20 +136,17 @@ class DeliveryScreen extends React.Component {
   }
 
   _radioBtn=(id)=>{
-    this.setState({
-      address: [
-        {name: ' Manhattan', active: false,id:0},
-        {name: ' Dubai', active: false,id:1},
-        {name: ' Boston', active: false,id:2},
-        {name: ' Geneva', active: false,id:3},
-        {name: ' Tokyo', active: false,id:4},
-      ],
+    this.setState(state=>{
+      const locations = state.locations.map(i=>
+        i.id === i.id?
+        {...i, active: false}:i);
+        return {locations}
     })
     this.setState(state=>{
-      const address = state.address.map(i=>
+      const locations = state.locations.map(i=>
         i.id === id?
         {...i, active: true}:i);
-        return {address}
+        return {locations}
     })
   }
 
@@ -119,26 +161,9 @@ class DeliveryScreen extends React.Component {
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
-          {this.state.address.map((item) => (
+          {this.state.locations.map((item) => (
             <RadioButton item={item} radioBtn={()=>{this._radioBtn(item.id)}}/>
           ))}
-        </View>
-        <View key={'calendar'} style={{paddingTop: 10}}>
-          <Text style={styles.h2}>Заберу заказ в:</Text>
-          <CalendarButton onPress={()=>{
-            this.setState({
-              calendarActive: true
-            })
-          }} title={`Сегодня, в ${this.state.date}`} />
-          {this.state.calendarActive?<DateTimePicker
-              testID="dateTimePicker"
-              value={this.state.date}
-              mode={'time'}
-              is24Hour={true}
-              display='default'
-              locale='ru-RU'
-              onChange={(date)=>this.onChange(date)}
-            />:null}
         </View>
         <View key={'cabinet'} style={{marginTop: 10}}>
           <Text style={styles.h2}>Введите номер кабинета</Text>
@@ -175,7 +200,6 @@ class DeliveryScreen extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        {/* <CalendarView active={this.state.calendarActive}/> */}
         <Header openDrawer={()=>this.props.navigation.openDrawer()}/>
         <ButtonUser />
         <Background>

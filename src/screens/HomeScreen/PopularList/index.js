@@ -50,6 +50,7 @@ class PopularList extends React.Component {
               <PopularCard
                 dispatch={dispatch}
                 item={item}
+                imgUrl={item.thumbnail}
                 name={item.name}
                 id={item.id}
                 price={item.variations[0].price}

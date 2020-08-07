@@ -4,6 +4,7 @@ import {icLogo} from '../../assets';
 import SwitchSelector from 'react-native-switch-selector';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import axios from 'axios'
 
 const options = [
   {label: 'РУС', value: '1'},
@@ -26,16 +27,47 @@ const Input = ({item}) => (
 
 class LoginScreen extends React.Component {
   state = {
-    first_name: '',
     email: '',
     password: '',
+    loading: false
   };
 
   login=()=>{
+
+
+    const user = new FormData()
+    user.append("email","your@email.com")
+    user.append("password","admin")
+
+    var config = {
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/login',
+      headers: { 
+      },
+      data : user
+    };
+    this.setState({
+      loading: true
+    })
+    axios(config)
+    .then( (response)=> {
+      console.log((response))
+      if(response.status===200){
+        this.props.navigation.navigate('TabStack')
+        this.setState({
+          loading: false
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
     console.log(`login: ${this.state.email}; password: ${this.state.password}`);
   }
 
   render() {
+    const {loading} = this.state
     this.list = [
       {
         title: 'Введите email',
@@ -78,9 +110,9 @@ class LoginScreen extends React.Component {
         <Text style={styles.register}>Авторизация</Text>
         <View style={{margin: 20}}>
           {this.list.map((item) => (
-            <Input key={`key${item.value}`} item={item} />
+            <Input key={`key${item}`} item={item} />
           ))}
-          <Button onPress={()=>{this.login()}} title={'Войти'} styleBtn={{marginTop: 30}} />
+          <Button onPress={()=>{this.login()}} title={loading?'loading': 'Войти'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text
@@ -98,7 +130,7 @@ class LoginScreen extends React.Component {
               textAlign: 'center',
               marginTop: 10,
             }} onPress={()=>{
-              this.props.navigation.goBack()
+              this.props.navigation.navigate('RegisterScreen')
             }}>
             Зарегистрироваться
           </Text>

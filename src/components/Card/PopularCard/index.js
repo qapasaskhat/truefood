@@ -4,7 +4,7 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key,item, navigation, coinVisible, image, name, price,desc, id, onPress} = this.props;
+    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen',{param: id})}
@@ -14,7 +14,7 @@ class PopularCard extends React.Component {
           style={styles.foodImg}
           source={{
             uri:
-              'https://alimero.ru/uploads/images/18/76/55/2019/08/05/3e0c56.png',
+              imgUrl,
           }}
         />
         <View style={styles.body}>

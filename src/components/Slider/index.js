@@ -7,26 +7,36 @@ const {width, height} = Dimensions.get('window');
 class Slider extends React.Component {
   state = {
     activeSlide: 0,
+    slider_images: [],
   };
-  _renderItem = ({item, index}) => {
+
+  componentDidMount=()=>{
+    const { imgItems } = this.props
+    console.log(imgItems)
+    this.setState({
+      slider_images: imgItems
+    })
+  }
+
+  _renderItem = ({item}) => {
     return (
       <View style={{height: width - 20, width: '100%', maxHeight: width - 20}}>
         <Image
           style={styles.img}
           source={{
             uri:
-              'https://www.restoran.ru/upload/resize_cache/iblock/f17/800_533_188984fb440a23db0ecf5c453c8495a18/67.jpg',
+              item,
           }}
         />
       </View>
     );
   };
-  get pagination() {
-    const {activeSlide} = this.state;
+get pagination() {
+    const {activeSlide,slider_images} = this.state;
     return (
-      <View style={{}}>
+      <View>
         <Pagination
-          dotsLength={[{}, {}, {},{},].length}
+          dotsLength={slider_images.length}
           activeDotIndex={activeSlide}
           containerStyle={styles.conStyle}
           dotStyle={styles.dot}
@@ -39,6 +49,8 @@ class Slider extends React.Component {
   }
 
   render() {
+    const { imgItems } = this.props
+    
     return (
       <View
         style={{
@@ -60,8 +72,8 @@ class Slider extends React.Component {
             padding: 0,
           }}
           onSnapToItem={index => this.setState({activeSlide: index})}
-          data={[{}, {}, {}, {}]}
-          renderItem={this._renderItem}
+          data={imgItems}
+          renderItem={({item})=>this._renderItem(item) }
           sliderWidth={width - 20}
           itemWidth={width - 20}
           itemHeight={width - 20}

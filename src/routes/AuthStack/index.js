@@ -10,7 +10,7 @@ const StoreStack = createAppContainer(
       RegisterScreen,
     },
     {
-      initialRouteName: 'RegisterScreen',
+      initialRouteName: 'LoginScreen',
       header: null,
       headerMode: 'none',
     },

@@ -5,6 +5,8 @@ import SwitchSelector from 'react-native-switch-selector';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 
+import axios from 'axios'
+
 const options = [
   {label: 'РУС', value: '1'},
   {label: 'ENG', value: '1.5'},
@@ -37,9 +39,29 @@ validateEmail(email) {
 }
 
   register =()=>{
-    console.log( this.validateEmail(this.state.email))
     const {first_name, email, password} = this.state
-    console.log(`name: ${first_name} ; login: ${email}; passowrd: ${password}`);
+    console.log( this.validateEmail(email))
+    
+      var FormData = require('form-data');
+      var data = new FormData();
+      data.append('name', 'askhat');
+      data.append('email', 'askhat@mail.ru');
+      data.append('password', '123456');
+
+      var config = {
+        method: 'post',
+        url: 'http://truefood.chat-bots.kz/api/register',
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    
   }
   render() {
     this.list = [
@@ -97,7 +119,7 @@ validateEmail(email) {
           ))}
           <Button onPress={()=>{
               this.register()
-              this.props.navigation.navigate('TabStack')
+             // this.props.navigation.navigate('TabStack')
               }} title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
@@ -111,7 +133,7 @@ validateEmail(email) {
           </Text>
           <Text
             onPress={() => {
-              this.props.navigation.navigate('LoginScreen')
+              this.props.navigation.goBack()
             }}
             style={{
               color: '#FE1935',

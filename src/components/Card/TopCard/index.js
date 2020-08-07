@@ -22,7 +22,7 @@ class TopCard extends React.Component {
           style={{width: width / 2, height: 120, borderRadius: 5}}
           source={{
             uri:
-              'https://cdn.segodnya.ua/i/image_650x434/media/image/5e2/846/8af/5e28468af1aa4.jpg',
+              item.thumbnail,
           }}
         />
         <View style={{padding: 5, paddingTop: 8}}>

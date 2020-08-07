@@ -32,14 +32,13 @@ class CardScreen extends React.Component {
   state = {
     count: 1,
     size: [
-      {name: '160 гр', active: true},
-      {name: '240 гр', active: false},
-      {name: '520 гр', active: false},
+      
     ],
     product:{
       loading: false,
       error: null,
-      item: {}
+      item: {},
+      variations: []
     }
   };
 
@@ -62,8 +61,19 @@ class CardScreen extends React.Component {
       this.setState({
         product: {
           item: response.data,
-          loading: false}
+          loading: false,
+          variations: response.data.variations
+        }
       })
+      let newSize = [...this.state.product.variations[1].attributes];
+      newSize.map((item) => {
+      if (item.id === 1) {
+        item.active = true;
+      } else {
+        item.active = false;
+      }
+    });
+    this.setState({size: newSize});
     }).catch(err=>{
       this.setState({
         product:{
@@ -76,7 +86,7 @@ class CardScreen extends React.Component {
   _changeSize = (i) => {
     let newSize = [...this.state.size];
     newSize.map((item) => {
-      if (item.name === i.name) {
+      if (item.id === i.id) {
         item.active = true;
       } else {
         item.active = false;
@@ -128,7 +138,7 @@ class CardScreen extends React.Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
           <BackButton onBack={() => navigation.goBack()} />
-          <Slider />
+          <Slider imgItems={product.item && product.item.slider_images} />
           {this._renderBody()}
           <View key={'bottom'} style={{padding: 10}}>
             <View key={'size'}>
@@ -152,7 +162,7 @@ class CardScreen extends React.Component {
                           ? 'OpenSans-Bold'
                           : 'OpenSans-Regular',
                       }}>
-                      {item.name}
+                      {item.value} {item.dimention}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -186,7 +196,7 @@ class CardScreen extends React.Component {
             </View>
           </View>
 
-          <Button title='Заказать' styleBtn={{margin: 10}} />
+          <Button title='Заказать' styleBtn={{margin: 10}} onPress={()=>{this.props.navigation.navigate('DeliveryScreen')}} />
         </ScrollView>}
       </View>
     );

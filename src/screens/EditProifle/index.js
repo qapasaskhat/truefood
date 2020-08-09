@@ -11,6 +11,8 @@ import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import { icDown } from '../../assets'
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios'
 
 const Input = ({item}) => (
   <View style={{marginTop: 10}}>
@@ -28,32 +30,78 @@ class EditProifle extends React.Component {
   state = {
     first_name: '',
     last_name: '',
+    name: '',
+    email: '',
+    loading: false,
+    access_token: ''
   };
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.setState({
+      aaccess_token: ser.access_token
+    })
+  }
+  _editProfile=(access_token)=>{
+    const { name, first_name, last_name, email } = this.state
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('name', 'name');
+    data.append('email', 'email@mail.ru');
+    data.append('middlename', 'first_name');
+    data.append('lastname', 'last_name');
+
+    var config = {
+      method: 'put',
+      url: 'http://truefood.chat-bots.kz/api/user/',
+      headers: { 
+        'Authorization': `Bearer ${access_token}`, 
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   render() {
     this.list = [
       {
         title: 'Введите имя',
         placeholder: 'Малик',
+        value: this.state.name,
+        onChangeText: (text) => {
+          this.setState({name: text});
+        },
+      },
+      {
+        title: 'Введите фамилию',
+        placeholder: 'Каримов',
         value: this.state.first_name,
         onChangeText: (text) => {
           this.setState({first_name: text});
         },
       },
       {
-        title: 'Введите фамилию',
-        placeholder: 'Каримов',
+        title: 'Введите отчество',
+        placeholder: '',
         value: this.state.last_name,
         onChangeText: (text) => {
           this.setState({last_name: text});
         },
       },
       {
-        title: 'Введите отчество',
-        placeholder: '',
-      },
-      {
         title: 'Введите e-mail',
         placeholder: '',
+        value: this.state.email,
+        onChangeText: (text) => {
+          this.setState({email: text});
+        },
       },
     ];
     return (
@@ -84,7 +132,10 @@ class EditProifle extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} />
+          <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} onPress={()=>{
+            this._editProfile(this.state.access_token)
+            this.props.navigation.goBack()
+          }}/>
         </View>
       </View>
     );

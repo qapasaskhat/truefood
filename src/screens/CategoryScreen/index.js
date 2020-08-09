@@ -84,7 +84,14 @@ class CategoryScreen extends React.Component {
             <View style={{marginTop: 10}}>
               <FlatList data={product.items}
               renderItem={({item,index})=>(
-                <PopularCard navigation={navigation} coinVisible={true} key={index}/>
+                <PopularCard 
+                  name={item.name} 
+                  price= {item.variations && item.variations[0].price } 
+                  desc={item.description} 
+                  discount={item.variations && item.variations[0].discount}
+                  navigation={navigation} 
+                  coinVisible={true} 
+                  key={index}/>
               )}
               ListEmptyComponent={
                 <Text style={{
@@ -94,15 +101,8 @@ class CategoryScreen extends React.Component {
                 }}>пусто</Text>
               }
                />
-              {/* {product.items &&  product.items.map((item, index) => (
-                <PopularCard
-                  navigation={navigation}
-                  coinVisible={true}
-                  key={index}
-                />
-              ))} */}
             </View>
-            { product.items.length !==0 && <View style={styles.pagination}>
+            {/* { product.items.length !==0 && <View style={styles.pagination}>
               {  [1, 2, 3, 4].map((item) => (
                 <TouchableOpacity onPress={() => this.setState({page: item})}>
                   <Text
@@ -114,7 +114,7 @@ class CategoryScreen extends React.Component {
                   </Text>
                 </TouchableOpacity>
               ))}
-            </View>}
+            </View>} */}
           </View>
         </Background>
       </View>

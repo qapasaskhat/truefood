@@ -17,16 +17,26 @@ class BasketScreen extends React.Component {
   state = {
     count: 1,
     size: [
-      {name: '160 гр', active: true},
-      {name: '240 гр', active: false},
-      {name: '520 гр', active: false},
+ 
     ],
     activeSections: [],
   };
+  componentDidMount=()=>{
+    //const { item } = this.props
+    let newSize = [...this.props.item.variations]
+      newSize.map((item) => {
+      if (item.id === 1) {
+        item.active = true;
+      } else {
+        item.active = false;
+      }
+    });
+    this.setState({size: newSize});
+  }
   _changeSize = (i) => {
     let newSize = [...this.state.size];
     newSize.map((item) => {
-      if (item.name === i.name) {
+      if (item.id === i.id) {
         item.active = true;
       } else {
         item.active = false;
@@ -53,7 +63,7 @@ class BasketScreen extends React.Component {
           style={styles.foodImg}
           source={{
             uri:
-              'https://alimero.ru/uploads/images/18/76/55/2019/08/05/3e0c56.png',
+              item.product.thumbnail,
           }}
         />
         <View style={styles.body}>
@@ -63,9 +73,9 @@ class BasketScreen extends React.Component {
               style={{width: 20, height: 20, resizeMode: 'contain'}}
             />
           </TouchableOpacity>
-        <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.title}>{item.product.name}</Text>
           <Text style={styles.description}>
-            {item.slug}
+            {item.product.description}
           </Text>
           <View style={styles.bottom}>
             <View style={styles.horizontal}>
@@ -79,7 +89,7 @@ class BasketScreen extends React.Component {
     );
   };
 
-  _renderSize = () => {
+  _renderSize = (item) => {
     return (
       <View key={'size'}>
         <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
@@ -102,7 +112,7 @@ class BasketScreen extends React.Component {
                     ? 'OpenSans-Bold'
                     : 'OpenSans-Regular',
                 }}>
-                {item.name}
+                {item.value}
               </Text>
             </TouchableOpacity>
           ))}
@@ -142,12 +152,12 @@ class BasketScreen extends React.Component {
     );
   };
 
-  _renderBottom = () => {
+  _renderBottom = (item) => {
     return (
       <View
         key={'bottom'}
         style={{padding: 10, paddingLeft: 20, paddingRight: 20}}>
-        {this._renderSize()}
+        {this._renderSize(item)}
         {this._renderCount()}
       </View>
     );
@@ -201,15 +211,15 @@ class BasketScreen extends React.Component {
     return (
       <View key={'basketCard'} style={styles.shadow}>
         {this._renderHeader(item)}
-        {this._renderBottom()}
-        <Accordion
+        {this._renderBottom(item.variations)}
+        {/* <Accordion
           sections={SECTIONS}
           touchableComponent={TouchableOpacity}
           activeSections={this.state.activeSections}
           renderHeader={this._renderHeader1}
           renderContent={this._renderContent}
           onChange={this._updateSections}
-        />
+        /> */}
         <View>
           <Text style={styles.add}>Добавить пожелание к блюду</Text>
         </View>

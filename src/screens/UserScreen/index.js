@@ -9,12 +9,16 @@ import {
 } from 'react-native';
 import Header from '../../components/Header';
 import Background from '../../components/Background';
+import AsyncStorage from '@react-native-community/async-storage'
+import { NavigationActions, StackActions } from 'react-navigation'
 
 import {icFrame, icRight} from '../../assets';
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
 class UserScreen extends React.Component {
+
+
   renderBody = () => {
     const menu = [
       {
@@ -39,6 +43,7 @@ class UserScreen extends React.Component {
         title: 'Карты и оплата',
       },
     ];
+
     return (
       <View style={styles.view}>
         {menu.map((item) => (
@@ -48,13 +53,24 @@ class UserScreen extends React.Component {
             <Image source={icRight} style={styles.img} />
           </TouchableOpacity>
         ))}
-        <TouchableOpacity style={[styles.btn, {borderBottomWidth: 0}]}>
+        <TouchableOpacity style={[styles.btn, {borderBottomWidth: 0}]} onPress={()=>{
+          this.logout()
+        }}>
           <Text style={[styles.title, {color: '#FE1935'}]}>Выйти</Text>
           <Image source={icRight} style={styles.img} />
         </TouchableOpacity>
       </View>
     );
   };
+
+  logout=async()=>{
+    await AsyncStorage.removeItem('user');
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({routeName: 'AppLoading'})]
+    })
+    this.props.navigation.dispatch(resetAction)
+  }
   render() {
     return (
       <View style={styles.container}>

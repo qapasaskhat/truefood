@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage'
 
 class AuthLoading extends Component {
   constructor(props) {
@@ -9,8 +10,14 @@ class AuthLoading extends Component {
     this.state = {};
     this.rehydrated = false;
   }
-  componentDidMount() {
-    this.props.navigation.navigate('AuhtStack');
+  componentDidMount= async() =>{
+    let usr =  await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    if(!user){
+      this.props.navigation.navigate('AuhtStack');
+    }else{
+      this.props.navigation.navigate('TabStack');
+    }
   }
 
   render() {

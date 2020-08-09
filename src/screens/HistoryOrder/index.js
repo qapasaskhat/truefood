@@ -6,12 +6,15 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../../components/Header';
 import Background from '../../components/Background';
 import axios from 'axios'
 import moment from 'moment'
 import {icFrame2, icRight, icMoney} from '../../assets';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
@@ -23,26 +26,34 @@ class UserScreen extends React.Component {
       items: [],
       error: null
     },
-    orderItems: []
+    orderItems: [],
+    load: false
   }
-  componentDidMount=()=>{
-    this.getOrders()
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.getOrders(user.access_token)
   }
-  getOrders=()=>{
+  getOrders=(access_token)=>{
     const api = 'http://truefood.chat-bots.kz/api/user/orders'
     var config = {
       method: 'get',
       url: 'http://truefood.chat-bots.kz/api/user/orders',
       headers: { 
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw'
+        'Authorization': `Bearer ${access_token}`
       }
     };
+    this.setState({
+      load: true
+    })
     
     axios(config)
     .then( (response) =>{
       console.log(JSON.stringify(response.data));
       this.setState({
-        orderItems: response.data
+        orderItems: response.data,
+        load: false
       })
     })
     .catch(function (error) {
@@ -52,23 +63,15 @@ class UserScreen extends React.Component {
   }
 
   renderBody = () => {
-    const { orderItems } = this.state
-    const menu = [
-      {
-        title: 'Заказ от 26.05.2020',
-      },
-      {
-        title: 'Заказ от 26.05.2020',
-      },
-      {
-        title: 'Заказ от 26.05.2020',
-      },
-    ];
+    const { orderItems,load } = this.state
     return (
       <View style={styles.view}>
-        {orderItems.map((item) => (
+        {load ? <ActivityIndicator /> : orderItems.map((item) => (
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('OrderScreen')}
+            onPress={() => {
+              //this.props.navigation.navigate('OrderScreen')
+            }
+            }
             style={styles.btn}>
             <Text style={styles.title}>{item.status.name} {moment(item.created_at).format('ll')}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>

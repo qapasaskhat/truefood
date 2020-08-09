@@ -4,7 +4,7 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress} = this.props;
+    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress, discount} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen',{param: id})}
@@ -27,7 +27,7 @@ class PopularCard extends React.Component {
             {coinVisible && (
               <View style={styles.horizontal}>
                 <Image source={icMoney} style={styles.icMoney} />
-                <Text style={styles.coinTXT}>170</Text>
+            <Text style={styles.coinTXT}>{discount}</Text>
               </View>
             )}
             <TouchableOpacity

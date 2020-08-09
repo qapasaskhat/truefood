@@ -22,7 +22,12 @@ class BasketScreen extends React.Component {
     });
     console.log(this.props.basket.length)
     this.getBasket()
+    this.props.navigation.addListener ('willFocus', () =>
+      {this.getBasket()}
+    );
   }
+
+
 
   getAllMoney=()=>{
     const { basket } = this.props
@@ -73,7 +78,7 @@ class BasketScreen extends React.Component {
                   basket.length !== 0
                 ?
                 <Button
-                onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: basketProduct})}
+                onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
                 title={`Оформить за ${this.getAllMoney()} ₸`}
               />: null}
               <Button

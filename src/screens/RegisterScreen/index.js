@@ -1,9 +1,11 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, ScrollView } from 'react-native';
 import {icLogo} from '../../assets';
 import SwitchSelector from 'react-native-switch-selector';
-import TextInput from '../../components/TextInput';
-import Button from '../../components/Button';
+import TextInput from '../../components/TextInput'
+import Button from '../../components/Button'
+import AsyncStorage from '@react-native-community/async-storage'
+import moment from 'moment'
 
 import axios from 'axios'
 
@@ -31,6 +33,8 @@ class LoginScreen extends React.Component {
     first_name: '',
     email: '',
     password: '',
+    password_r: '',
+    loading: false
   };
 
 validateEmail(email) {
@@ -39,31 +43,44 @@ validateEmail(email) {
 }
 
   register =()=>{
-    const {first_name, email, password} = this.state
+    const {first_name, email, password, password_r} = this.state
     console.log( this.validateEmail(email))
-    
-      var FormData = require('form-data');
-      var data = new FormData();
-      data.append('name', 'askhat');
-      data.append('email', 'askhat@mail.ru');
-      data.append('password', '123456');
+    if(this.validateEmail(email)){
+      if(password===password_r)
+      {  var FormData = require('form-data');
+        var data = new FormData();
+        data.append('name', first_name);
+        data.append('email', email);
+        data.append('password', password);
+        data.append('password_confirmation', password_r);
 
-      var config = {
-        method: 'post',
-        url: 'http://truefood.chat-bots.kz/api/register',
-        data : data
-      };
+        var config = {
+          method: 'post',
+          url: 'http://truefood.chat-bots.kz/api/register',
+          data : data
+        };
 
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    
+        axios(config)
+        .then( (response)=> {
+          console.log(response.data)
+          this.props.navigation.navigate('TabStack')
+          this.getAsync(response.data)
+        })
+        .catch( (error)=> {
+          console.log(error);
+        });}
+        else{
+          alert('password error')
+        }
+    }else{
+      alert('email error')
+    }
+  }
+  getAsync=async(data)=>{
+    await AsyncStorage.setItem('user', JSON.stringify(data))
   }
   render() {
+    const { loading } = this.state
     this.list = [
       {
         title: 'Введите имя',
@@ -89,6 +106,15 @@ validateEmail(email) {
         value: this.state.password,
         onChangeText: (text) => {
           this.setState({password: text});
+        },
+        password: true
+      },
+      {
+        title: 'Повторите пароль',
+        placeholder: '*********',
+        value: this.state.password_r,
+        onChangeText: (text) => {
+          this.setState({password_r: text});
         },
         password: true
       },
@@ -120,7 +146,7 @@ validateEmail(email) {
           <Button onPress={()=>{
               this.register()
              // this.props.navigation.navigate('TabStack')
-              }} title={'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
+              }} title={loading?'loading':'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text

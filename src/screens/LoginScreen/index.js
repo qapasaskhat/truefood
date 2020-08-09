@@ -5,6 +5,7 @@ import SwitchSelector from 'react-native-switch-selector';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const options = [
   {label: 'РУС', value: '1'},
@@ -29,15 +30,15 @@ class LoginScreen extends React.Component {
   state = {
     email: '',
     password: '',
-    loading: false
+    loading: false,
+    error: null
   };
 
   login=()=>{
-
-
+    const { email, password } = this.state
     const user = new FormData()
-    user.append("email","your@email.com")
-    user.append("password","admin")
+    user.append("email",email)
+    user.append("password",password)
 
     var config = {
       method: 'post',
@@ -50,24 +51,37 @@ class LoginScreen extends React.Component {
       loading: true
     })
     axios(config)
-    .then( (response)=> {
+    .then( (response) => {
       console.log((response))
       if(response.status===200){
         this.props.navigation.navigate('TabStack')
+        this.getAsync(response.data)
         this.setState({
           loading: false
         })
+      }else{
+        this.setState({
+          loading: false,
+          error: 'Ошибка входа'
+        })
       }
     })
-    .catch(function (error) {
+    .catch( (error)=> {
       console.log(error);
+      this.setState({
+        loading: false,
+        error: 'Ошибка входа'
+      })
     });
 
     console.log(`login: ${this.state.email}; password: ${this.state.password}`);
   }
+  getAsync=async(data)=>{
+    await AsyncStorage.setItem('user', JSON.stringify(data))
+  }
 
   render() {
-    const {loading} = this.state
+    const {loading,error} = this.state
     this.list = [
       {
         title: 'Введите email',
@@ -113,6 +127,12 @@ class LoginScreen extends React.Component {
             <Input key={`key${item}`} item={item} />
           ))}
           <Button onPress={()=>{this.login()}} title={loading?'loading': 'Войти'} styleBtn={{marginTop: 30}} />
+          {
+            error && <Text style={{
+              color: 'red',
+              textAlign: 'center'
+            }}>{error}</Text>
+          }
         </View>
         <View>
           <Text

@@ -196,7 +196,7 @@ class CardScreen extends React.Component {
             </View>
           </View>
 
-          <Button title='Заказать' styleBtn={{margin: 10}} onPress={()=>{this.props.navigation.navigate('DeliveryScreen')}} />
+          <Button title='Заказать' styleBtn={{margin: 10}} onPress={()=>{this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'product', items: product.item}})}} />
         </ScrollView>}
       </View>
     );

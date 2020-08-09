@@ -13,6 +13,8 @@ import RadioButton from '../../components/RadioButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 const options = [
   {label: 'Доставка', value: false},
@@ -45,21 +47,33 @@ class DeliveryScreen extends React.Component {
     dateOrder: 'Сегодня, в 14:30',
     date: new Date(Date.now()),
     number: null,
-    locations: []
+    locations: [],
+    access_token: '',
+    place_id: '',
+    comment: '',
+    otvet: ''
   };
 
-  componentDidMount() {
+  componentDidMount =async()=> {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     this.setState({
       dateOrder: `Сегодня, в ${moment(this.state.date)}`
     })
-    console.log(this.props.navigation.getParam('basket'))
+    console.log(this.props.navigation.getParam('basket').items)
     this.getPlace()
+    
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.setState({
+      access_token: user.access_token
+    })
     //this.delivery()
   }
   getPlace=()=>{
+
     axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
       console.log(response.data.locations)
       this.setState({
@@ -76,32 +90,62 @@ class DeliveryScreen extends React.Component {
     })
   }
   pickup=()=>{
+    const {number, numberPhone, place_id,comment} = this.state
 
-  }
-  delivery=()=>{
-    
     var FormData = require('form-data');
     var data = new FormData();
-    data.append('phone', '87073039917');
+    data.append('phone', numberPhone);
     data.append('cart[0]', '{"quantity":1,"variation_id":1}');
     data.append('payment_type_id', '2');
-    data.append('delivery_place_id', '1');
-    data.append('cabinet_number', '1');
+    data.append('pick_up_at', '12:00');
+    data.append('comment', comment);
 
     var config = {
       method: 'post',
       url: 'http://truefood.chat-bots.kz/api/orders/pickup',
       headers: { 
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw', 
+        'Authorization': `Bearer ${this.state.access_token}`, 
       },
       data : data
     };
 
     axios(config)
-    .then(function (response) {
+    .then( (response)=> {
       console.log(JSON.stringify(response.data));
     })
-    .catch(function (error) {
+    .catch( (error) =>{
+      console.log(error);
+    });
+  }
+  delivery=()=>{
+    const {number, numberPhone, place_id,comment} = this.state
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('phone', numberPhone);
+    data.append('cart[0]', '{"quantity":1,"variation_id":1}');
+    data.append('payment_type_id', '2');
+    data.append('delivery_place_id', place_id);
+    data.append('cabinet_number', number);
+    data.append('comment', comment);
+
+    var config = {
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
+      headers: { 
+        'Authorization': `Bearer ${this.state.access_token}`, 
+      },
+      data : data
+    };
+
+    axios(config)
+    .then( (response)=> {
+      console.log(JSON.stringify(response.data));
+      this.setState({
+        otvet: response.data.message
+      })
+      alert(this.state.otvet)
+    })
+    .catch( (error)=> {
       console.log(error);
     });
   }
@@ -148,6 +192,9 @@ class DeliveryScreen extends React.Component {
         {...i, active: true}:i);
         return {locations}
     })
+    this.setState({
+      place_id: id
+    })
   }
 
   onChange=(date)=>{
@@ -192,6 +239,8 @@ class DeliveryScreen extends React.Component {
             placeholderTextColor={''}
             style={{height: 150, borderRadius: 20}}
             multiline={true}
+            value={this.state.comment}
+            onChangeText={(comment)=>this.setState({comment:comment})}
           />
         </View>
       </View>
@@ -219,8 +268,11 @@ class DeliveryScreen extends React.Component {
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <Button
-            onPress={() => this.props.navigation.navigate('PayScreen')}
-            title={'Перейти к оплате'}
+            onPress={() => {
+              this.delivery()
+              //this.props.navigation.navigate('PayScreen')
+            }}
+            title={'Оформит заказ'}
             styleBtn={{margin: 10}}
           />
         </Background>

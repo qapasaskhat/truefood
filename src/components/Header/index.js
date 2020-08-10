@@ -18,7 +18,38 @@ import {
   icBack,
 } from '../../assets/index';
 
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
+
 class Header extends React.Component {
+  state={
+    message: 0
+  }
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    this.getChat(user.access_token)
+  }
+  getChat=(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/chat',
+      headers: { 
+        'Authorization': `Bearer ${token}`, 
+      },
+    };
+    
+    axios(config)
+    .then( (response) => {
+      this.setState({
+        message: response.data.messages.length
+      })
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   render() {
     const {openDrawer, type, onPressUser, close, goBack} = this.props;
     if (type === 'profile') {
@@ -91,9 +122,11 @@ class Header extends React.Component {
             <Image source={icBurger} style={styles.icBurger} />
           </TouchableOpacity>
           <Image source={icLogo} style={styles.icLogo} />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            //this.props.natigation.navigate('Incoming')
+          }}>
             <View style={styles.number}>
-              <Text style={styles.txtNumber}>1</Text>
+            <Text style={styles.txtNumber}>{this.state.message}</Text>
             </View>
             <Image source={icChat} style={styles.icChat} />
           </TouchableOpacity>

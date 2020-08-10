@@ -5,6 +5,7 @@ import {icUser, icRight, icMoney} from '../../assets';
 
 class ButtonUser extends React.Component {
   render() {
+    const { name,cashback } = this.props
     return (
       <TouchableOpacity style={styles.container}>
         <View
@@ -16,12 +17,12 @@ class ButtonUser extends React.Component {
           ]}>
           <View style={styles.horizontal}>
             <Image source={icUser} style={styles.icUser} />
-            <Text style={styles.name}>Каримов Малик</Text>
+        <Text style={styles.name}>{name}</Text>
           </View>
           <View style={styles.horizontal}>
             <View style={[styles.horizontal, {marginRight: 30}]}>
               <Image source={icMoney} style={styles.icMoney} />
-              <Text style={styles.countText}>140</Text>
+        <Text style={styles.countText}>{cashback}</Text>
             </View>
             <Image source={icRight} style={styles.icRight} />
           </View>

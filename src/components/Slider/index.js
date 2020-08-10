@@ -24,8 +24,8 @@ class Slider extends React.Component {
         <Image
           style={styles.img}
           source={{
-            uri:
-              item,
+            uri:   
+              'http://truefood.chat-bots.kz/storage/'+item,
           }}
         />
       </View>

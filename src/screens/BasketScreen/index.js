@@ -41,13 +41,16 @@ class BasketScreen extends React.Component {
     const { basket } = this.props
     let api = 'http://truefood.chat-bots.kz/api/basket/mobile?'
     for(let i=0; i<basket.length; i++){
-      api = api + `cart[${i}][product]=${1}&cart[0][selected_variation]=${1}`
+      const a = basket.length===i+1?'': '&'
+      api = api + `cart[${i}][product]=${basket[i].id}&cart[${i}][selected_variation]=${1}${a}`
     }
     console.log(api)
       var config = {
         method: 'get',
         url: api,
-        headers: { }
+        headers: { 
+          'Accept': 'application/json',
+        }
       };
       
       axios(config)

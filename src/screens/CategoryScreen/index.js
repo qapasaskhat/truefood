@@ -15,13 +15,14 @@ import Background from '../../components/Background';
 import {icTop} from '../../assets';
 import {PopularCard} from '../../components/Card';
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 const {width, height} = Dimensions.get('window');
 
-const Tag = ({item}) => (
-  <TouchableOpacity style={styles.tag}>
+const Tag = ({name,id,onPress}) => (
+  <TouchableOpacity style={styles.tag} onPress={onPress}>
     <Text style={{color: '#FE1935', fontFamily: 'OpenSans-Regular'}}>
-      {item}
+      {name}
     </Text>
     <Image source={icTop} style={styles.icTop} />
   </TouchableOpacity>
@@ -34,21 +35,33 @@ class CategoryScreen extends React.Component {
       loading: false,
       error: null,
       items: []
-    }
+    },
+    byPrice: 'asc'
   };
-  getProduct=(categoryId)=>{
+  filter=(id)=>{
+    this.setState({
+      byPrice: this.state.byPrice==='asc'? 'desc': 'asc'
+    })
+    if(id === 1){
+      this.getProduct(this.props.navigation.getParam('id').id,true, this.state.byPrice)
+
+    }
+  }
+  getProduct=(categoryId, byPrice, value)=>{
     const api =`http://truefood.chat-bots.kz/api/products?category=${categoryId}`
+    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category=${categoryId}&byPrice=${value}`
     this.setState({
       product: {
         ...this.state.product, loading: true
       }
     })
-    axios.get(api).then(response=>{
+    axios.get( byPrice?apiByPrice: api).then(response=>{
       console.log(response.data)
       this.setState({
         product: {
           items: response.data,
-          loading: false}
+          loading: false
+        }
       })
     }).catch(err=>{
       this.setState({
@@ -66,7 +79,7 @@ class CategoryScreen extends React.Component {
     this.getProduct(this.props.navigation.getParam('id').id)
   }
   render() {
-    const {navigation} = this.props;
+    const {navigation,dispatch} = this.props;
     const {page,product} = this.state;
     return (
       <View style={styles.container}>
@@ -76,21 +89,33 @@ class CategoryScreen extends React.Component {
           <View style={{flex: 1, padding: 12.5}}>
             <Text style={styles.title}>{navigation.getParam('id').name}</Text>
             <View style={styles.view}>
-              {['по популярности', 'по цене'].map((item) => (
-                <Tag item={item} />
+              {[{
+                id:0,
+                name:'по популярности'
+              },{
+                id:1, 
+                name: 'по цене'
+              }].map((item) => (
+                <Tag name={item.name} onPress={()=>this.filter(item.id)} />
               ))}
             </View>
-            <FilterButton />
+            {/* <FilterButton /> */}
             <View style={{marginTop: 10}}>
               <FlatList data={product.items}
               renderItem={({item,index})=>(
                 <PopularCard 
                   name={item.name} 
+                  id={item.id}
+                  imgUrl={item.thumbnail}
                   price= {item.variations && item.variations[0].price } 
                   desc={item.description} 
                   discount={item.variations && item.variations[0].discount}
-                  navigation={navigation} 
-                  coinVisible={true} 
+                  navigation={navigation}
+                  dispatch={dispatch} 
+                  coinVisible={true}
+                  onPress={()=>{
+                    //this.addBasket(item)
+                  }} 
                   key={index}/>
               )}
               ListEmptyComponent={
@@ -178,4 +203,11 @@ const styles = StyleSheet.create({
   view: {flexDirection: 'row', marginTop: 20, marginBottom: 15},
 });
 
-export default CategoryScreen;
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+const mapStateToProps = (state) => ({
+  basket: state.appReducer.basket,
+});
+
+export default connect(mapStateToProps,mapDispatchToProps) (CategoryScreen);

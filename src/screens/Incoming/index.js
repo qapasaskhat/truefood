@@ -14,6 +14,7 @@ import Pusher from 'pusher-js/react-native';
 import {pusherConfig} from './pusher'
 
 import {icFrame2, icRight, icMoney} from '../../assets';
+
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
@@ -27,14 +28,14 @@ class Incoming extends React.Component {
     this.pusher = null
     this.my_channel = null
   }
-  componentWillMount=()=>{
+  componentDidMount=()=>{
     Pusher.logToConsole = true
     console.log('date');
-   
     this.pusher = new Pusher(pusherConfig.key,{
       authEndpoint: 'http://truefood.chat-bots.kz/api/chat',
       cluster: 'ap2',
       encrypted: true,
+      secret: "3ceee9abe02b2c2fafd9",
       auth: {
         headers: {
             'Accept': 'application/json',
@@ -42,12 +43,17 @@ class Incoming extends React.Component {
         }
     }
     })
-    this.my_channel = this.pusher.subscribe('App.Chat.'+7)
-    this.pusher.connection.bind('App\\Events\\MessageSent',(data)=>{
-      console.log('connection  '+ data)
+    this.my_channel = this.pusher.subscribe('User.Chats.'+1)
+    this.my_channel.bind('pusher:subscription_succeeded',function(data){
+      console.log('pusher:subscription_succeeded  '+ (data) )
     })
-    this.my_channel.bind('App\\Events\\MessageSent',(data)=>{
-      console.log('data  '+ data)
+
+    this.pusher.connection.bind('App\\Events\\ChatCreated',(data)=>{
+      console.log('connection.bind  '+ data)
+    })
+
+    this.my_channel.bind('App\\Events\\ChatCreated',(data)=>{
+      console.log('my_channel.bind  '+ data)
     })
   }
 

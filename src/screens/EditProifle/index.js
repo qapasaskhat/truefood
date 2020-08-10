@@ -39,6 +39,7 @@ class EditProifle extends React.Component {
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
+    this.getUser(user.access_token)
     this.setState({
       aaccess_token: ser.access_token
     })
@@ -66,6 +67,30 @@ class EditProifle extends React.Component {
       console.log(JSON.stringify(response.data));
     })
     .catch(function (error) {
+      console.log(error);
+    });
+  }
+  getUser=(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          first_name: response.data.name,
+          last_name: response.data.middlename,
+          name: response.data.lastname,
+          email: response.data.email,
+        })
+      }
+    })
+    .catch( (error) => {
       console.log(error);
     });
   }
@@ -111,7 +136,7 @@ class EditProifle extends React.Component {
           {this.list.map((item) => (
             <Input item={item} />
           ))}
-          <Text style={[styles.h2,{marginTop:10}]}>Введите дату рождения</Text>
+          {/* <Text style={[styles.h2,{marginTop:10}]}>Введите дату рождения</Text>
           <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
             <View style={styles.calendar}>
               <Text style={styles.calendarTxt}>12</Text>
@@ -131,7 +156,7 @@ class EditProifle extends React.Component {
               <Image source={icDown} style={styles.downImg}/>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} onPress={()=>{
             this._editProfile(this.state.access_token)
             this.props.navigation.goBack()

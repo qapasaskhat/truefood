@@ -31,41 +31,46 @@ const BackButton = ({onBack}) => {
 class CardScreen extends React.Component {
   state = {
     count: 1,
-    size: [
-      
-    ],
+    size: [],
     product:{
       loading: false,
       error: null,
       item: {},
       variations: []
-    }
+    },
+    items: {},
+    variations: [],
+    loading: false,
   };
 
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
-    });
+    })
+    console.log(this.props.navigation.getParam('param'))
     this.getProduct(this.props.navigation.getParam('param'))
+    setTimeout(() => {
+      console.log('iteeeeeem',
+        this.state.product.item
+      )
+    }, 2000);
+    
   }
 
   getProduct=(id)=>{
     const api = `http://truefood.chat-bots.kz/api/products/${id}`
     this.setState({
-      product: {
-        ...this.state.product, loading: true
-      }
+      loading: true
     })
     axios.get(api).then(response=>{
+      console.log('response' ,response)
       console.log(response.data)
       this.setState({
-        product: {
-          item: response.data,
-          loading: false,
-          variations: response.data.variations
-        }
+        items: response.data ,
+        variations: response.data.variations,
+        loading: false
       })
-      let newSize = [...this.state.product.variations[1].attributes];
+      let newSize = [...this.state.variations[0].main_attributes];
       newSize.map((item) => {
       if (item.id === 1) {
         item.active = true;
@@ -105,22 +110,22 @@ class CardScreen extends React.Component {
       }
     }
   };
-  _renderBody = () => {
-    const { product } = this.state
+  _renderBody = (product) => {
+    //const { product } = this.state
     return (
       <View key={'meduim'} style={styles.width}>
-        <Text style={styles.name}>{product.item.name}</Text>
+        <Text style={styles.name}>{product.name}</Text>
         <Text style={styles.description}>
-          {product.item.description}
+          {product.description}
         </Text>
         <Text style={styles.sostav}>
-          {product.item.slug}
+          {product.slug}
         </Text>
         <View style={styles.bottom}>
-          <Text style={styles.price}>{product.item.variations && product.item.variations[0].price} ₸</Text>
+          <Text style={styles.price}>{product.variations && product.variations[0].price} ₸</Text>
           <View style={styles.money}>
             <Image source={icMoney} style={styles.icMoney} />
-            <Text style={styles.count}>{product.item.variations && product.item.variations[0].cashback}</Text>
+            <Text style={styles.count}>{product.variations && product.variations[0].cashback}</Text>
           </View>
         </View>
         <TagList />
@@ -129,17 +134,17 @@ class CardScreen extends React.Component {
   };
   render() {
     const {navigation} = this.props;
-    const {product} = this.state
+    const {product,items, loading} = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
         <ButtonUser />
-        {product.loading? <ActivityIndicator /> :<ScrollView
+        {loading? <ActivityIndicator /> :<ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
           <BackButton onBack={() => navigation.goBack()} />
-          <Slider imgItems={product.item && product.item.slider_images} />
-          {this._renderBody()}
+          <Slider imgItems={items.slider_images} />
+          {this._renderBody(items)}
           <View key={'bottom'} style={{padding: 10}}>
             <View key={'size'}>
               <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>

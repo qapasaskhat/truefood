@@ -121,6 +121,7 @@ validateEmail(email) {
     ];
     return (
       <View style={{flex: 1}}>
+        <ScrollView>
         <Image source={icLogo} style={styles.icLogo} />
         <View style={styles.switch}>
           <SwitchSelector
@@ -170,6 +171,7 @@ validateEmail(email) {
             Войти
           </Text>
         </View>
+        </ScrollView>
       </View>
     );
   }

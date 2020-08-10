@@ -17,7 +17,7 @@ import Categories from '../../components/Categories';
 import PopularList from './PopularList';
 import TopList from './TopList';
 import {connect} from 'react-redux';
-
+import AsyncStorage from '@react-native-community/async-storage'
 class HomeScreen extends React.Component {
 
   state={
@@ -35,6 +35,10 @@ class HomeScreen extends React.Component {
       loading: false,
       category: [],
       error: null
+    },
+    user:{
+      name: '',
+      cashback: 0
     }
   }
 
@@ -104,43 +108,49 @@ class HomeScreen extends React.Component {
       })
     })
   }
-
-  componentDidMount() {
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: {
+            name: response.data.name,
+            cashback: response.data.bill
+          }
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+  }
+  componentDidMount=async()=> {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     this.getPopularProduct()
     this.getTopList()
     this.getCategory()
-
-    // const card = [
-    //   {
-    //     'quantity': '1',
-    //     'product': '1',
-    //     'selected_variation': '1',
-    //   }
-    // ]
-    // fetch('http://truefood.chat-bots.kz/api/orders/pickup',{
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(card)
-    // }).then(response=>{
-    //   console.log(response)
-    // }).catch(error=>{
-    //   console.log(error)
-    // })
-
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.getUser(user.access_token)
   }
   render() {
     const {navigation, dispatch} = this.props;
-    const { popularProduct, topList, category } = this.state
+    const { popularProduct, topList, category, user } = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
-        <ButtonUser />
+        <ButtonUser name = {user.name} cashback={user.cashback}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>

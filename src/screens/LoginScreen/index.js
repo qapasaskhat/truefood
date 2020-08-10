@@ -6,10 +6,11 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage'
-
+import {Language} from '../../constants/lang'
+import {connect} from 'react-redux'
 const options = [
-  {label: 'РУС', value: '1'},
-  {label: 'ENG', value: '1.5'},
+  {label: 'ENG', value: 0},
+  {label: 'РУС', value: 1},
 ];
 
 const Input = ({item}) => (
@@ -31,8 +32,12 @@ class LoginScreen extends React.Component {
     email: '',
     password: '',
     loading: false,
-    error: null
+    error: null,
+    langId: 1
   };
+  componentDidMount=()=>{
+    console.log(Language[0])
+  }
 
   login=()=>{
     const { email, password } = this.state
@@ -73,18 +78,21 @@ class LoginScreen extends React.Component {
         error: 'Ошибка входа'
       })
     });
-
     console.log(`login: ${this.state.email}; password: ${this.state.password}`);
   }
   getAsync=async(data)=>{
     await AsyncStorage.setItem('user', JSON.stringify(data))
   }
+  changeLang=(value)=>{
+    this.props.dispatch({type: 'CHANGE_LANG', payload: value} )
+  }
 
   render() {
     const {loading,error} = this.state
+    const {langId} = this.props
     this.list = [
       {
-        title: 'Введите email',
+        title: Language[langId].auth.email,
         placeholder: 'info@email.ru',
         value: this.state.email,
         onChangeText: (text) => {
@@ -93,7 +101,7 @@ class LoginScreen extends React.Component {
         password: false
       },
       {
-        title: 'Введите пароль',
+        title: Language[langId].auth.password,
         placeholder: '*********',
         value: this.state.password,
         onChangeText: (text) => {
@@ -115,18 +123,18 @@ class LoginScreen extends React.Component {
             selectedTextStyle={styles.textSwitch}
             height={33}
             options={options}
-            initial={0}
+            initial={langId}
             onPress={(value) =>
-              console.log(`Call onPress with value: ${value}`)
+              this.changeLang(value)
             }
           />
         </View>
-        <Text style={styles.register}>Авторизация</Text>
+          <Text style={styles.register}>{Language[langId].auth.title}</Text>
         <View style={{margin: 20}}>
           {this.list.map((item) => (
             <Input key={`key${item}`} item={item} />
           ))}
-          <Button onPress={()=>{this.login()}} title={loading?'loading': 'Войти'} styleBtn={{marginTop: 30}} />
+          <Button onPress={()=>{this.login()}} title={loading?'loading': Language[langId].auth.signin} styleBtn={{marginTop: 30}} />
           {
             error && <Text style={{
               color: 'red',
@@ -141,7 +149,7 @@ class LoginScreen extends React.Component {
               fontFamily: 'OpenSans-Regular',
               textAlign: 'center',
             }}>
-            У вас еще нет аккаунта?
+            {Language[langId].auth.account}
           </Text>
           <Text
             style={{
@@ -152,7 +160,7 @@ class LoginScreen extends React.Component {
             }} onPress={()=>{
               this.props.navigation.navigate('RegisterScreen')
             }}>
-            Зарегистрироваться
+            {Language[langId].auth.register}
           </Text>
         </View>
       </View>
@@ -200,4 +208,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps,mapDispatchToProps) (LoginScreen);

@@ -21,6 +21,11 @@ export const appReducer = (state = initialState.app, action) => {
         ...state,
         basket: [...state.basket, action.payload],
       };
+    case 'CHANGE_LANG':
+      return {
+        ...state,
+        langId: action.payload
+      }
     default:
       return state;
   }

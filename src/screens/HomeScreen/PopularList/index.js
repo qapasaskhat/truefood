@@ -13,6 +13,7 @@ import {
 import {PopularCard} from '../../../components/Card';
 import {layer1, icRight} from '../../../assets';
 import axios from 'axios'
+import {Language} from '../../../constants/lang'
 
 const Button = ({text}) => {
   return (
@@ -27,12 +28,8 @@ class PopularList extends React.Component {
   state={
 
   }
-  addBasket=(item)=>{
-    const api = `http://truefood.chat-bots.kz/api/basket/mobile?cart[0][quantity]=1&cart[0][product]=1&cart[0][selected_variation]=1`
-    //axios.post
-  }
   render() {
-    const {navigation, dispatch, items, loading, } = this.props;
+    const {navigation, dispatch, items, loading, langId } = this.props;
     return (
       <View>
         <ImageBackground
@@ -43,7 +40,7 @@ class PopularList extends React.Component {
           {
             loading?<ActivityIndicator />:
             <View style={{padding: 10}}>
-            <Text style={styles.title}>Популярные блюда</Text>
+            <Text style={styles.title}>{Language[langId].home.popular}</Text>
             <FlatList 
             data={items}
             renderItem={({item})=>(
@@ -58,13 +55,14 @@ class PopularList extends React.Component {
                 desc = {item.slug}
                 navigation={navigation}
                 coinVisible={false}
+                text={Language[langId].home.basket}
                 onPress={()=>{
-                  this.addBasket(item)
+                  //this.addBasket(item)
                 }}
               />
             )}
             />
-            <Button text='Смотреть все популярные блюда' />
+            <Button text={Language[langId].home.showPopular} />
           </View>}
         </ImageBackground>
       </View>

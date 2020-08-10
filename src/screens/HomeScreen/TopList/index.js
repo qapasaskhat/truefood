@@ -14,6 +14,7 @@ import {
 const {width, height} = Dimensions.get('window');
 import {TopCard} from '../../../components/Card';
 import {icRight} from '../../../assets';
+import { Language } from '../../../constants/lang'
 const Button = ({text}) => {
   return (
     <TouchableOpacity style={styles.view}>
@@ -25,10 +26,10 @@ const Button = ({text}) => {
 
 class TopList extends React.Component {
   render() {
-    const { items, loading, dispatch} = this.props;
+    const { items, loading, dispatch, langId} = this.props;
     return (
       <View key={'top'} style={{backgroundColor: 'white'}}>
-        <Text style={styles.title}>Топ блюда недели</Text>
+        <Text style={styles.title}> {Language[langId].home.top}</Text>
         {loading? <ActivityIndicator /> :<ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -51,7 +52,7 @@ class TopList extends React.Component {
           )}}
            />
         </ScrollView>}
-        <Button text='Смотреть все топ блюд недели'/>
+        <Button text={Language[langId].home.showPopular}/>
       </View>
     );
   }

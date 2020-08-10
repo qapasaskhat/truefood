@@ -8,10 +8,12 @@ import AsyncStorage from '@react-native-community/async-storage'
 import moment from 'moment'
 
 import axios from 'axios'
+import { Language } from '../../constants/lang';
+import {connect} from 'react-redux'
 
 const options = [
-  {label: 'РУС', value: '1'},
-  {label: 'ENG', value: '1.5'},
+  {label: 'ENG', value: 0},
+  {label: 'РУС', value: 1},
 ];
 
 const Input = ({item}) => (
@@ -34,8 +36,12 @@ class LoginScreen extends React.Component {
     email: '',
     password: '',
     password_r: '',
-    loading: false
+    loading: false,
+    langId: 1
   };
+  changeLang=(value)=>{
+    this.props.dispatch({type: 'CHANGE_LANG', payload: value} )
+  }
 
 validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -45,6 +51,9 @@ validateEmail(email) {
   register =()=>{
     const {first_name, email, password, password_r} = this.state
     console.log( this.validateEmail(email))
+    this.setState({
+      loading: true
+    })
     if(this.validateEmail(email)){
       if(password===password_r)
       {  var FormData = require('form-data');
@@ -63,6 +72,9 @@ validateEmail(email) {
         axios(config)
         .then( (response)=> {
           console.log(response.data)
+          this.setState({
+            loading: false
+          })
           this.props.navigation.navigate('TabStack')
           this.getAsync(response.data)
         })
@@ -80,11 +92,12 @@ validateEmail(email) {
     await AsyncStorage.setItem('user', JSON.stringify(data))
   }
   render() {
-    const { loading } = this.state
+    const { loading  } = this.state
+    const { langId } = this.props
     this.list = [
       {
-        title: 'Введите имя',
-        placeholder: 'Имя',
+        title: Language[langId].register.name,
+        placeholder: Language[langId].register.name,
         value: this.state.first_name,
         onChangeText: (text) => {
           this.setState({first_name: text});
@@ -92,7 +105,7 @@ validateEmail(email) {
         password: false
       },
       {
-        title: 'Введите email',
+        title: Language[langId].auth.email,
         placeholder: 'info@email.ru',
         value: this.state.email,
         onChangeText: (text) => {
@@ -101,7 +114,7 @@ validateEmail(email) {
         password: false
       },
       {
-        title: 'Введите пароль',
+        title: Language[langId].auth.password,
         placeholder: '*********',
         value: this.state.password,
         onChangeText: (text) => {
@@ -110,7 +123,7 @@ validateEmail(email) {
         password: true
       },
       {
-        title: 'Повторите пароль',
+        title: Language[langId].register.repeadPassword,
         placeholder: '*********',
         value: this.state.password_r,
         onChangeText: (text) => {
@@ -133,13 +146,13 @@ validateEmail(email) {
             selectedTextStyle={styles.textSwitch}
             height={33}
             options={options}
-            initial={0}
+            initial={langId}
             onPress={(value) =>
-              console.log(`Call onPress with value: ${value}`)
+              this.changeLang(value)
             }
           />
         </View>
-        <Text style={styles.register}>Регистариция</Text>
+          <Text style={styles.register}>{Language[langId].register.title}</Text>
         <View style={{margin: 20}}>
           {this.list.map((item) => (
             <Input item={item} />
@@ -147,7 +160,7 @@ validateEmail(email) {
           <Button onPress={()=>{
               this.register()
              // this.props.navigation.navigate('TabStack')
-              }} title={loading?'loading':'Зарегистрироваться'} styleBtn={{marginTop: 30}} />
+              }} title={loading?'loading':Language[langId].auth.register} styleBtn={{marginTop: 30}} />
         </View>
         <View>
           <Text
@@ -156,7 +169,7 @@ validateEmail(email) {
               fontFamily: 'OpenSans-Regular',
               textAlign: 'center',
             }}>
-            У вас уже есть аккаунт?
+            {Language[langId].register.account}
           </Text>
           <Text
             onPress={() => {
@@ -168,7 +181,7 @@ validateEmail(email) {
               textAlign: 'center',
               marginTop: 10,
             }}>
-            Войти
+            {Language[langId].auth.signin}
           </Text>
         </View>
         </ScrollView>
@@ -217,4 +230,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps,mapDispatchToProps) (LoginScreen);

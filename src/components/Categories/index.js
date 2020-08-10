@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+    textAlign: 'center'
   },
   img: {
     width: width / 4 - 10,

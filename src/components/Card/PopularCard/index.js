@@ -4,7 +4,7 @@ import {icMoney} from '../../../assets';
 
 class PopularCard extends React.Component {
   render() {
-    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress, discount} = this.props;
+    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress, discount,text} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen',{param: id})}
@@ -36,7 +36,7 @@ class PopularCard extends React.Component {
                 this.props.dispatch({type: 'ADD_BASKET', payload: item} )}
               }
               style={styles.btnView}>
-              <Text style={styles.btnText}>в корзину</Text>
+              <Text style={styles.btnText}>{text}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -145,12 +145,12 @@ class HomeScreen extends React.Component {
     this.getUser(user.access_token)
   }
   render() {
-    const {navigation, dispatch} = this.props;
+    const {navigation, dispatch, langId} = this.props;
     const { popularProduct, topList, category, user } = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} />
-        <ButtonUser name = {user.name} cashback={user.cashback}/>
+        <ButtonUser name = {user.name } cashback={user.cashback}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
@@ -158,9 +158,10 @@ class HomeScreen extends React.Component {
           <PopularList 
             loading={popularProduct.loading} 
             items={popularProduct.products} 
+            langId={langId}
             navigation={navigation} 
             dispatch={dispatch} />
-          <TopList dispatch={dispatch} items={topList.products} loading={topList.loading} />
+          <TopList langId={langId} dispatch={dispatch} items={topList.products} loading={topList.loading} />
         </ScrollView>
       </View>
     );
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
+  langId: state.appReducer.langId
 });
 
 const mapDispatchToProps = (dispatch) => ({

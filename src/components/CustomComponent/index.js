@@ -15,10 +15,12 @@ import {
 } from '../../assets';
 
 import SwitchSelector from 'react-native-switch-selector';
+import {Language} from '../../constants/lang'
+import {connect} from 'react-redux'
 
 const options = [
-  {label: 'РУС', value: '1'},
-  {label: 'ENG', value: '1.5'},
+  {label: 'ENG', value: 0},
+  {label: 'РУС', value: 1},
 ];
 
 const socail = [
@@ -28,42 +30,46 @@ const socail = [
   {icon: icVk},
 ];
 
-const list = [
-  {
-    id: 0,
-    name: 'Настройки',
-    icon: icSettings,
-    routeName: 'SettingScreen'
-  },
-  {
-    id: 1,
-    name: 'История заказов',
-    icon: icList,
-    routeName: 'HistoryOrder'
-  },
-  {
-    id: 2,
-    name: 'О нас / Контакты',
-    icon: icFlag,
-    routeName: 'AboutScreen'
-  },
-  {
-    id: 3,
-    name: 'Обратная связь или помощь',
-    icon: icGroup,
-    routeName: 'SupportScreen'
-  },
-];
 
 class CustomComponent extends Component {
+  changeLang=(value)=>{
+    this.props.dispatch({type: 'CHANGE_LANG', payload: value} )
+  }
   render() {
+    const { langId } = this.props
+    this.list = [
+      {
+        id: 0,
+        name: Language[langId].menu.settings,
+        icon: icSettings,
+        routeName: 'SettingScreen'
+      },
+      {
+        id: 1,
+        name: Language[langId].menu.historyOrder,
+        icon: icList,
+        routeName: 'HistoryOrder'
+      },
+      {
+        id: 2,
+        name: Language[langId].menu.about,
+        icon: icFlag,
+        routeName: 'AboutScreen'
+      },
+      {
+        id: 3,
+        name: Language[langId].menu.support,
+        icon: icGroup,
+        routeName: 'SupportScreen'
+      },
+    ];
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => this.props.navigation.closeDrawer()}>
           <Image source={icClose} style={styles.icClose} />
         </TouchableOpacity>
         <Image source={icLogo} style={styles.icLogo} />
-        {list.map((item) => (
+        {this.list.map((item) => (
           <TouchableOpacity 
             style={styles.btn} 
             key={`${item.id}`}
@@ -97,9 +103,9 @@ class CustomComponent extends Component {
             selectedTextStyle={styles.textSwitch}
             height={33}
             options={options}
-            initial={0}
+            initial={langId}
             onPress={(value) =>
-              console.log(`Call onPress with value: ${value}`)
+              this.changeLang(value)
             }
           />
         </View>
@@ -176,4 +182,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomComponent;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(CustomComponent);

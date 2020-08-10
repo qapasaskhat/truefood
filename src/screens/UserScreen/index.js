@@ -11,6 +11,8 @@ import Header from '../../components/Header';
 import Background from '../../components/Background';
 import AsyncStorage from '@react-native-community/async-storage'
 import { NavigationActions, StackActions } from 'react-navigation'
+import {connect} from 'react-redux'
+import {Language} from '../../constants/lang'
 
 import {icFrame, icRight} from '../../assets';
 const {width, height} = Dimensions.get('window');
@@ -20,9 +22,11 @@ class UserScreen extends React.Component {
 
 
   renderBody = () => {
+    const {langId} = this.props
+
     const menu = [
       {
-        title: 'История заказов',
+        title: Language[langId].menu.historyOrder,
         renderCenter: () => (
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Incoming')}
@@ -37,10 +41,10 @@ class UserScreen extends React.Component {
         },
       },
       {
-        title: 'Адреса доставки',
+        title: Language[langId].user.address,
       },
       {
-        title: 'Карты и оплата',
+        title: Language[langId].user.card,
       },
     ];
 
@@ -56,7 +60,7 @@ class UserScreen extends React.Component {
         <TouchableOpacity style={[styles.btn, {borderBottomWidth: 0}]} onPress={()=>{
           this.logout()
         }}>
-          <Text style={[styles.title, {color: '#FE1935'}]}>Выйти</Text>
+          <Text style={[styles.title, {color: '#FE1935'}]}>{Language[langId].user.singout}</Text>
           <Image source={icRight} style={styles.img} />
         </TouchableOpacity>
       </View>
@@ -146,5 +150,11 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
 });
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
 
-export default UserScreen;
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps) (UserScreen);

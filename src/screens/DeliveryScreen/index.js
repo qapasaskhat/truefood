@@ -122,7 +122,7 @@ class DeliveryScreen extends React.Component {
     var FormData = require('form-data');
     var data = new FormData();
     data.append('phone', numberPhone);
-    data.append('cart[0]', '{"quantity":1,"variation_id":1}');
+    data.append('cart[0]', `{"quantity":1,"variation_id":1,"product_id": 7}`);
     data.append('payment_type_id', '2');
     data.append('delivery_place_id', place_id);
     data.append('cabinet_number', number);

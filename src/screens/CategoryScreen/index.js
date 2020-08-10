@@ -16,6 +16,7 @@ import {icTop} from '../../assets';
 import {PopularCard} from '../../components/Card';
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { Language } from '../../constants/lang'
 
 const {width, height} = Dimensions.get('window');
 
@@ -79,7 +80,7 @@ class CategoryScreen extends React.Component {
     this.getProduct(this.props.navigation.getParam('id').id)
   }
   render() {
-    const {navigation,dispatch} = this.props;
+    const {navigation,dispatch, langId} = this.props;
     const {page,product} = this.state;
     return (
       <View style={styles.container}>
@@ -91,10 +92,10 @@ class CategoryScreen extends React.Component {
             <View style={styles.view}>
               {[{
                 id:0,
-                name:'по популярности'
+                name:Language[langId].home.byPopular
               },{
                 id:1, 
-                name: 'по цене'
+                name: Language[langId].home.byPrice
               }].map((item) => (
                 <Tag name={item.name} onPress={()=>this.filter(item.id)} />
               ))}
@@ -111,6 +112,7 @@ class CategoryScreen extends React.Component {
                   desc={item.description} 
                   discount={item.variations && item.variations[0].discount}
                   navigation={navigation}
+                  text={Language[langId].home.basket}
                   dispatch={dispatch} 
                   coinVisible={true}
                   onPress={()=>{
@@ -208,6 +210,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
+  langId: state.appReducer.langId
+
 });
 
 export default connect(mapStateToProps,mapDispatchToProps) (CategoryScreen);

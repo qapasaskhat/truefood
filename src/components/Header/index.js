@@ -102,7 +102,7 @@ class Header extends React.Component {
           <View>
             <Text style={styles.textProfile}>{this.props.title}</Text>
           </View>
-          <TouchableOpacity onPress={()=>close()}>
+          <TouchableOpacity onPress={close}>
             <Image
               source={icClose}
               style={{

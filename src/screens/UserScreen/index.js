@@ -40,18 +40,7 @@ class UserScreen extends React.Component {
           this.props.navigation.navigate('HistoryOrder');
         },
       },
-      {
-        title: Language[langId].user.address,
-        onPress: () => {
-          //this.props.navigation.navigate('HistoryOrder');
-        },
-      },
-      {
-        title: Language[langId].user.card,
-        onPress: () => {
-          //this.props.navigation.navigate('HistoryOrder');
-        },
-      },
+      
     ];
 
     return (

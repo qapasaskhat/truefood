@@ -32,7 +32,7 @@ class Incoming extends React.Component {
     Pusher.logToConsole = true
     console.log('date');
     this.pusher = new Pusher(pusherConfig.key,{
-      //authEndpoint: 'http://truefood.chat-bots.kz/api/chat',
+      authEndpoint: 'http://truefood.chat-bots.kz/api/chat',
       cluster: 'ap2',
       encrypted: true,
       secret: "3ceee9abe02b2c2fafd9",
@@ -43,7 +43,7 @@ class Incoming extends React.Component {
         }
     }
     })
-    this.my_channel = this.pusher.subscribe('User.Chats.'+11)
+    this.my_channel = this.pusher.subscribe('User.Chat.'+11)
     this.my_channel.bind('pusher:subscription_succeeded',function(data){
       console.log('pusher:subscription_succeeded  '+ (data) )
     })

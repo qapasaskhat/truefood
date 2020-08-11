@@ -45,12 +45,11 @@ class CategoryScreen extends React.Component {
     })
     if(id === 1){
       this.getProduct(this.props.navigation.getParam('id').id,true, this.state.byPrice)
-
     }
   }
   getProduct=(categoryId, byPrice, value)=>{
-    const api =`http://truefood.chat-bots.kz/api/products?category=${categoryId}`
-    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category=${categoryId}&byPrice=${value}`
+    const api =`http://truefood.chat-bots.kz/api/products?category_id=${categoryId}`
+    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category_id=${categoryId}&byPrice=${value}`
     this.setState({
       product: {
         ...this.state.product, loading: true

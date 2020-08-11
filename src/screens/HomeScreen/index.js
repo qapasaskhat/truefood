@@ -145,7 +145,7 @@ class HomeScreen extends React.Component {
     this.getUser(user.access_token)
   }
   render() {
-    const {navigation, dispatch, langId} = this.props;
+    const {navigation, dispatch, langId } = this.props;
     const { popularProduct, topList, category, user } = this.state
     return (
       <View style={styles.container}>

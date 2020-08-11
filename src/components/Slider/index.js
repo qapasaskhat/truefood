@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Image, View, Dimensions} from 'react-native';
+import {StyleSheet, Image, View, Dimensions,Text} from 'react-native';
 
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 const {width, height} = Dimensions.get('window');
@@ -18,14 +18,14 @@ class Slider extends React.Component {
     })
   }
 
-  _renderItem = ({item}) => {
+  _renderItem = (item) => {
     return (
       <View style={{height: width - 20, width: '100%', maxHeight: width - 20}}>
         <Image
           style={styles.img}
           source={{
             uri:   
-              'http://truefood.chat-bots.kz/storage/'+item,
+              `http://truefood.chat-bots.kz/storage/${item}`//+item,
           }}
         />
       </View>

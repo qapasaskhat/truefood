@@ -42,9 +42,15 @@ class UserScreen extends React.Component {
       },
       {
         title: Language[langId].user.address,
+        onPress: () => {
+          //this.props.navigation.navigate('HistoryOrder');
+        },
       },
       {
         title: Language[langId].user.card,
+        onPress: () => {
+          //this.props.navigation.navigate('HistoryOrder');
+        },
       },
     ];
 
@@ -157,4 +163,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
+
 export default connect(mapStateToProps,mapDispatchToProps) (UserScreen);

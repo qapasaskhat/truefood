@@ -4,6 +4,8 @@ import Header from '../../components/Header'
 import Button from '../../components/Button'
 import Background from '../../components/Background'
 import axios from 'axios'
+import { connect } from 'react-redux'
+import { Language } from '../../constants/lang'
 
 class GetGiftCard extends Component {
   constructor(props) {
@@ -18,19 +20,6 @@ class GetGiftCard extends Component {
       
   }
   postGift=(price, email)=>{
-    // fetch('http://truefood.chat-bots.kz/api/orders/gift-card', {
-    //     method: 'POST',
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       price: '2000',
-    //       email: 'tomboffos@gmail.com'
-    //     })
-    //   }).then(function(response){
-    //     console.log(JSON.stringify(response));
-    //   })
       const gift = {
           price: price,
           email: email
@@ -55,11 +44,12 @@ class GetGiftCard extends Component {
   }
   render() {
       const { discountPrice, email, comment } = this.state
+      const { langId } = this.props
     return (
       <View style={{
           flex: 1
       }}>
-          <Header title='Оформление' type='back' goBack={()=>this.props.navigation.goBack()}/>
+          <Header title={Language[langId].giftCards.btn} type='back' goBack={()=>this.props.navigation.goBack()}/>
           <Background type='red'>
               <View style={{
                   marginHorizontal: 12,
@@ -76,7 +66,7 @@ class GetGiftCard extends Component {
                       fontStyle: 'normal',
                       fontWeight: '600',
                       fontFamily: 'OpenSans-Regular',
-                  }}>Введите данные {'\n'}адресата</Text>
+                  }}>{Language[langId].giftCards.get.title}</Text>
                   <Text style={{
                       fontSize: 14,
                       color: '#08050B',
@@ -85,7 +75,7 @@ class GetGiftCard extends Component {
                       fontStyle: 'normal',
                       fontFamily: 'OpenSans-Regular',
                       marginTop:12
-                  }}>Введите e-mail получателя</Text>
+                  }}>{Language[langId].giftCards.get.email}</Text>
                   <TextInput 
                     placeholder='info@mail.ru' 
                     value={email}
@@ -110,9 +100,9 @@ class GetGiftCard extends Component {
                       fontStyle: 'normal',
                       fontFamily: 'OpenSans-Regular',
                       marginTop:12
-                     }}>Введите комментарий </Text>
+                     }}>{Language[langId].giftCards.get.comment} </Text>
                   <TextInput 
-                    placeholder='Можете написать несколько хороших слов получателю :)' 
+                    placeholder={Language[langId].giftCards.get.enter} 
                     placeholderTextColor='#B1AEAE'
                     value={comment}
                     onChangeText={(comment)=>this.setState({comment})}
@@ -146,8 +136,8 @@ class GetGiftCard extends Component {
                       fontFamily: 'OpenSans-Regular',
                       fontWeight: '600',
                       fontStyle: 'normal'
-                  }}>Итого: {discountPrice} ₸</Text>
-                  <Button title='Перейти к оплате' onPress={()=>{
+                  }}>{Language[langId].giftCards.get.all}: {discountPrice} ₸</Text>
+                  <Button title={Language[langId].giftCards.get.btn} onPress={()=>{
                       this.postGift(discountPrice,email)
                   }} />
               </View>
@@ -155,5 +145,8 @@ class GetGiftCard extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
 
-export default GetGiftCard;
+export default connect(mapStateToProps) (GetGiftCard);

@@ -43,7 +43,7 @@ class Incoming extends React.Component {
         }
     }
     })
-    this.my_channel = this.pusher.subscribe('App.Chats.'+11)
+    this.my_channel = this.pusher.subscribe('User.Chats.'+11)
     this.my_channel.bind('pusher:subscription_succeeded',function(data){
       console.log('pusher:subscription_succeeded  '+ (data) )
     })

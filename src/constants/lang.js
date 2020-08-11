@@ -74,6 +74,22 @@ export const Language = [
       enter: 'Write your question or wish',
       sendPhoto: 'Attach a photo',
       send: 'Send a message'
+    },
+    giftCards:{
+      title:'Select a gift card',
+      choose: 'choose',
+      text: 'Or enter your amount',
+      header: 'Gift card',
+      selected: 'selected',
+      btn: 'Get a gift card',
+      get:{
+        title: 'Enter data \naddress',
+        email: "Enter the recipient's e-mail",
+        comment: 'Enter your comment',
+        enter: 'You can write some nice words to the recipient :)',
+        btn: 'Send message',
+        all: 'Total'
+      }
     }
   },
   {
@@ -152,6 +168,22 @@ export const Language = [
       enter: 'Напишите свой вопрос или пожелание',
       sendPhoto: 'Прикрепить фото',
       send: 'отправить сообщение'
+    },
+    giftCards:{
+      title:'Выберите \nподарочную карту',
+      choose: 'выбрать',
+      text: 'Или впишите свою сумму',
+      header: 'Подарочная карта',
+      selected: 'выбрано',
+      btn: 'Оформить подарочную карту',
+      get:{
+        title: 'Введите данные \nадресата',
+        email: 'Введите e-mail получателя',
+        comment: 'Введите комментарий',
+        enter: 'Можете написать несколько хороших слов получателю :)',
+        btn: 'Отправить',
+        all: 'Итоги'
+      }
     }
   },
 ];

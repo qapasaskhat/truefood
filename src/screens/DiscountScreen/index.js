@@ -5,11 +5,15 @@ import Background from '../../components/Background'
 import {img001,img002,img003} from '../../assets'
 import { TextInput } from 'react-native-gesture-handler';
 import Button from '../../components/Button'
+import { Language } from '../../constants/lang'
+import { connect } from 'react-redux'
 
 const Btn = ({
     status,
     onPress,
-    active
+    active,
+    btntxtDis,
+    btntxtAc
 })=>(
     <TouchableOpacity style={{
         backgroundColor: status?"#fff": '#FE1935',
@@ -26,7 +30,7 @@ const Btn = ({
             textAlign: 'center',
             fontSize: 12,
             color: status?'#000':'#fff'
-        }}>{status?'Выбрано':'выбрать'}</Text>
+        }}>{status?btntxtAc:btntxtDis}</Text>
     </TouchableOpacity>
 )
 const Card = ({
@@ -34,7 +38,9 @@ const Card = ({
     img,
     status,
     onPress,
-    active
+    active,
+    btntxtDis,
+    btntxtAc
 })=>(
     <View style={{
         marginTop: 30
@@ -50,7 +56,7 @@ const Card = ({
             marginTop: 21,
             marginBottom: 7
         }}>{price} ₸</Text>
-        <Btn active={active} status={status} onPress={onPress}/>
+        <Btn btntxtAc={btntxtAc} btntxtDis={btntxtDis} active={active} status={status} onPress={onPress}/>
     </View>
 )
 
@@ -125,11 +131,14 @@ class Discount extends Component {
 
   render() {
       const { discount, discountPrice } = this.state
+      const { langId } = this.props
     return (
       <View style={{
           flex: 1,
       }}>
-          <Header type='back' title={this.state.headerTitle} />
+          <Header type='back' title={Language[langId].giftCards.header} goBack={()=>{
+              this.props.navigation.goBack()
+          }}/>
           <Background type='red'>
               <View style={{
                   marginHorizontal: 12,
@@ -146,7 +155,7 @@ class Discount extends Component {
                       fontStyle: 'normal',
                       fontWeight: '600',
                       fontFamily: 'OpenSans-Regular',
-                  }}>Выберите {'\n'}подарочную карту</Text>
+                  }}>{Language[langId].giftCards.title}</Text>
                   <View style={{
                       flexDirection: 'row', 
                       justifyContent: 'space-between',
@@ -160,6 +169,8 @@ class Discount extends Component {
                               return (
                                   <Card 
                                     price={item.text}
+                                    btntxtAc = {Language[langId].giftCards.selected}
+                                    btntxtDis = {Language[langId].giftCards.choose}
                                     img={item.img}
                                     status={item.status}
                                     onPress={()=>{this.change(item.id)}}
@@ -175,7 +186,7 @@ class Discount extends Component {
                       fontWeight: '600',
                       fontStyle: 'normal',
                       fontFamily: 'OpenSans-Regular'
-                  }}>Или впишите свою сумму</Text>
+                  }}>{Language[langId].giftCards.text}</Text>
                   <TextInput 
                     placeholder='5 500 ₸'
                     value={discountPrice}
@@ -201,7 +212,7 @@ class Discount extends Component {
                   alignSelf: 'center',
                   bottom: 20
               }}>
-                  <Button title='Оформить подарочную карту' onPress={()=>{
+                  <Button title={Language[langId].giftCards.btn} onPress={()=>{
                       this.props.navigation.navigate('GetGiftCard',{discountPrice: discountPrice})
                   }} />
               </View>
@@ -209,5 +220,8 @@ class Discount extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+    langId: state.appReducer.langId
+  });
 
-export default Discount;
+export default connect(mapStateToProps) (Discount);

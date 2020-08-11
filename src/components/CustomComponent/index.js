@@ -38,12 +38,12 @@ class CustomComponent extends Component {
   render() {
     const { langId } = this.props
     this.list = [
-      {
-        id: 0,
-        name: Language[langId].menu.settings,
-        icon: icSettings,
-        routeName: 'SettingScreen'
-      },
+      // {
+      //   id: 0,
+      //   name: Language[langId].menu.settings,
+      //   icon: icSettings,
+      //   routeName: 'SettingScreen'
+      // },
       {
         id: 1,
         name: Language[langId].menu.historyOrder,

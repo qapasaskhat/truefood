@@ -3,27 +3,11 @@ import { View, Text, Image, ScrollView } from 'react-native';
 import Header from '../../components/Header'
 import { about, icAdd } from '../../assets/index'
 import Button from '../../components/Button'
+import { Language } from '../../constants/lang'
+import { connect } from 'react-redux'
 
 const text = '\t\tДеньги не спишутся без Вашего ведома. За сутки до списания мы отправляем смс с напоминанием: можно изменить состав заказа, отменить его в личном кабинете и по телефону до оплаты.'
 const text2 = '\t\tПотому что не надо каждую неделю заходить на сайт и думать об оплате коробки. Заказы можно изменять или пропускать сколько угодно недель. Саму подписку можно отменить, позвонив нам. А на каждый заказ по подписке мы предоставляем Вам скидку 10%.'
-const items = [
-  {
-    id: 1,
-    text: 'Скачайте приложение "TRUE FOOD"'
-  },
-  {
-    id: 2,
-    text: 'Выберите расписание доставок и меню'
-  },
-  {
-    id: 3,
-    text: 'Привяжите свою карту'
-  },
-  {
-    id: 4,
-    text: 'Получите свой вкусный заказ'
-  },
-]
 
 const Item = ({about})=>(
   <View style={{flexDirection: "row", marginTop:12}}>
@@ -88,6 +72,7 @@ class About extends Component {
   }
 
   render() {
+    const { langId } = this.props
     return (
       <View style={{
           flex: 1,
@@ -95,7 +80,7 @@ class About extends Component {
           <Header 
             type='back' 
             goBack={()=>this.props.navigation.goBack()}
-            title='О нас'
+            title={Language[langId].about.aboutUs}
             />
           <ScrollView style={{
             paddingTop: 32,
@@ -107,7 +92,7 @@ class About extends Component {
           lineHeight: 24,
           color: '#08050B',
           fontFamily: 'OpenSans-Regular',
-        }}> Почему TRUE FOOD? </Text>
+        }}> {Language[langId].about.title} </Text>
         <View style={{
           width: '100%',
           height: 200,
@@ -120,16 +105,33 @@ class About extends Component {
             resizeMode: 'center'
           }}/>
         </View>
-        <Item about={text2} />
-        <Item about={text} />
+        <Item about={Language[langId].about.text} />
+        <Item about={Language[langId].about.text1} />
         <Text style={{
           fontSize: 24,
           fontFamily: 'OpenSans-Regular',
           fontWeight: '600',
           lineHeight: 100
-        }}>Как заказать?</Text>
+        }}>{Language[langId].about.steps}</Text>
         {
-          items.map((item)=>{
+          [
+            {
+              id: 1,
+              text: Language[langId].about.step1
+            },
+            {
+              id: 2,
+              text: Language[langId].about.step2
+            },
+            {
+              id: 3,
+              text: Language[langId].about.step3
+            },
+            {
+              id: 4,
+              text: Language[langId].about.step4
+            },
+          ].map((item)=>{
             return(
               <HowToOrder id={item.id} text={item.text} />
             )
@@ -139,7 +141,7 @@ class About extends Component {
           marginTop: 20,
           marginBottom:50
         }}>
-          <Button onPress={()=>{}} title='Задать вопрос'/>
+          <Button onPress={()=>{}} title={Language[langId].about.answer}/>
         </View>
         </ScrollView>
       </View>
@@ -147,4 +149,8 @@ class About extends Component {
   }
 }
 
-export default About;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+
+export default connect(mapStateToProps) (About);

@@ -8,6 +8,7 @@ import BasketCard from '../../components/BasketCard';
 import Button from '../../components/Button';
 import { connect } from 'react-redux';
 import axios from 'axios'
+import { Language } from '../../constants/lang'
 
 class BasketScreen extends React.Component {
 
@@ -64,7 +65,7 @@ class BasketScreen extends React.Component {
   }
 
   render() {
-    const {navigation, dispatch, basket} = this.props;
+    const {navigation, dispatch, basket,langId} = this.props;
     const { basketProduct, loading } = this.state
     return (
       <View style={{flex: 1}}>
@@ -82,10 +83,10 @@ class BasketScreen extends React.Component {
                 ?
                 <Button
                 onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
-                title={`Оформить за ${this.getAllMoney()} ₸`}
+                title={`${Language[langId].basket.delivery} ${this.getAllMoney()} ₸`}
               />: null}
               <Button
-                title={'Добавить еще блюда'}
+                title={Language[langId].basket.add}
                 styleBtn={styles.styleBtn}
                 styleText={styles.styleText}
                 onPress={()=>{
@@ -94,12 +95,12 @@ class BasketScreen extends React.Component {
               />
               </View>
             }
-            ListHeaderComponent={<Text style={styles.h1}>Корзина</Text>}
+            ListHeaderComponent={<Text style={styles.h1}>{Language[langId].basket.title}</Text>}
             renderItem={({item})=>(
-              <BasketCard item={item} />
+              <BasketCard langId={langId} item={item} />
             )}
             ListEmptyComponent={
-              <Text style={styles.h1}>Пусто</Text>
+            <Text style={styles.h1}>{Language[langId].basket.empty}</Text>
             }
              />
           </View>}
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
+  langId: state.appReducer.langId
 });
 
 export default connect(mapStateToProps) (BasketScreen);

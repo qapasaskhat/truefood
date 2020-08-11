@@ -14,12 +14,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
+import { Language } from '../../constants/lang'
+import { connect } from 'react-redux'
 
 
-const options = [
-  {label: 'Доставка', value: false},
-  {label: 'Забрать из True Food', value: true},
-];
 const CalendarView=({active})=>(
   active?<View style={{
     position: 'absolute',
@@ -151,14 +149,15 @@ class DeliveryScreen extends React.Component {
   }
 
   _renderWith = () => {
+    const { langId } = this.props
     return (
       <View style={styles.view}>
         <View key={'calendar'}>
-          <Text style={styles.h2}>Заберу заказ в:</Text>
-          <CalendarButton title={this.state.dateOrder} />
+          <Text style={styles.h2}>{Language[langId].delivery.pickuptext}:</Text>
+          <CalendarButton title={'20:00'} />
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
-          <Text style={styles.h2}>Ваш номер телефона</Text>
+        <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
             value={this.state.number}
             onChangeText={(text) => {
@@ -167,9 +166,9 @@ class DeliveryScreen extends React.Component {
           />
         </View>
         <View key={'description'} style={{marginTop: 10}}>
-          <Text style={styles.h2}>Пожелания ко всему заказу</Text>
+          <Text style={styles.h2}>{Language[langId].delivery.wish}</Text>
           <TextInput
-            placeholder={'Напишите свои пожелания к заказу'}
+            placeholder={Language[langId].delivery.enter}
             placeholderTextColor={''}
             style={{height: 150, borderRadius: 20}}
             multiline={true}
@@ -205,6 +204,7 @@ class DeliveryScreen extends React.Component {
     })
   }
   _renderWithout = () => {
+    const { langId } = this.props
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
@@ -213,7 +213,7 @@ class DeliveryScreen extends React.Component {
           ))}
         </View>
         <View key={'cabinet'} style={{marginTop: 10}}>
-          <Text style={styles.h2}>Введите номер кабинета</Text>
+          <Text style={styles.h2}>{Language[langId].delivery.cabinet}</Text>
           <TextInput 
             placeholder={'20'}
             value={this.state.number}
@@ -224,7 +224,7 @@ class DeliveryScreen extends React.Component {
              />
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
-          <Text style={styles.h2}>Ваш номер телефона</Text>
+          <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
             value={this.state.numberPhone}
             onChangeText={(text) => {
@@ -233,9 +233,9 @@ class DeliveryScreen extends React.Component {
           />
         </View>
         <View key={'description'} style={{marginTop: 10}}>
-          <Text style={styles.h2}>Пожелания ко всему заказу</Text>
+          <Text style={styles.h2}>{Language[langId].delivery.wish}</Text>
           <TextInput
-            placeholder={'Напишите свои пожеланияк заказу'}
+            placeholder={Language[langId].delivery.enter}
             placeholderTextColor={''}
             style={{height: 150, borderRadius: 20}}
             multiline={true}
@@ -247,13 +247,14 @@ class DeliveryScreen extends React.Component {
     );
   };
   render() {
+    const { langId } = this.props
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={()=>this.props.navigation.openDrawer()}/>
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
-            <Text style={styles.h1}>Корзина</Text>
+            <Text style={styles.h1}>{Language[langId].basket.title}</Text>
             <SwitchSelector
               borderColor={'#FE1935'}
               buttonColor={'#FE1935'}
@@ -261,7 +262,10 @@ class DeliveryScreen extends React.Component {
               textStyle={styles.text}
               selectedTextStyle={styles.text}
               height={55}
-              options={options}
+              options={[
+                {label: Language[langId].delivery.delivety, value: false},
+                {label: Language[langId].delivery.pickup, value: true},
+              ]}
               initial={0}
               onPress={(value) => this.setState({type: value})}
             />
@@ -272,7 +276,7 @@ class DeliveryScreen extends React.Component {
               this.delivery()
               //this.props.navigation.navigate('PayScreen')
             }}
-            title={'Оформит заказ'}
+            title={Language[langId].delivery.checkout}
             styleBtn={{margin: 10}}
           />
         </Background>
@@ -329,5 +333,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 });
-
-export default DeliveryScreen;
+const mapStateToProps = (state) => ({
+  basket: state.appReducer.basket,
+  langId: state.appReducer.langId
+});
+export default connect(mapStateToProps) (DeliveryScreen);

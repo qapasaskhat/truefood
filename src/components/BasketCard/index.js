@@ -5,6 +5,7 @@ import {icMoney, icClose, icRemove, icAdd} from '../../assets';
 import Accordion from 'react-native-collapsible/Accordion';
 import CalendarButton from '../../components/Button/CalendarButton';
 import DownButton from '../../components/Button/DownButton';
+import { Language } from '../../constants/lang'
 
 const SECTIONS = [
   {
@@ -90,10 +91,11 @@ class BasketScreen extends React.Component {
   };
 
   _renderSize = (item) => {
+    const { langId } = this.props
     return (
       <View key={'size'}>
         <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
-          Размер порции
+          {Language[langId].cart.text1}
         </Text>
         <View style={[styles.btmContainer]}>
           {this.state.size.map((item, index) => (
@@ -122,10 +124,11 @@ class BasketScreen extends React.Component {
   };
 
   _renderCount = () => {
+    const { langId } = this.props
     return (
       <View key={'count'} style={{marginTop: 10}}>
         <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
-          Количество порций
+          {Language[langId].cart.text}
         </Text>
         <View style={styles.btmContainer}>
           <TouchableOpacity
@@ -207,7 +210,7 @@ class BasketScreen extends React.Component {
     this.setState({activeSections});
   };
   render() {
-    const { item } = this.props
+    const { item, langId } = this.props
     return (
       <View key={'basketCard'} style={styles.shadow}>
         {this._renderHeader(item)}
@@ -221,7 +224,7 @@ class BasketScreen extends React.Component {
           onChange={this._updateSections}
         /> */}
         <View>
-          <Text style={styles.add}>Добавить пожелание к блюду</Text>
+        <Text style={styles.add}>{Language[langId].cart.add}</Text>
         </View>
       </View>
     );

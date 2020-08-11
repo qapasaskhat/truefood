@@ -36,14 +36,15 @@ class LoginScreen extends React.Component {
     langId: 1
   };
   componentDidMount=()=>{
-    console.log(Language[0])
+    console.log(Language[this.props.langId])
   }
 
   login=()=>{
     const { email, password } = this.state
+    const { langId } = this.props
     const user = new FormData()
-    user.append("email",email)
-    user.append("password",password)
+    user.append("email", email)
+    user.append("password", password)
 
     var config = {
       method: 'post',
@@ -67,7 +68,7 @@ class LoginScreen extends React.Component {
       }else{
         this.setState({
           loading: false,
-          error: 'Ошибка входа'
+          error: Language[langId].auth.error
         })
       }
     })
@@ -75,7 +76,7 @@ class LoginScreen extends React.Component {
       console.log(error);
       this.setState({
         loading: false,
-        error: 'Ошибка входа'
+        error: Language[langId].auth.error
       })
     });
     console.log(`login: ${this.state.email}; password: ${this.state.password}`);

@@ -6,6 +6,8 @@ import Background from '../../components/Background'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Button from '../../components/Button'
 import axios from 'axios'
+import { connect } from 'react-redux';
+import { Language } from '../../constants/lang'
 
 class Support extends Component {
   constructor(props) {
@@ -43,9 +45,10 @@ class Support extends Component {
   }
 
   render() {
+    const { langId } = this.props
     return (
       <View style={{flex: 1}}>
-          <Header type='back' title='Помощь' goBack={()=>this.props.navigation.goBack()}/>
+          <Header type='back' title={Language[langId].support.title} goBack={()=>this.props.navigation.goBack()}/>
           <Background>
               <View style={{
                   marginHorizontal: 12,
@@ -69,7 +72,7 @@ class Support extends Component {
                           fontFamily: 'OpenSans-Regular',
                           textAlign: 'left',
                           marginTop: 16
-                      }}>Здесь вы можете{'\n'}задать вопрос</Text>
+                      }}>{Language[langId].support.answer}</Text>
                       <Image source={chat} style={{
                           width: 54,
                           height: 54,
@@ -84,9 +87,9 @@ class Support extends Component {
                           fontStyle: 'normal',
                           fontWeight: '600',
                           fontFamily: 'OpenSans-Regular',
-                  }}>Ваше сообщение</Text>
+                  }}>{Language[langId].support.text}</Text>
                   <TextInput 
-                    placeholder='Напишите свой вопрос или пожелание'
+                    placeholder={Language[langId].support.enter}
                     multiline
                     value={this.state.message}
                     onChangeText={(text)=>this.setState({message: text})}
@@ -129,9 +132,9 @@ class Support extends Component {
                                 textTransform: 'uppercase',
                                 fontWeight: 'bold',
                                // marginLeft: 30
-                            }}>Прикрепить фото</Text>
+                            }}>{Language[langId].support.sendPhoto}</Text>
                         </TouchableOpacity>
-                        <Button title='отправить сообщение' onPress={()=>{this.sendMessage(this.state.message)}} />
+                        <Button title={Language[langId].support.send} onPress={()=>{this.sendMessage(this.state.message)}} />
                     </View>
               </View>
           </Background>
@@ -140,4 +143,8 @@ class Support extends Component {
   }
 }
 
-export default Support;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+
+export default connect(mapStateToProps) (Support);

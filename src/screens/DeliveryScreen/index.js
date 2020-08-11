@@ -49,7 +49,8 @@ class DeliveryScreen extends React.Component {
     access_token: '',
     place_id: '',
     comment: '',
-    otvet: ''
+    otvet: '',
+    basket: []
   };
 
   componentDidMount =async()=> {
@@ -61,7 +62,9 @@ class DeliveryScreen extends React.Component {
     })
     console.log(this.props.navigation.getParam('basket').items)
     this.getPlace()
-    
+    this.setState({
+      basket: this.props.navigation.getParam('basket').items
+    })
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
@@ -116,11 +119,16 @@ class DeliveryScreen extends React.Component {
     });
   }
   delivery=()=>{
-    const {number, numberPhone, place_id,comment} = this.state
+    const { number, numberPhone, place_id,comment, basket } = this.state
+
     var FormData = require('form-data');
     var data = new FormData();
     data.append('phone', numberPhone);
-    data.append('cart[0]', `{"quantity":1,"variation_id":1,"product_id": 7}`);
+    for (let i=0; i<basket.length; i++){
+      //console.log(basket[i].variations[0].product_variation_id)
+      data.append(`cart[${i}]`, `{"quantity":${1},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
+    }
+
     data.append('payment_type_id', '2');
     data.append('delivery_place_id', place_id);
     data.append('cabinet_number', number);
@@ -142,6 +150,7 @@ class DeliveryScreen extends React.Component {
         otvet: response.data.message
       })
       alert(this.state.otvet)
+      this.props.navigation.goBack()
     })
     .catch( (error)=> {
       console.log(error);

@@ -26,6 +26,12 @@ export const appReducer = (state = initialState.app, action) => {
         ...state,
         langId: action.payload
       }
+    case 'DELETE_BASKET_ITEM':
+      console.log(action.payload)
+      return {
+        ...state,
+        basket: state.basket.filter(item=>item.id !== action.payload)
+      }
     default:
       return state;
   }

@@ -7,19 +7,10 @@ import CalendarButton from '../../components/Button/CalendarButton';
 import DownButton from '../../components/Button/DownButton';
 import { Language } from '../../constants/lang'
 
-const SECTIONS = [
-  {
-    title: 'Показать дополнительные параметры',
-    content: 'Lorem ipsum...',
-  },
-];
-
 class BasketScreen extends React.Component {
   state = {
     count: 1,
-    size: [
- 
-    ],
+    size: [],
     activeSections: [],
   };
   componentDidMount=()=>{
@@ -58,6 +49,7 @@ class BasketScreen extends React.Component {
   };
 
   _renderHeader = (item) => {
+    const {onPress} = this.props
     return (
       <View key={'header'} style={styles.container}>
         <Image
@@ -67,8 +59,8 @@ class BasketScreen extends React.Component {
               item.product.thumbnail,
           }}
         />
-        <View style={styles.body}>
-          <TouchableOpacity style={styles.close}>
+        <View style={[styles.body]}>
+          <TouchableOpacity onPress={onPress} style={[styles.close,{ backgroundColor: '#fff', zIndex:1001}]} >
             <Image
               source={icClose}
               style={{width: 20, height: 20, resizeMode: 'contain'}}
@@ -210,7 +202,7 @@ class BasketScreen extends React.Component {
     this.setState({activeSections});
   };
   render() {
-    const { item, langId } = this.props
+    const { item, langId, deleleItem } = this.props
     return (
       <View key={'basketCard'} style={styles.shadow}>
         {this._renderHeader(item)}

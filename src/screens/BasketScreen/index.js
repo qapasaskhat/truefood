@@ -27,9 +27,6 @@ class BasketScreen extends React.Component {
       {this.getBasket()}
     );
   }
-
-
-
   getAllMoney=()=>{
     const { basket } = this.props
     let money = 0
@@ -53,7 +50,6 @@ class BasketScreen extends React.Component {
           'Accept': 'application/json',
         }
       };
-      
       axios(config)
       .then( (response) =>{
         console.log(response.data.cart);
@@ -62,6 +58,10 @@ class BasketScreen extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
+  }
+  deleteBAsketItem=(id)=>{
+    this.props.dispatch({type: 'DELETE_BASKET_ITEM', payload: id} )
+    this.getBasket()
   }
 
   render() {
@@ -97,7 +97,7 @@ class BasketScreen extends React.Component {
             }
             ListHeaderComponent={<Text style={styles.h1}>{Language[langId].basket.title}</Text>}
             renderItem={({item})=>(
-              <BasketCard langId={langId} item={item} />
+              <BasketCard langId={langId} item={item} onPress={()=>this.deleteBAsketItem(item.product.id)}/>
             )}
             ListEmptyComponent={
             <Text style={styles.h1}>{Language[langId].basket.empty}</Text>
@@ -131,5 +131,7 @@ const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
   langId: state.appReducer.langId
 });
-
-export default connect(mapStateToProps) (BasketScreen);
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps) (BasketScreen);

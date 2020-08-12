@@ -20,14 +20,10 @@ class GetGiftCard extends Component {
       
   }
   postGift=(price, email)=>{
-      const gift = {
-          price: price,
-          email: email
-      }
       const api = `http://truefood.chat-bots.kz/api/orders/gift-card`
       var data = new FormData();
-        data.append('price', '2000');
-        data.append('email', 'tomboffos@gmail.com');
+        data.append('price', price);
+        data.append('email', email);
       var config = {
         method: 'post',
         url: api,
@@ -35,8 +31,9 @@ class GetGiftCard extends Component {
         data: data
       };
       axios(config)
-        .then(function (response) {
+        .then( (response)=> {
         console.log(JSON.stringify(response.data));
+        
         })
         .catch(function (error) {
         console.log(error);

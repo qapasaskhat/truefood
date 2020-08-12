@@ -106,7 +106,9 @@ class DeliveryScreen extends React.Component {
         otvet: response.data.message,
         loading: false
       })
+
       alert(this.state.otvet)
+      this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
       this.props.navigation.goBack()
     })
     .catch( (error) =>{
@@ -154,6 +156,7 @@ class DeliveryScreen extends React.Component {
         loading: false
       })
       alert(this.state.otvet)
+      this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
       this.props.navigation.goBack()
     })
     .catch( (error)=> {
@@ -169,15 +172,10 @@ class DeliveryScreen extends React.Component {
     const { langId } = this.props
     return (
       <View style={styles.view}>
-        <View key={'calendar'}>
-          <Text style={styles.h2}>{Language[langId].delivery.pickuptext}:</Text>
-          <TextInput 
-            value={this.state.time}
-            onChangeText={(text) => {
-              this.setState({time: text});
-            }}
-          />
-          {/* <CalendarButton title={'20:00'} /> */}
+        <View key={'radioView'} style={styles.radioView}>
+          {this.state.locations.map((item) => (
+            <RadioButton item={item} radioBtn={()=>{this._radioBtn(item.id)}}/>
+          ))}
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
         <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
@@ -364,4 +362,7 @@ const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
   langId: state.appReducer.langId
 });
-export default connect(mapStateToProps) (DeliveryScreen);
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps) (DeliveryScreen);

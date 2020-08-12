@@ -43,7 +43,7 @@ class Header extends React.Component {
     axios(config)
     .then( (response) => {
       this.setState({
-        message: response.data.messages.length
+        //message: response.data.messages.length
       })
       //console.log(JSON.stringify(response.data));
     })

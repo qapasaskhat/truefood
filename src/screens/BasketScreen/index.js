@@ -18,14 +18,21 @@ class BasketScreen extends React.Component {
   }
 
   componentDidMount() {
+    
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     console.log(this.props.basket.length)
     this.getBasket()
     this.props.navigation.addListener ('willFocus', () =>
-      {this.getBasket()}
+      {
+        this.getBasket()
+        this.props.basket.length === 0 && this.setState({
+          basketProduct: []
+        })
+      }
     );
+
   }
   getAllMoney=()=>{
     const { basket } = this.props
@@ -61,7 +68,15 @@ class BasketScreen extends React.Component {
   }
   deleteBAsketItem=(id)=>{
     this.props.dispatch({type: 'DELETE_BASKET_ITEM', payload: id} )
-    this.getBasket()
+    this.setState(state => {
+      const basketProduct = this.state.basketProduct.filter(item=>item.id !== id)
+      return {
+        basketProduct,
+      };
+    });
+    setTimeout(() => {
+      this.getBasket()
+    }, 1000);
   }
 
   render() {
@@ -69,7 +84,7 @@ class BasketScreen extends React.Component {
     const { basketProduct, loading } = this.state
     return (
       <View style={{flex: 1}}>
-        <Header openDrawer={() => navigation.openDrawer()}/>
+        <Header openDrawer={() => navigation.openDrawer()} navigation={navigation}/>
         <ButtonUser />
         <Background>
          { loading?<ActivityIndicator />:
@@ -97,6 +112,7 @@ class BasketScreen extends React.Component {
             }
             ListHeaderComponent={<Text style={styles.h1}>{Language[langId].basket.title}</Text>}
             renderItem={({item})=>(
+              basket.length !==0 &&
               <BasketCard langId={langId} item={item} onPress={()=>this.deleteBAsketItem(item.product.id)}/>
             )}
             ListEmptyComponent={

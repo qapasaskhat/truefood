@@ -33,7 +33,9 @@ class PopularCard extends React.Component {
             <TouchableOpacity
               onPress={() =>{
                 onPress()
-                this.props.dispatch({type: 'ADD_BASKET', payload: item} )}
+                this.props.dispatch({type: 'ADD_BASKET', payload: item})
+                this.props.dispatch({type: 'BASKET'} )
+              }
               }
               style={styles.btnView}>
               <Text style={styles.btnText}>{text}</Text>

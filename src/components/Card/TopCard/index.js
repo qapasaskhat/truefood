@@ -32,6 +32,7 @@ class TopCard extends React.Component {
             <TouchableOpacity style={styles.btnView} onPress={()=>{
               //console.log(item)
               this.props.dispatch({type: 'ADD_BASKET', payload: item})
+              this.props.dispatch({type: 'BASKET'} )
             }}>
               <Image
                 source={icAdd}

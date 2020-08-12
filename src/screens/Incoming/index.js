@@ -14,6 +14,7 @@ import Background from '../../components/Background';
 import Pusher from 'pusher-js/react-native';
 import {pusherConfig} from './pusher';
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 import {icFrame2, icRight, icMoney, chat} from '../../assets';
 import {GiftedChat} from 'react-native-gifted-chat';
@@ -32,6 +33,13 @@ class Incoming extends React.Component {
     this.my_channel = null;
   }
   componentDidMount = () => {
+
+    const {chat_id,chat_messages} = this.props
+
+    this.setState({
+      messages: chat_messages
+    })
+
     Pusher.logToConsole = true;
     console.log('date');
     this.pusher = new Pusher(pusherConfig.key, {
@@ -47,7 +55,7 @@ class Incoming extends React.Component {
         },
       },
     });
-    this.my_channel = this.pusher.subscribe('App.Chat.' + 11);
+    this.my_channel = this.pusher.subscribe('App.Chat.' + chat_id);
     this.my_channel.bind('message-sent', (data)=> {
       this.setState({
         message: data.message
@@ -71,12 +79,17 @@ class Incoming extends React.Component {
       console.log(this.state.messages);
     });
   };
+  componentWillUnmount=()=>{
+    this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )
+  }
   sendMessage=(message)=>{
+    const {chat_id} = this.props
+
     var FormData = require('form-data');
     var data = new FormData();
     data.append('message', message);
-    data.append('chat_id', '11');
-
+    data.append('chat_id', chat_id);
+    console.log(chat_id)
     var config = {
       method: 'post',
       url: 'http://truefood.chat-bots.kz/api/chat',
@@ -148,7 +161,7 @@ class Incoming extends React.Component {
     const {messages} = this.state;
     const chat = (
       <GiftedChat
-        messages={messages}
+        messages={messages.reverse()}
         
         onSend={(message)=>{
           console.log(message[0].text)
@@ -275,5 +288,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-export default Incoming;
+const mapStateToProps = (state) => ({
+  chat_id: state.appReducer.chat_id,
+  chat_messages: state.appReducer.chat_messages
+});
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps) (Incoming);

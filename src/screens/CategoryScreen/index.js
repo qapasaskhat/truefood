@@ -111,7 +111,7 @@ class CategoryScreen extends React.Component {
     const {page,product} = this.state;
     return (
       <View style={styles.container}>
-        <Header navigation={navigation}/>
+        <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>

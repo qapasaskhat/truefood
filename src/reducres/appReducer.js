@@ -21,6 +21,13 @@ export const appReducer = (state = initialState.app, action) => {
         ...state,
         basket: [...state.basket, action.payload],
       };
+    case 'BASKET':
+      return{
+        ...state,
+        basket: state.basket.filter((item,index)=>{
+          return state.basket.indexOf(item)===index
+        })
+      }
     case 'CHANGE_LANG':
       return {
         ...state,
@@ -31,6 +38,21 @@ export const appReducer = (state = initialState.app, action) => {
       return {
         ...state,
         basket: state.basket.filter(item=>item.id !== action.payload)
+      }
+    case 'CLEAR_BASKET':
+      return{
+        ...state,
+        basket: []
+      }
+    case 'GET_CHAT_ID':
+      return{
+        ...state,
+        chat_id: action.payload
+      }
+    case 'GET_MESSAGE':
+      return{
+        ...state,
+        chat_messages: action.payload
       }
     default:
       return state;

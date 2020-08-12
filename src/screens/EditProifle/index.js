@@ -65,9 +65,12 @@ class EditProifle extends React.Component {
 
     axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
+      console.log(JSON.stringify(response.data))
+      
+      this.props.navigation.goBack()
     })
     .catch(function (error) {
+      alert(error.message)
       console.log(error);
     });
   }
@@ -160,7 +163,6 @@ class EditProifle extends React.Component {
           </View> */}
           <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} onPress={()=>{
             this._editProfile(this.state.access_token)
-            this.props.navigation.goBack()
           }}/>
         </View>
       </View>

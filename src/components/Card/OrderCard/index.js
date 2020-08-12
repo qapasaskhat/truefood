@@ -27,7 +27,7 @@ class OrderCard extends React.Component {
             style={styles.foodImg}
             source={{
               uri:
-                'https://alimero.ru/uploads/images/18/76/55/2019/08/05/3e0c56.png',
+              `http://truefood.chat-bots.kz/storage/${item.entity && item.entity.product.thumbnail}`
             }}
           />
           <View style={styles.body}>

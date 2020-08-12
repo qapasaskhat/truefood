@@ -16,6 +16,7 @@ import {
   icProfile,
   icClose,
   icBack,
+  entypo_edit
 } from '../../assets/index';
 
 import axios from 'axios';
@@ -44,7 +45,7 @@ class Header extends React.Component {
       this.setState({
         message: response.data.messages.length
       })
-      console.log(JSON.stringify(response.data));
+      //console.log(JSON.stringify(response.data));
     })
     .catch(function (error) {
       console.log(error);
@@ -67,7 +68,7 @@ class Header extends React.Component {
               onPress={() => onPressUser()}
               style={styles.profileBtn}>
               <Image
-                source={icProfile}
+                source={entypo_edit}
                 style={{width: 18, height: 18, resizeMode: 'contain'}}
               />
             </TouchableOpacity>

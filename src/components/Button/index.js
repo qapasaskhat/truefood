@@ -1,16 +1,16 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 class Button extends React.Component {
   render() {
-    const {styleBtn, styleText, onPress} = this.props;
+    const {styleBtn, styleText, onPress,loading} = this.props;
     return (
       <TouchableOpacity
         onPress={() => onPress()}
         style={[styles.btnView, styleBtn && styleBtn]}>
-        <Text style={[styles.btnText, styleText && styleText]}>
+       {loading?<ActivityIndicator color='#fff'/>: <Text style={[styles.btnText, styleText && styleText]}>
           {this.props.title}
-        </Text>
+        </Text>}
       </TouchableOpacity>
     );
   }

@@ -14,8 +14,8 @@ class BasketScreen extends React.Component {
     activeSections: [],
   };
   componentDidMount=()=>{
-    //const { item } = this.props
-    let newSize = [...this.props.item.variations]
+    const { item } = this.props
+    let newSize = [...item.variations]
       newSize.map((item) => {
       if (item.id === 1) {
         item.active = true;
@@ -206,7 +206,7 @@ class BasketScreen extends React.Component {
     return (
       <View key={'basketCard'} style={styles.shadow}>
         {this._renderHeader(item)}
-        {this._renderBottom(item.variations)}
+        {this._renderBottom(item.variations && item.variations)}
         {/* <Accordion
           sections={SECTIONS}
           touchableComponent={TouchableOpacity}
@@ -215,9 +215,7 @@ class BasketScreen extends React.Component {
           renderContent={this._renderContent}
           onChange={this._updateSections}
         /> */}
-        <View>
-        <Text style={styles.add}>{Language[langId].cart.add}</Text>
-        </View>
+        
       </View>
     );
   }

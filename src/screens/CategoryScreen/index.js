@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -48,7 +49,7 @@ class CategoryScreen extends React.Component {
     }
   }
   getProduct=(categoryId, byPrice, value)=>{
-    const api =`http://truefood.chat-bots.kz/api/products?category_id=${categoryId}`
+    const api =`http://truefood.chat-bots.kz/api/products?category[]=${categoryId}`
     const apiByPrice = `http://truefood.chat-bots.kz/api/products?category_id=${categoryId}&byPrice=${value}`
     this.setState({
       product: {
@@ -110,7 +111,7 @@ class CategoryScreen extends React.Component {
     const {page,product} = this.state;
     return (
       <View style={styles.container}>
-        <Header />
+        <Header navigation={navigation}/>
         <ButtonUser />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
@@ -128,11 +129,12 @@ class CategoryScreen extends React.Component {
             </View>
             {/* <FilterButton /> */}
             <View style={{marginTop: 10}}>
-              <FlatList data={product.items}
+              { product.loading? <ActivityIndicator/> : <FlatList data={product.items}
               renderItem={({item,index})=>(
                 <PopularCard 
                   name={item.name} 
                   id={item.id}
+                  item={item}
                   imgUrl={item.thumbnail}
                   price= {item.variations && item.variations[0].price } 
                   desc={item.description} 
@@ -153,7 +155,7 @@ class CategoryScreen extends React.Component {
                   fontWeight: '200'
                 }}>пусто</Text>
               }
-               />
+               />}
             </View>
             {/* { product.items.length !==0 && <View style={styles.pagination}>
               {  [1, 2, 3, 4].map((item) => (

@@ -18,25 +18,6 @@ import { Language } from '../../constants/lang'
 import { connect } from 'react-redux'
 
 
-const CalendarView=({active})=>(
-  active?<View style={{
-    position: 'absolute',
-    width:'100%',
-    height: '100%',
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    zIndex: 1111,
-  }}>
-    <View style={{
-      width:'80%',
-      height: '60%',
-      borderRadius: 11,
-    }}>
-    </View>
-  </View>:null
-)
-
 class DeliveryScreen extends React.Component {
   state = {
     type: false,
@@ -44,13 +25,15 @@ class DeliveryScreen extends React.Component {
     calendarActive: false,
     dateOrder: 'Сегодня, в 14:30',
     date: new Date(Date.now()),
-    number: null,
+    number: '',
     locations: [],
     access_token: '',
     place_id: '',
     comment: '',
     otvet: '',
-    basket: []
+    basket: [],
+    loading: false,
+    time: ''
   };
 
   componentDidMount =async()=> {
@@ -91,35 +74,7 @@ class DeliveryScreen extends React.Component {
     })
   }
   pickup=()=>{
-    const {number, numberPhone, place_id,comment} = this.state
-
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('phone', numberPhone);
-    data.append('cart[0]', '{"quantity":1,"variation_id":1}');
-    data.append('payment_type_id', '2');
-    data.append('pick_up_at', '12:00');
-    data.append('comment', comment);
-
-    var config = {
-      method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
-      headers: { 
-        'Authorization': `Bearer ${this.state.access_token}`, 
-      },
-      data : data
-    };
-
-    axios(config)
-    .then( (response)=> {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch( (error) =>{
-      console.log(error);
-    });
-  }
-  delivery=()=>{
-    const { number, numberPhone, place_id,comment, basket } = this.state
+    const {number, numberPhone, time,comment, basket} = this.state
 
     var FormData = require('form-data');
     var data = new FormData();
@@ -128,12 +83,11 @@ class DeliveryScreen extends React.Component {
       //console.log(basket[i].variations[0].product_variation_id)
       data.append(`cart[${i}]`, `{"quantity":${1},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
     }
-
     data.append('payment_type_id', '2');
-    data.append('delivery_place_id', place_id);
-    data.append('cabinet_number', number);
+    data.append('pick_up_at', time);
     data.append('comment', comment);
-
+    data.append('delivery_type_id', '2')
+    data.append('cabinet_number', number);
     var config = {
       method: 'post',
       url: 'http://truefood.chat-bots.kz/api/orders/pickup',
@@ -142,18 +96,72 @@ class DeliveryScreen extends React.Component {
       },
       data : data
     };
-
+    this.setState({
+      loading: true
+    })
     axios(config)
     .then( (response)=> {
       console.log(JSON.stringify(response.data));
       this.setState({
-        otvet: response.data.message
+        otvet: response.data.message,
+        loading: false
+      })
+      alert(this.state.otvet)
+      this.props.navigation.goBack()
+    })
+    .catch( (error) =>{
+      console.log(error);
+      alert(error.message)
+      this.setState({
+        loading: false
+      })
+    });
+  }
+  delivery=(type)=>{
+    const { number, numberPhone, place_id,comment, basket,time } = this.state
+
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('phone', numberPhone);
+    for (let i=0; i<basket.length; i++){
+      //console.log(basket[i].variations[0].product_variation_id)
+      data.append(`cart[${i}]`, `{"quantity":${1},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
+    }
+   // data.append('delivery_type_id', '1')
+    data.append('delivery_type', type)
+    data.append('payment_type_id', '2');
+    data.append('delievery_place_id', `${place_id}`);
+    data.append('cabinet_number', number);
+    data.append('pick_up_at', time);
+    data.append('message', `${comment}`);
+    console.log(data)
+    var config = {
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
+      headers: { 
+        'Authorization': `Bearer ${this.state.access_token}`, 
+      },
+      data : data
+    };
+    this.setState({
+      loading: true
+    })
+    axios(config)
+    .then( (response)=> {
+      console.log(JSON.stringify(response.data));
+      this.setState({
+        otvet: response.data.message,
+        loading: false
       })
       alert(this.state.otvet)
       this.props.navigation.goBack()
     })
     .catch( (error)=> {
       console.log(error);
+      alert(error.message)
+      this.setState({
+        loading: false
+      })
     });
   }
 
@@ -163,14 +171,20 @@ class DeliveryScreen extends React.Component {
       <View style={styles.view}>
         <View key={'calendar'}>
           <Text style={styles.h2}>{Language[langId].delivery.pickuptext}:</Text>
-          <CalendarButton title={'20:00'} />
+          <TextInput 
+            value={this.state.time}
+            onChangeText={(text) => {
+              this.setState({time: text});
+            }}
+          />
+          {/* <CalendarButton title={'20:00'} /> */}
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
         <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
-            value={this.state.number}
+            value={this.state.numberPhone}
             onChangeText={(text) => {
-              this.setState({number: text});
+              this.setState({numberPhone: text});
             }}
           />
         </View>
@@ -229,7 +243,6 @@ class DeliveryScreen extends React.Component {
             onChangeText={(text) => {
               this.setState({number: text});
             }}
-            
              />
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
@@ -276,15 +289,20 @@ class DeliveryScreen extends React.Component {
                 {label: Language[langId].delivery.pickup, value: true},
               ]}
               initial={0}
-              onPress={(value) => this.setState({type: value})}
+              onPress={(value) => {
+
+                this.setState({type: value})
+              }}
             />
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <Button
             onPress={() => {
-              this.delivery()
+              this.state.type?this.delivery(2):
+              this.delivery(1)
               //this.props.navigation.navigate('PayScreen')
             }}
+            loading={this.state.loading}
             title={Language[langId].delivery.checkout}
             styleBtn={{margin: 10}}
           />

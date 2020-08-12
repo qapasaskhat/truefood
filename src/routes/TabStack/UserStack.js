@@ -11,6 +11,7 @@ import {
 import React, {Component} from 'react';
 import {Animated, Easing, Dimensions} from 'react-native';
 import CustomComponent from '../../components/CustomComponent'
+
 const {width} = Dimensions.get('window');
 
 const UserStack = createAppContainer(

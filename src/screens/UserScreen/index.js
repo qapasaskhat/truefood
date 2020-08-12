@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../../components/Header';
 import Background from '../../components/Background';
@@ -24,7 +25,8 @@ class UserScreen extends React.Component {
     user: {},
     name: 'dima',
     phone: '1111',
-    email: '1111@mail.com'
+    email: '1111@mail.com',
+    loading: false
   }
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
@@ -40,13 +42,16 @@ class UserScreen extends React.Component {
         'Authorization': `Bearer ${token}`
       }
     };
-    
+    this.setState({
+      loading: true
+    })
     axios(config)
     .then( (response) => {
       //console.log(response.data)
       if(response.status === 200){
         this.setState({
-          user: response.data
+          user: response.data,
+          loading: false
         })
       }
     })
@@ -97,15 +102,30 @@ class UserScreen extends React.Component {
   };
 
   logout=async()=>{
-    await AsyncStorage.removeItem('user');
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName: 'AppLoading'})]
-    })
-    this.props.navigation.dispatch(resetAction)
+    //await AsyncStorage.removeItem('user');
+    //this.props.navigation.navigate('AppLoading');
+    //alert('out')
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate('AppLoading')]
+    // })
+    // this.props.navigation.dispatch('AppLoading')
+
+    setTimeout(() => {
+        const resetAction = StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [
+            NavigationActions.navigate({
+              routeName: "AuthStack",
+            }),
+          ],
+        });
+        this.props.navigation.dispatch(resetAction);
+    }, 500);
   }
   render() {
-    const { name,email,phone,user } = this.state
+    const { name,email,phone,user ,loading} = this.state
     return (
       <View style={styles.container}>
         <Header
@@ -117,7 +137,7 @@ class UserScreen extends React.Component {
           }}
         />
         <Background source={icFrame} style={styles.bgContainer}>
-          <View style={[styles.view,{flexDirection: 'row'}]}>
+          {loading?<ActivityIndicator />: <View style={[styles.view,{flexDirection: 'row'}]}>
             <View style={{
               backgroundColor: '#eee',
               height: 140,
@@ -146,7 +166,7 @@ class UserScreen extends React.Component {
                 marginVertical:5
               }]}>Телефон: {'\n'}  {user.phone}</Text>
             </View>
-          </View>
+          </View>}
           {this.renderBody()}
         </Background>
       </View>

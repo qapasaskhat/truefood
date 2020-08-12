@@ -140,7 +140,7 @@ class CardScreen extends React.Component {
     const {product,items, loading} = this.state
     return (
       <View style={styles.container}>
-        <Header openDrawer={() => navigation.openDrawer()} />
+        <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
         <ButtonUser />
         {loading? <ActivityIndicator /> :<ScrollView
           showsVerticalScrollIndicator={false}

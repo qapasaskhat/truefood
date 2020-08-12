@@ -21,6 +21,7 @@ class Support extends Component {
     var FormData = require('form-data');
     var data = new FormData();
     data.append('message', message);
+    data.append('chat_id','11')
     
     var config = {
       method: 'post',
@@ -107,7 +108,7 @@ class Support extends Component {
                         marginHorizontal: 20,
                         marginBottom: 20
                     }}>
-                        <TouchableOpacity style={{
+                        {/* <TouchableOpacity style={{
                             //flexDirection: 'row',
                             justifyContent: 'center',
                             borderWidth: 1,
@@ -133,7 +134,7 @@ class Support extends Component {
                                 fontWeight: 'bold',
                                // marginLeft: 30
                             }}>{Language[langId].support.sendPhoto}</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <Button title={Language[langId].support.send} onPress={()=>{this.sendMessage(this.state.message)}} />
                     </View>
               </View>

@@ -21,7 +21,7 @@ const HomeStack = createAppContainer(
           SupportScreen,
           DiscountScreen,
           GetGiftCard,
-          //Incoming
+          Incoming
         },
         {
           initialRouteName: 'HomeScreen',

@@ -6,15 +6,16 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Header from '../../components/Header';
 import Background from '../../components/Background';
 
 import Pusher from 'pusher-js/react-native';
-import {pusherConfig} from './pusher'
+import {pusherConfig} from './pusher';
 
 import {icFrame2, icRight, icMoney} from '../../assets';
-
+import {GiftedChat} from 'react-native-gifted-chat';
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
@@ -22,42 +23,55 @@ class Incoming extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: []
+      messages: [
+        {
+          _id: 1,
+          text: 'Hello Truefood',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'Truefood',
+          },
+        },
+      ],
     };
 
-    this.pusher = null
-    this.my_channel = null
+    this.pusher = null;
+    this.my_channel = null;
   }
-  componentDidMount=()=>{
-    Pusher.logToConsole = true
+  componentDidMount = () => {
+    Pusher.logToConsole = true;
     console.log('date');
-    this.pusher = new Pusher(pusherConfig.key,{
+    this.pusher = new Pusher(pusherConfig.key, {
       authEndpoint: 'http://truefood.chat-bots.kz/api/chat',
       cluster: 'ap2',
       encrypted: true,
-      secret: "3ceee9abe02b2c2fafd9",
+      secret: '3ceee9abe02b2c2fafd9',
       auth: {
         headers: {
-            'Accept': 'application/json',
-            'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw"
-        }
-    }
-    })
-    this.my_channel = this.pusher.subscribe('User.Chat.'+11)
-    this.my_channel.bind('pusher:subscription_succeeded',function(data){
-      console.log('pusher:subscription_succeeded  '+ (data) )
-    })
-    this.my_channel.bind('pusher_internal:subscription_succeeded',function(data){
-      console.log('pusher:subscription_succeeded  '+ (data) )
-    })
-    this.pusher.connection.bind('chat-created',(data)=>{
-      console.log('connection.bind  '+ data)
-    })
+          Accept: 'application/json',
+          Authorization:
+            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw',
+        },
+      },
+    });
+    this.my_channel = this.pusher.subscribe('User.Chat.' + 11);
+    this.my_channel.bind('pusher:subscription_succeeded', function (data) {
+      console.log('pusher:subscription_succeeded  ' + data);
+    });
+    this.my_channel.bind('pusher_internal:subscription_succeeded', function (
+      data,
+    ) {
+      console.log('pusher:subscription_succeeded  ' + data);
+    });
+    this.pusher.connection.bind('chat-created', (data) => {
+      console.log('connection.bind  ' + data);
+    });
 
-    this.my_channel.bind('chat-created',(data)=>{
-      console.log('my_channel.bind  '+ data)
-    })
-  }
+    this.my_channel.bind('chat-created', (data) => {
+      console.log('my_channel.bind  ' + data);
+    });
+  };
 
   renderBody = () => {
     const menu = [
@@ -110,9 +124,30 @@ class Incoming extends React.Component {
     );
   };
   render() {
+    const {messages} = this.state;
+    const chat = (
+      <GiftedChat
+        messages={messages}
+        send={()=>{}}
+        user={{
+          _id: 1,
+        }}
+      />
+    );
     return (
       <View style={styles.container}>
         <Header
+          title={'Входящие'}
+          type={'close'}
+          onPressUser={() => {
+            console.log('fewewf');
+          }}
+          close={() => {
+            this.props.navigation.goBack();
+          }}
+        />
+        {chat}
+        {/* <Header
           title={'Входящие'}
           type={'close'}
           onPressUser={() => {
@@ -122,9 +157,10 @@ class Incoming extends React.Component {
             this.props.navigation.goBack();
           }}
         />
-        <Background source={icFrame2} style={styles.bgContainer}>
+        <Background source={icFrame2} style={[styles.bgContainer]}>
+        
           {this.renderBody()}
-        </Background>
+        </Background> */}
       </View>
     );
   }

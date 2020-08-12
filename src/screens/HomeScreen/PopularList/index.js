@@ -15,9 +15,9 @@ import {layer1, icRight} from '../../../assets';
 import axios from 'axios'
 import {Language} from '../../../constants/lang'
 
-const Button = ({text}) => {
+const Button = ({text,onPress}) => {
   return (
-    <TouchableOpacity style={styles.view}>
+    <TouchableOpacity style={styles.view} onPress={onPress}>
       <Text style={styles.txt}>{text}</Text>
       <Image source={icRight} resizeMode={'contain'} style={styles.icon} />
     </TouchableOpacity>
@@ -29,7 +29,7 @@ class PopularList extends React.Component {
 
   }
   render() {
-    const {navigation, dispatch, items, loading, langId } = this.props;
+    const {navigation, dispatch, items, loading, langId, onPress } = this.props;
     return (
       <View>
         <ImageBackground
@@ -62,7 +62,7 @@ class PopularList extends React.Component {
               />
             )}
             />
-            <Button text={Language[langId].home.showPopular} />
+            <Button onPress={onPress} text={Language[langId].home.showPopular} />
           </View>}
         </ImageBackground>
       </View>

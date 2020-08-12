@@ -71,12 +71,39 @@ class CategoryScreen extends React.Component {
       })
     })
   }
+  getAllProduct=(categoryId, byPrice, value)=>{
+    const api =`http://truefood.chat-bots.kz/api/products`
+    const apiByPrice = `http://truefood.chat-bots.kz/api/products`
+    this.setState({
+      product: {
+        ...this.state.product, loading: true
+      }
+    })
+    axios.get( byPrice?apiByPrice: api).then(response=>{
+      console.log(response.data)
+      this.setState({
+        product: {
+          items: response.data,
+          loading: false
+        }
+      })
+    }).catch(err=>{
+      this.setState({
+        product:{
+          error: err,
+          loading: false}
+      })
+    })
+  }
   componentDidMount() {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
-    console.log(this.props.navigation.getParam('id').name)
-    this.getProduct(this.props.navigation.getParam('id').id)
+    if(this.props.navigation.getParam('id').id === 'all'){
+      this.getAllProduct()
+    }else
+    {console.log(this.props.navigation.getParam('id').name)
+    this.getProduct(this.props.navigation.getParam('id').id)}
   }
   render() {
     const {navigation,dispatch, langId} = this.props;

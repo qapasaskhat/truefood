@@ -52,7 +52,7 @@ class TopList extends React.Component {
           )}}
            />
         </ScrollView>}
-        <Button text={Language[langId].home.showPopular}/>
+        {/* <Button text={Language[langId].home.showPopular}/> */}
       </View>
     );
   }

@@ -110,7 +110,7 @@ export const Language = [
     },
     home:{
         popular: 'Популярные блюда',
-        showPopular: 'Смотреть все популярные блюда',
+        showPopular: 'Смотреть все блюда',
         top: 'Топ блюда недели',
         basket: 'В корзину',
         byPopular: 'по популярности',

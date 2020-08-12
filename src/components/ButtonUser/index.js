@@ -1,13 +1,45 @@
 import React from 'react';
 import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage'
+import axios from 'axios'
 import {icUser, icRight, icMoney} from '../../assets';
 
 class ButtonUser extends React.Component {
+  state={
+    user: {},
+  }
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.getUser(user.access_token)
+  }
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+  }
   render() {
     const { name,cashback } = this.props
+    const { user } = this.state
     return (
-      <TouchableOpacity style={styles.container}>
+      <View style={styles.container}>
         <View
           style={[
             styles.horizontal,
@@ -17,17 +49,17 @@ class ButtonUser extends React.Component {
           ]}>
           <View style={styles.horizontal}>
             <Image source={icUser} style={styles.icUser} />
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{user.name}</Text>
           </View>
           <View style={styles.horizontal}>
             <View style={[styles.horizontal, {marginRight: 30}]}>
               <Image source={icMoney} style={styles.icMoney} />
-        <Text style={styles.countText}>{cashback}</Text>
+        <Text style={styles.countText}>{user.bill}</Text>
             </View>
-            <Image source={icRight} style={styles.icRight} />
+            <Image source={icRight} style={[styles.icRight,{tintColor: '#fff'}]} />
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   }
 }

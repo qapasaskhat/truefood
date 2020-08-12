@@ -13,13 +13,47 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { NavigationActions, StackActions } from 'react-navigation'
 import {connect} from 'react-redux'
 import {Language} from '../../constants/lang'
-
+import axios from 'axios'
+import {icProfile} from '../../assets/index'
 import {icFrame, icRight} from '../../assets';
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
 
 class UserScreen extends React.Component {
-
+  state={
+    user: {},
+    name: 'dima',
+    phone: '1111',
+    email: '1111@mail.com'
+  }
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.getUser(user.access_token)
+  }
+  getUser=(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      //console.log(response.data)
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+  }
 
   renderBody = () => {
     const {langId} = this.props
@@ -27,15 +61,15 @@ class UserScreen extends React.Component {
     const menu = [
       {
         title: Language[langId].menu.historyOrder,
-        renderCenter: () => (
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Incoming')}
-            style={styles.push}>
-            <Text style={{color: 'white', fontFamily: 'OpenSans-Bold'}}>
-              +1
-            </Text>
-          </TouchableOpacity>
-        ),
+        // renderCenter: () => (
+        //   <TouchableOpacity
+        //     onPress={() => this.props.navigation.navigate('Incoming')}
+        //     style={styles.push}>
+        //     <Text style={{color: 'white', fontFamily: 'OpenSans-Bold'}}>
+        //       +1
+        //     </Text>
+        //   </TouchableOpacity>
+        // ),
         onPress: () => {
           this.props.navigation.navigate('HistoryOrder');
         },
@@ -71,16 +105,48 @@ class UserScreen extends React.Component {
     this.props.navigation.dispatch(resetAction)
   }
   render() {
+    const { name,email,phone,user } = this.state
     return (
       <View style={styles.container}>
         <Header
           type={'profile'}
+          cash={user.bill}
           onPressUser={() => {
             console.log('fewewf');
             this.props.navigation.navigate('EditProifle');
           }}
         />
         <Background source={icFrame} style={styles.bgContainer}>
+          <View style={[styles.view,{flexDirection: 'row'}]}>
+            <View style={{
+              backgroundColor: '#eee',
+              height: 140,
+              width: 140,
+              borderRadius: 10,
+              justifyContent:'center',
+              alignItems: 'center',
+              
+            }}>
+              <Image source={icProfile} style={{height: 140, resizeMode: 'contain'}}/>
+            </View>
+            <View>
+              <Text style={[styles.title,{
+                marginLeft: 24,
+                marginHorizontal: 5,
+                marginVertical:5
+              }]}>Имя: {'\n'}  {user.name}</Text>
+              <Text style={[styles.title,{
+                marginLeft: 24,
+                marginHorizontal: 5,
+                marginVertical:5
+              }]}>Email: {'\n'}  {user.email}</Text>
+              <Text style={[styles.title,{
+                marginLeft: 24,
+                marginHorizontal: 5,
+                marginVertical:5
+              }]}>Телефон: {'\n'}  {user.phone}</Text>
+            </View>
+          </View>
           {this.renderBody()}
         </Background>
       </View>

@@ -33,7 +33,8 @@ class EditProifle extends React.Component {
     name: '',
     email: '',
     loading: false,
-    access_token: ''
+    access_token: '',
+    phone: ''
   };
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
@@ -45,13 +46,13 @@ class EditProifle extends React.Component {
     })
   }
   _editProfile=(access_token)=>{
-    const { name, first_name, last_name, email } = this.state
+    const { name, first_name, last_name, email,phone } = this.state
     var FormData = require('form-data');
     var data = new FormData();
-    data.append('name', 'name');
-    data.append('email', 'email@mail.ru');
-    data.append('middlename', 'first_name');
-    data.append('lastname', 'last_name');
+    data.append('name', name);
+    data.append('email', email);
+    data.append('phone', phone);
+    data.append('lastname', last_name);
 
     var config = {
       method: 'put',
@@ -83,9 +84,9 @@ class EditProifle extends React.Component {
     .then( (response) => {
       if(response.status === 200){
         this.setState({
-          first_name: response.data.name,
-          last_name: response.data.middlename,
-          name: response.data.lastname,
+          first_name: response.data.lastname,
+          phone: response.data.phone,
+          name: response.data.name,
           email: response.data.email,
         })
       }
@@ -113,11 +114,11 @@ class EditProifle extends React.Component {
         },
       },
       {
-        title: 'Введите отчество',
+        title: 'Введите номер телефона',
         placeholder: '',
-        value: this.state.last_name,
+        value: this.state.phone,
         onChangeText: (text) => {
-          this.setState({last_name: text});
+          this.setState({phone: text});
         },
       },
       {

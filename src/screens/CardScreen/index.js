@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -48,6 +49,7 @@ class CardScreen extends React.Component {
       openDrawer: () => this.props.navigation.openDrawer(),
     })
     console.log(this.props.navigation.getParam('param'))
+    
     this.getProduct(this.props.navigation.getParam('param'))
     setTimeout(() => {
       console.log('iteeeeeem',
@@ -87,6 +89,7 @@ class CardScreen extends React.Component {
       })
     })
   }
+  
 
   _changeSize = (i) => {
     let newSize = [...this.state.size];
@@ -200,8 +203,10 @@ class CardScreen extends React.Component {
               </View>
             </View>
           </View>
-
-          <Button title='Заказать' styleBtn={{margin: 10}} onPress={()=>{this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'product', items: product.item}})}} />
+          <Button title='В Корзину' styleBtn={{margin: 10}} onPress={()=>{
+            this.props.dispatch({type: 'ADD_BASKET', payload: items})
+            
+          }} />
         </ScrollView>}
       </View>
     );
@@ -320,5 +325,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+const mapStateToProps = (state) => ({
+  basket: state.appReducer.basket,
+  langId: state.appReducer.langId
 
-export default CardScreen;
+});
+
+export default connect(mapStateToProps,mapDispatchToProps) (CardScreen);

@@ -159,6 +159,9 @@ class HomeScreen extends React.Component {
             loading={popularProduct.loading} 
             items={popularProduct.products} 
             langId={langId}
+            onPress={()=>{
+              navigation.navigate('CategoryScreen',{id: {id: 'all' ,name: 'Все блюда'}})
+            }}
             navigation={navigation} 
             dispatch={dispatch} />
           <TopList langId={langId} dispatch={dispatch} items={topList.products} loading={topList.loading} />

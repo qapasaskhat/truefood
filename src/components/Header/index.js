@@ -51,7 +51,7 @@ class Header extends React.Component {
     });
   }
   render() {
-    const {openDrawer, type, onPressUser, close, goBack, navigation } = this.props;
+    const {openDrawer, type, onPressUser, close, goBack, navigation, cash } = this.props;
     if (type === 'profile') {
       return (
         <View style={styles.profileContainer}>
@@ -61,7 +61,7 @@ class Header extends React.Component {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={[styles.horizontal, {marginRight: 30}]}>
               <Image source={icMoney} style={styles.icMoney} />
-              <Text style={styles.countText}>140</Text>
+      <Text style={styles.countText}>{cash}</Text>
             </View>
             <TouchableOpacity
               onPress={() => onPressUser()}

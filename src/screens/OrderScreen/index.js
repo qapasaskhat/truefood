@@ -5,26 +5,74 @@ import Header from '../../components/Header';
 import OrderCard from '../../components/Card/OrderCard';
 import {icMoney} from '../../assets';
 import Button from '../../components/Button';
+import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment'
 
 class OrderScreen extends React.Component {
-  componentDidMount() {
+  state={
+    orders: {}
+  }
+  componentDidMount = async() =>{
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    console.log(this.props.navigation.getParam('param'))
+    this.getOrder(user.access_token,this.props.navigation.getParam('param'))
   }
-
+  getOrder=(token,id)=>{
+    var config = {
+      method: 'get',
+      url: `http://truefood.chat-bots.kz/api/user/orders/${id}`,
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) =>{
+      console.log(response.data)
+      this.setState({
+        orders: response.data
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  getPrice=()=>{
+    const { orders } = this.state
+    let price = 0
+    orders.details && orders.details.map(item=>
+      price = price + item.unit_price
+      )
+    return price
+  }
+  getCash=()=>{
+    const { orders } = this.state
+    let cash = 0
+    orders.details && orders.details.map(item=>
+      cash = cash + item.unit_cashback
+      )
+    return cash
+  }
   render() {
+    const { orders } = this.state
     return (
       <View style={{flex: 1}}>
         <Header
           navigation={this.props.navigation}
+          goBack={()=>this.props.navigation.goBack()}
           type={'back'}
-          title={'Заказ от 26.05.2020'}
+          title={`Заказ от ${moment(orders.created_at).format('ll')}`}
         />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
-            {[{}, {}].map((item) => (
-              <OrderCard />
+            {orders.details &&  orders.details.map((item) => (
+              <OrderCard item={item}  />
             ))}
             <View style={styles.view}>
               <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 18}}>
@@ -32,13 +80,13 @@ class OrderScreen extends React.Component {
               </Text>
               <View style={styles.horizontal}>
                 <Image source={icMoney} style={styles.icMoney} />
-                <Text style={styles.coinTXT}>170</Text>
+                <Text style={styles.coinTXT}>{this.getCash()}</Text>
               </View>
               <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 18}}>
-                650 ₸
+                {this.getPrice()} ₸
               </Text>
             </View>
-            <Button title={'Повторить заказ'} styleBtn={{marginTop: 10}} />
+            {/* <Button title={'Повторить заказ'} styleBtn={{marginTop: 10}} /> */}
           </View>
         </Background>
       </View>

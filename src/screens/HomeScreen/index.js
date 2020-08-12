@@ -149,7 +149,7 @@ class HomeScreen extends React.Component {
     const { popularProduct, topList, category, user } = this.state
     return (
       <View style={styles.container}>
-        <Header openDrawer={() => navigation.openDrawer()} />
+        <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
         <ButtonUser name = {user.name } cashback={user.cashback}/>
         <ScrollView
           showsVerticalScrollIndicator={false}

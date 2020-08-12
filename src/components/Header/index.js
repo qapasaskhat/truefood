@@ -51,7 +51,7 @@ class Header extends React.Component {
     });
   }
   render() {
-    const {openDrawer, type, onPressUser, close, goBack} = this.props;
+    const {openDrawer, type, onPressUser, close, goBack, navigation } = this.props;
     if (type === 'profile') {
       return (
         <View style={styles.profileContainer}>
@@ -123,7 +123,8 @@ class Header extends React.Component {
           </TouchableOpacity>
           <Image source={icLogo} style={styles.icLogo} />
           <TouchableOpacity onPress={()=>{
-            //this.props.natigation.navigate('Incoming')
+            console.log('Incoming')
+            navigation.navigate('Incoming')
           }}>
             <View style={styles.number}>
             <Text style={styles.txtNumber}>{this.state.message}</Text>

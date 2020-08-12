@@ -69,7 +69,8 @@ class UserScreen extends React.Component {
         {load ? <ActivityIndicator /> : orderItems.map((item) => (
           <TouchableOpacity
             onPress={() => {
-              //this.props.navigation.navigate('OrderScreen')
+              //console.log(item)
+              this.props.navigation.navigate('OrderScreen',{param: item.order_id })
             }
             }
             style={styles.btn}>

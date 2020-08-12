@@ -117,7 +117,9 @@ class Incoming extends React.Component {
           type={'close'}
           onPressUser={() => {
             console.log('fewewf');
-            this.props.navigation.navigate('EditProifle');
+          }}
+          close={()=>{
+            this.props.navigation.goBack();
           }}
         />
         <Background source={icFrame2} style={styles.bgContainer}>

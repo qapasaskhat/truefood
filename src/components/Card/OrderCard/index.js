@@ -5,6 +5,7 @@ import {icMoney, icDinner, icVilka} from '../../../assets';
 
 class OrderCard extends React.Component {
   render() {
+    const { item } = this.props
     return (
       <View
         style={{
@@ -30,17 +31,17 @@ class OrderCard extends React.Component {
             }}
           />
           <View style={styles.body}>
-            <Text style={styles.title}>Стейк Рибай</Text>
+            <Text style={styles.title}>{item.entity && item.entity.product.name}</Text>
             <Text style={styles.description}>
-              Состав блюда: свинина,{'\n'}специи, лук, перец
+              {item.entity && item.entity.product.description}
             </Text>
             <View style={styles.bottom}>
               <View style={styles.horizontal}>
                 <Image source={icMoney} style={styles.icMoney} />
-                <Text style={styles.coinTXT}>170</Text>
+                <Text style={styles.coinTXT}>{item.unit_cashback}</Text>
               </View>
 
-              <Text style={styles.price}>395 ₸</Text>
+              <Text style={styles.price}>{item.entity.price} ₸</Text>
             </View>
           </View>
         </View>
@@ -52,7 +53,7 @@ class OrderCard extends React.Component {
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
           }}>
-          <View style={{padding: 10, paddingLeft: 15}}>
+          {/* <View style={{padding: 10, paddingLeft: 15}}>
             <Text style={styles.razner}>Размер порций</Text>
             <View
               style={{
@@ -68,7 +69,7 @@ class OrderCard extends React.Component {
                 160 гр
               </Text>
             </View>
-          </View>
+          </View> */}
           <View style={{padding: 10, paddingLeft: 15}}>
             <Text style={styles.razner}>Количество порций</Text>
             <View
@@ -82,7 +83,7 @@ class OrderCard extends React.Component {
                 style={{width: 16, height: 16, resizeMode: 'contain'}}
               />
               <Text style={{fontFamily: 'OpenSans-SemiBold', marginLeft: 5}}>
-                4 шт
+                {item.unit_quantity} шт
               </Text>
             </View>
           </View>

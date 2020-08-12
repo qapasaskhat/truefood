@@ -3,8 +3,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 import {LoginScreen, RegisterScreen} from '../../screens';
 
-
-const StoreStack = createAppContainer(
+//createAppContainer(
+const StoreStack = 
   createStackNavigator(
     {
       LoginScreen,
@@ -15,7 +15,7 @@ const StoreStack = createAppContainer(
       header: null,
       headerMode: 'none',
     },
-  ),
-);
+  )
+  //,);
 
 export default StoreStack;

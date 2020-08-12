@@ -8,9 +8,10 @@ import UserStack from './UserStack';
 import StoreStack from './StoreStack';
 import MenuStack from './MenuStack';
 import {connect} from 'react-redux';
+import store from '../../redux/store'
 import {icUser, icMain, icStore, icMenu} from '../../assets';
-
-const AppContainer = createAppContainer(
+//createAppContainer(
+const AppContainer = 
   createBottomTabNavigator(
     {
       HomeStack: HomeStack,
@@ -20,7 +21,6 @@ const AppContainer = createAppContainer(
     },
     {
       initialRouteName: 'HomeStack',
-
       defaultNavigationOptions: ({navigation, screenProps}) => ({
         tabBarOptions: {
           showLabel: false,
@@ -50,6 +50,8 @@ const AppContainer = createAppContainer(
             }
           } else {
             if (nextRoute.key === 'MenuStack') {
+              console.log('lllllloooooooggggg')
+              console.log(prevRoute)
               prevRoute.routes[0].routes[0].params.openDrawer();
             } else {
               defaultHandler();
@@ -76,7 +78,6 @@ const AppContainer = createAppContainer(
               iconName = icMenu;
               break;
             }
-
             default:
               break;
           }
@@ -85,7 +86,7 @@ const AppContainer = createAppContainer(
               {iconName === icStore && (
                 <View style={styles.number}>
                   <Text style={styles.txtNumber}>
-                    {screenProps.basketLength}
+                    {store.getState().appReducer.basket.length}
                   </Text>
                 </View>
               )}
@@ -101,8 +102,9 @@ const AppContainer = createAppContainer(
         },
       }),
     },
-  ),
-);
+  )
+//  ,);
+
 class App extends React.Component {
   render() {
     return (
@@ -122,8 +124,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default AppContainer
+//export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   icon: {

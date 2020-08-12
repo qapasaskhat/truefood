@@ -9,7 +9,7 @@ const MyApp = createStackNavigator(
   {
     AppLoading: AppLoading,
     TabStack: TabStack,
-    AuhtStack: AuthStack,
+    AuthStack: AuthStack,
   },
   {
     headerMode: 'none',

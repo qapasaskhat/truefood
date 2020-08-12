@@ -19,6 +19,7 @@ import {icProfile} from '../../assets/index'
 import {icFrame, icRight} from '../../assets';
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
+import { withNavigation } from 'react-navigation';
 
 class UserScreen extends React.Component {
   state={
@@ -33,7 +34,11 @@ class UserScreen extends React.Component {
     let user = JSON.parse(usr)
     console.log(user.access_token)
     this.getUser(user.access_token)
+    this.props.navigation.setParams({
+      openDrawer: () => this.props.navigation.openDrawer(),
+    });
   }
+
   getUser=(token)=>{
     var config = {
       method: 'get',
@@ -102,19 +107,12 @@ class UserScreen extends React.Component {
   };
 
   logout=async()=>{
-    //await AsyncStorage.removeItem('user');
-    //this.props.navigation.navigate('AppLoading');
-    //alert('out')
-    // const resetAction = StackActions.reset({
-    //   index: 0,
-    //   actions: [NavigationActions.navigate('AppLoading')]
-    // })
-    // this.props.navigation.dispatch('AppLoading')
-
+    
+    await AsyncStorage.removeItem('user');
+    console.log(this.props.navigation)
     setTimeout(() => {
         const resetAction = StackActions.reset({
           index: 0,
-          key: null,
           actions: [
             NavigationActions.navigate({
               routeName: "AuthStack",
@@ -240,3 +238,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps,mapDispatchToProps) (UserScreen);
+
+// export default withNavigation(connect(
+//   mapStateToProps, 
+//   mapDispatchToProps
+// )(UserScreen))

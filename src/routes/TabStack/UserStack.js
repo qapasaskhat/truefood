@@ -11,19 +11,18 @@ import {
 import React, {Component} from 'react';
 import {Animated, Easing, Dimensions} from 'react-native';
 import CustomComponent from '../../components/CustomComponent'
+import AuthStack from '../AuthStack'
 
 const {width} = Dimensions.get('window');
 
-const UserStack = createAppContainer(
-  createDrawerNavigator(
-   { User:
-    createStackNavigator(
+const UserStack = createDrawerNavigator({ User:
+createStackNavigator(
       {
-        UserScreen,
-        EditProifle,
-        HistoryOrder,
-        Incoming,
-        OrderScreen,
+        UserScreen:UserScreen,
+        EditProifle:EditProifle,
+        HistoryOrder:HistoryOrder,
+        Incoming:Incoming,
+        OrderScreen:OrderScreen,
       },
       {
         initialRouteName: 'UserScreen',
@@ -55,7 +54,8 @@ const UserStack = createAppContainer(
             },
           }),
       },
-    ),},{
+    )
+    ,},{
       initialRouteName: 'User',
       header: null,
       headerMode: 'none',
@@ -66,6 +66,6 @@ const UserStack = createAppContainer(
       contentComponent: (props) => <CustomComponent {...props} />,
     }
   )
-);
+
 
 export default UserStack;

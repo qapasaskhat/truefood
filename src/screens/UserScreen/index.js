@@ -27,16 +27,25 @@ class UserScreen extends React.Component {
     name: 'dima',
     phone: '1111',
     email: '1111@mail.com',
-    loading: false
+    loading: false,
+    token: ''
   }
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
+    this.setState({
+      token: user.access_token
+    })
     this.getUser(user.access_token)
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getUser(this.state.token)
+      }
+    );
   }
 
   getUser=(token)=>{
@@ -64,7 +73,7 @@ class UserScreen extends React.Component {
       console.log(error);
     });
   }
-
+  
   renderBody = () => {
     const {langId} = this.props
 
@@ -107,8 +116,9 @@ class UserScreen extends React.Component {
   };
 
   logout=async()=>{
-    
+
     await AsyncStorage.removeItem('user');
+    
     console.log(this.props.navigation)
     setTimeout(() => {
         const resetAction = StackActions.reset({

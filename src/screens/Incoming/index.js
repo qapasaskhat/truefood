@@ -16,8 +16,10 @@ import {pusherConfig} from './pusher';
 import axios from 'axios'
 import { connect } from 'react-redux'
 
-import {icFrame2, icRight, icMoney, chat} from '../../assets';
+import {icFrame2, icRight, icMoney, chat, send} from '../../assets';
 import {GiftedChat} from 'react-native-gifted-chat';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
@@ -27,18 +29,27 @@ class Incoming extends React.Component {
     super(props);
     this.state = {
       messages: [],
-      message: {}
+      message: {},
+      token: '',
+      user_id: 1,
+      text: ''
     };
     this.pusher = null;
     this.my_channel = null;
   }
-  componentDidMount = () => {
-
+  componentDidMount = async() => {
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user)
+    this.setState({
+      token: user.access_token
+    })
     const {chat_id,chat_messages} = this.props
-
+    this.getUser(user.access_token)
     this.setState({
       messages: chat_messages
     })
+    console.log(this.state.messages)
 
     Pusher.logToConsole = true;
     console.log('date');
@@ -51,7 +62,7 @@ class Incoming extends React.Component {
         headers: {
           Accept: 'application/json',
           Authorization:
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw',
+            `Bearer ${this.state.token}`,
         },
       },
     });
@@ -79,12 +90,33 @@ class Incoming extends React.Component {
       console.log(this.state.messages);
     });
   };
+  getUser=(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        console.log(response.data.id)
+        this.setState({
+          user_id: response.data.id
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+  }
   componentWillUnmount=()=>{
     this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )
   }
   sendMessage=(message)=>{
     const {chat_id} = this.props
-
     var FormData = require('form-data');
     var data = new FormData();
     data.append('message', message);
@@ -94,7 +126,7 @@ class Incoming extends React.Component {
       method: 'post',
       url: 'http://truefood.chat-bots.kz/api/chat',
       headers: { 
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiODkzNDdkZjkwNDM3ZDJkMGNiNWI1MzNjYzVhOTUzNWM0ZmE1YWE1NjFlOTI5ZGQxMjRhOTI1N2QyOWIyOTM3NjQxY2I5ODJhMWRlNTk0MmUiLCJpYXQiOjE1OTY3MTQwMjMsIm5iZiI6MTU5NjcxNDAyMywiZXhwIjoxNjI4MjUwMDIzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lOd8AeSVMwFeH6AP-4OJQBSyh9mLrjzDkUFa03r_kQULZ9TFd6x_FNDjAvP82dX_6acDyt2Gxo51W3EqgBFqgWsWl5oePRWCVhXiNysrH9VczGyHMl77gKNmE86OjC3aefMafREH5a8d6rMsZZTDvNOXdBS3ZDL-myUQqLdYK7rSayITdPu6rb2bGEyQ_q0_y_uSQAFXkf5z4CDw-2MOtBTJspcktEWI7-38MIHBVJ-CahHavS7uDsWCsnn3Qv3tH96cH3ru3CSJhiUZ_9iFcijlcHGwx6XB3Gcq0hAkDJSOpjZTd8wNPCDTSxQH4uOEF3bzwQ-CM9aQbxwqxDd6_UvCVvYCkUdWIfIeU0OS0yX0GZK-6U-O9RMFHJc90GCDdbFdCnv0IIn39Ic0RMEc4PTIcu3n3QaJIlKqmIJT2WWrBvldrFjjWWJbn4r7dzfBYmEKg5zOZilEGQIoFCyjygTOGowTFFeqqq85u0zRgmOd2wOcvqc5rMA3eOfF7qBewsX8mXk85ZblmjdMpSwlWrBLLObDjz2juCoNOVE7DI7IhkV0k0Hto9xcfSPktIA53pDCf3vRjmB7A5l4aY1XLFuW1h82FH7rqg9s5qExNCgfjmyw0gBjuOiAtBz2YH5-IQ65F1KdWb5xhxwuAXSJV9cX7oxh5h6Ci4m11FPxHiw', 
+        'Authorization': `Bearer ${this.state.token}`, 
       },
       data : data
     };
@@ -158,17 +190,39 @@ class Incoming extends React.Component {
     );
   }
   render() {
-    const {messages} = this.state;
+    const {messages,user_id} = this.state;
+    const { chat_id } = this.props
     const chat = (
       <GiftedChat
-        messages={messages.reverse()}
-        
+        messages={messages}
+        placeholder={'Напишите сообщение...'}
+        text={this.state.text}
+        onInputTextChanged={text=>this.setState({text})}
+        renderSend={(message)=>(
+          <TouchableOpacity onPress={()=>{
+            this.sendMessage(message.text)
+            this.setState({
+              text: ''
+            })
+          }} style={{
+            justifyContent:'center',
+            alignItems: 'center',
+            height: '100%',
+            marginRight: 6,
+          }}>
+            <Image source={send} style={{
+              width: 32,
+              height: 32,
+              resizeMode: 'contain'
+            }} />
+          </TouchableOpacity>
+        )}
         onSend={(message)=>{
           console.log(message[0].text)
           this.sendMessage(message[0].text)
         }}
         user={{
-          _id: 1,
+          _id: user_id,
         }}
       />
     );
@@ -184,7 +238,12 @@ class Incoming extends React.Component {
             this.props.navigation.goBack();
           }}
         />
-        {chat}
+        { chat_id===0? 
+        
+        <Text style={{textAlign: 'center',marginTop:'30%',fontSize: 16,}}>
+          Чтобы начать чат переходите в меню {'\n'}<Text style={{fontWeight: 'bold',}}>Обратная связь или помощь</Text>
+        </Text>
+        :chat}
         {/* <Header
           title={'Входящие'}
           type={'close'}

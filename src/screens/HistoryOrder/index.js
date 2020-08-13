@@ -27,13 +27,22 @@ class UserScreen extends React.Component {
       error: null
     },
     orderItems: [],
-    load: false
+    load: false,
+    token: ''
   }
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
+    this.setState({
+      token: user.access_token
+    })
     this.getOrders(user.access_token)
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getOrders(this.state.token)
+      }
+    );
   }
   getOrders=(access_token)=>{
     const api = 'http://truefood.chat-bots.kz/api/user/orders'
@@ -66,7 +75,9 @@ class UserScreen extends React.Component {
     const { orderItems,load } = this.state
     return (
       <View style={styles.view}>
-        {load ? <ActivityIndicator /> : orderItems.map((item) => (
+        {load ? <ActivityIndicator /> : orderItems.length===0? 
+        <Text style={{textAlign: 'center',marginVertical:6}}>История заказов пуст</Text> 
+        : orderItems.map((item) => (
           <TouchableOpacity
             onPress={() => {
               //console.log(item)
@@ -89,6 +100,7 @@ class UserScreen extends React.Component {
     );
   };
   render() {
+    const { orderItems,load } = this.state
     return (
       <View style={styles.container}>
         <Header
@@ -103,7 +115,7 @@ class UserScreen extends React.Component {
           }}
         />
         <Background source={icFrame2} style={styles.bgContainer}>
-          {this.renderBody()}
+          { this.renderBody()}
         </Background>
       </View>
     );

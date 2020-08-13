@@ -141,7 +141,8 @@ class HomeScreen extends React.Component {
     this.getCategory()
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
-    console.log(user.access_token)
+    console.log('user');
+    console.log(user)
     this.getUser(user.access_token)
   }
   render() {

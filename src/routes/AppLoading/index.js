@@ -14,7 +14,7 @@ class AuthLoading extends Component {
     let usr =  await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     if(!user){
-      this.props.navigation.navigate('AuhtStack');
+      this.props.navigation.navigate('AuthStack');
     }else{
       this.props.navigation.navigate('TabStack');
     }

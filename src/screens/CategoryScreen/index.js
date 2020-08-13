@@ -50,7 +50,7 @@ class CategoryScreen extends React.Component {
   }
   getProduct=(categoryId, byPrice, value)=>{
     const api =`http://truefood.chat-bots.kz/api/products?category[]=${categoryId}`
-    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category_id=${categoryId}&byPrice=${value}`
+    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category[]=${categoryId}&byPrice=${value}`
     this.setState({
       product: {
         ...this.state.product, loading: true

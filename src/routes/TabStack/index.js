@@ -82,22 +82,7 @@ const AppContainer =
               break;
           }
           return (
-            <View>
-              {iconName === icStore && (
-                <View style={styles.number}>
-                  <Text style={styles.txtNumber}>
-                    {store.getState().appReducer.basket.length}
-                  </Text>
-                </View>
-              )}
-              <Image
-                source={iconName}
-                style={[
-                  styles.icon,
-                  {tintColor: focused ? '#000000' : '#B7B6BB'},
-                ]}
-              />
-            </View>
+            <AppD iconName={iconName} focused={focused} />
           );
         },
       }),
@@ -105,14 +90,27 @@ const AppContainer =
   )
 //  ,);
 
+
 class App extends React.Component {
   render() {
+    const { iconName,focused,basket } = this.props
     return (
-      <AppContainer
-        screenProps={{
-          basketLength: this.props.basket.length,
-        }}
+      <View>
+      {iconName === icStore && (
+        <View style={styles.number}>
+          <Text style={styles.txtNumber}>
+            {basket.length}
+          </Text>
+        </View>
+      )}
+      <Image
+        source={iconName}
+        style={[
+          styles.icon,
+          {tintColor: focused ? '#000000' : '#B7B6BB'},
+        ]}
       />
+    </View>
     );
   }
 }
@@ -125,7 +123,7 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch,
 });
 export default AppContainer
-//export default connect(mapStateToProps, mapDispatchToProps)(App);
+const AppD =  connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   icon: {

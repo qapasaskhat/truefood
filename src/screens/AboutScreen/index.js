@@ -12,8 +12,8 @@ const text2 = '\t\tПотому что не надо каждую неделю �
 const Item = ({about})=>(
   <View style={{flexDirection: "row", marginTop:12}}>
     <Image source={icAdd} style={{
-      width: 20,
-      height:20,
+      width: 14,
+      height:14,
       resizeMode: 'contain',
       tintColor: '#FE1935',
       marginTop: 6,
@@ -141,7 +141,9 @@ class About extends Component {
           marginTop: 20,
           marginBottom:50
         }}>
-          <Button onPress={()=>{}} title={Language[langId].about.answer}/>
+          <Button onPress={()=>{
+            this.props.navigation.navigate('SupportScreen')
+          }} title={Language[langId].about.answer}/>
         </View>
         </ScrollView>
       </View>

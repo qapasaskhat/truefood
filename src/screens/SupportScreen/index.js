@@ -16,7 +16,9 @@ class Support extends Component {
     this.state = {
         message: '',
         token: '',
-        loading: false
+        loading: false,
+        messages: [],
+        message: {},
     };
   }
   componentDidMount=async()=>{
@@ -48,10 +50,26 @@ class Support extends Component {
     axios(config)
     .then( (response)=> {
         if(response.status === 200){
+          this.setState(state => {
+            const obj = {
+              _id: response.data.message.id,
+              text: response.data.message.message,
+              createdAt: response.data.message.updated_at,
+              user: {
+                _id: response.data.message.user_id,
+                name: ''
+              }
+            }
+            const messages = [...this.state.messages, obj]
+            return {
+              messages,
+            };
+          });
             alert('Отправлено')
             this.props.navigation.goBack()
             this.props.dispatch({type: 'GET_CHAT_ID', payload: response.data.chat.id} )
-            console.log(response.data.chat.id)
+            this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )
+            console.log(response.data)
             this.setState({
               loading: false
             })

@@ -3,7 +3,7 @@ export default {
     name: 'TrueFood',
     basket: [],
     langId: 1,
-    chat_id: 1,
+    chat_id: 0,
     chat_messages: [] 
   },
 };

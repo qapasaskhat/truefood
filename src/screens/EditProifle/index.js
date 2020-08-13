@@ -42,29 +42,35 @@ class EditProifle extends React.Component {
     console.log(user.access_token)
     this.getUser(user.access_token)
     this.setState({
-      aaccess_token: ser.access_token
+      access_token: user.access_token
     })
+    console.log(this.state.access_token)
+    
   }
   _editProfile=(access_token)=>{
     const { name, first_name, last_name, email,phone } = this.state
+    console.log(
+      access_token
+    )
     var FormData = require('form-data');
     var data = new FormData();
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
-    data.append('lastname', last_name);
+    data.append('_method','PUT')
 
     var config = {
-      method: 'put',
-      url: 'http://truefood.chat-bots.kz/api/user/',
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/user',
       headers: { 
-        'Authorization': `Bearer ${access_token}`, 
+        'Accept':'application/json',
+        'Authorization': `Bearer ${this.state.access_token}`, 
       },
       data : data
     };
 
     axios(config)
-    .then(function (response) {
+    .then( (response)=> {
       console.log(JSON.stringify(response.data))
       
       this.props.navigation.goBack()
@@ -108,14 +114,14 @@ class EditProifle extends React.Component {
           this.setState({name: text});
         },
       },
-      {
-        title: 'Введите фамилию',
-        placeholder: 'Каримов',
-        value: this.state.first_name,
-        onChangeText: (text) => {
-          this.setState({first_name: text});
-        },
-      },
+      // {
+      //   title: 'Введите фамилию',
+      //   placeholder: 'Каримов',
+      //   value: this.state.first_name,
+      //   onChangeText: (text) => {
+      //     this.setState({first_name: text});
+      //   },
+      // },
       {
         title: 'Введите номер телефона',
         placeholder: '',

@@ -26,7 +26,9 @@ class Categories extends React.Component {
             onPress={() => this.props.navigation.navigate('CategoryScreen',{id: {id: item.id,name: item.name}})}
             style={styles.btn}>
             <View />
-            <Image source={{uri: item.thumbnail}} style={styles.img} />
+            <Image source={{
+              uri: item.thumbnail
+            }} style={styles.img} />
             <Text style={styles.name}>{item.name}</Text>
           </TouchableOpacity>
         ))}
@@ -106,8 +108,8 @@ const styles = StyleSheet.create({
   },
   img: {
     width: width / 4 - 10,
-    height: 72,
-    resizeMode: 'contain',
+    height: 64,
+    resizeMode: 'center',
   },
 });
 

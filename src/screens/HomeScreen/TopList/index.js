@@ -26,7 +26,7 @@ const Button = ({text}) => {
 
 class TopList extends React.Component {
   render() {
-    const { items, loading, dispatch, langId} = this.props;
+    const { items, loading, dispatch, langId,navigation} = this.props;
     return (
       <View key={'top'} style={{backgroundColor: 'white'}}>
         <Text style={styles.title}> {Language[langId].home.top}</Text>
@@ -48,7 +48,7 @@ class TopList extends React.Component {
             }}>Пусто</Text>
           }
           renderItem={({item})=> {return(
-            <TopCard dispatch={dispatch} key={`${item}`} item={item}  />
+            <TopCard navigation={navigation} dispatch={dispatch} key={`${item}`} item={item}  />
           )}}
            />
         </ScrollView>}

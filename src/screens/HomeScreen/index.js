@@ -39,7 +39,8 @@ class HomeScreen extends React.Component {
     user:{
       name: '',
       cashback: 0
-    }
+    },
+    token: ''
   }
 
   getPopularProduct=()=>{
@@ -143,7 +144,15 @@ class HomeScreen extends React.Component {
     let user = JSON.parse(usr)
     console.log('user');
     console.log(user)
+    this.setState({
+      token: user.access_token
+    })
     this.getUser(user.access_token)
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getUser(this.state.token)
+      }
+    );
   }
   render() {
     const {navigation, dispatch, langId } = this.props;
@@ -165,7 +174,7 @@ class HomeScreen extends React.Component {
             }}
             navigation={navigation} 
             dispatch={dispatch} />
-          <TopList langId={langId} dispatch={dispatch} items={topList.products} loading={topList.loading} />
+          <TopList navigation={navigation} langId={langId} dispatch={dispatch} items={topList.products} loading={topList.loading} />
         </ScrollView>
       </View>
     );

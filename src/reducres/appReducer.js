@@ -19,7 +19,7 @@ export const appReducer = (state = initialState.app, action) => {
     case `ADD_BASKET`:
       return {
         ...state,
-        basket: [...state.basket, action.payload],
+        basket: [...state.basket, {...action.payload.item, quantity: action.payload.quantity}],
       };
     case 'BASKET':
       return{

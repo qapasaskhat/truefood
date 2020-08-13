@@ -6,6 +6,7 @@ import Background from '../../components/Background'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Language } from '../../constants/lang'
+import AsyncStorage from '@react-native-community/async-storage'
 
 class GetGiftCard extends Component {
   constructor(props) {
@@ -13,31 +14,44 @@ class GetGiftCard extends Component {
     this.state = {
         discountPrice: this.props.navigation.getParam('discountPrice'),
         email: '',
-        comment: ''
+        comment: '',
+        token: ''
     };
   }
-  componentDidMount=()=>{
-      
+  componentDidMount=async()=>{
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    this.setState({
+      token: user.access_token
+    })
   }
-  postGift=(price, email)=>{
-      const api = `http://truefood.chat-bots.kz/api/orders/gift-card`
-      var data = new FormData();
-        data.append('price', price);
-        data.append('email', email);
-      var config = {
-        method: 'post',
-        url: api,
-        
-        data: data
-      };
-      axios(config)
-        .then( (response)=> {
-        console.log(JSON.stringify(response.data));
-        
-        })
-        .catch(function (error) {
-        console.log(error);
-        });
+  postGift=(price, email, comment)=>{
+
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('email', email);
+    data.append('price', price);
+    data.append('comment', comment);
+    
+    var config = {
+      method: 'post',
+      url: 'http://truefood.chat-bots.kz/api/orders/gift-card',
+      headers: { 
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${this.state.token}`, 
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then( (response)=> {
+      console.log(JSON.stringify(response.data));
+      alert('success')
+    })
+    .catch( (error)=> {
+      alert(error.message)
+      console.log(error);
+    });
   }
   render() {
       const { discountPrice, email, comment } = this.state

@@ -12,9 +12,13 @@ const {width, height} = Dimensions.get('window');
 import {icAdd} from '../../../assets';
 class TopCard extends React.Component {
   render() {
-    const {item,name} = this.props
+    const {item,name,navigation} = this.props
     return (
       <TouchableOpacity
+        onPress={() => {
+          //alert(item.id)
+          navigation.navigate('CardScreen',{param: item.id})
+        }}
         key={item}
         style={styles.containerBtn}
         key={'smallCard'}>

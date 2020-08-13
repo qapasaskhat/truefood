@@ -7,12 +7,21 @@ import {icUser, icRight, icMoney} from '../../assets';
 class ButtonUser extends React.Component {
   state={
     user: {},
+    token: ''
   }
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
+    this.setState({
+      token: user.access_token
+    })
     this.getUser(user.access_token)
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getUser(this.state.token)
+      }
+    );
   }
   getUser =(token)=>{
     var config = {
@@ -49,12 +58,12 @@ class ButtonUser extends React.Component {
           ]}>
           <View style={styles.horizontal}>
             <Image source={icUser} style={styles.icUser} />
-        <Text style={styles.name}>{user.name}</Text>
+        <Text style={styles.name}>{name}</Text>
           </View>
           <View style={styles.horizontal}>
             <View style={[styles.horizontal, {marginRight: 30}]}>
               <Image source={icMoney} style={styles.icMoney} />
-        <Text style={styles.countText}>{user.bill}</Text>
+        <Text style={styles.countText}>{cashback}</Text>
             </View>
             <Image source={icRight} style={[styles.icRight,{tintColor: '#fff'}]} />
           </View>

@@ -12,6 +12,7 @@ import {
 
 import axios from 'axios'
 import { connect } from 'react-redux'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -42,9 +43,12 @@ class CardScreen extends React.Component {
     items: {},
     variations: [],
     loading: false,
+    token: '',
+    user: {}
   };
 
-  componentDidMount() {
+  componentDidMount= async()=> {
+    
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     })
@@ -56,7 +60,40 @@ class CardScreen extends React.Component {
         this.state.product.item
       )
     }, 2000);
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log('user');
+    console.log(user)
+    this.setState({
+      token: user.access_token
+    })
+    this.getUser(this.state.token)
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getUser(this.state.token)
+      }
+    );
+  }
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
     
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
   }
 
   getProduct=(id)=>{
@@ -137,11 +174,11 @@ class CardScreen extends React.Component {
   };
   render() {
     const {navigation} = this.props;
-    const {product,items, loading} = this.state
+    const {product,items, loading,user} = this.state
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
-        <ButtonUser />
+        <ButtonUser name={user.name} cashback={user.bill}/>
         {loading? <ActivityIndicator /> :<ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
@@ -204,8 +241,7 @@ class CardScreen extends React.Component {
             </View>
           </View>
           <Button title='В Корзину' styleBtn={{margin: 10}} onPress={()=>{
-            this.props.dispatch({type: 'ADD_BASKET', payload: items})
-            
+            this.props.dispatch({type: 'ADD_BASKET', payload: {item: items, quantity: this.state.count}})
           }} />
         </ScrollView>}
       </View>

@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View, Text, Image, FlatList, ActivityIndic
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import BasketCard from '../../components/BasketCard';
 import Button from '../../components/Button';
@@ -14,22 +15,31 @@ class BasketScreen extends React.Component {
 
   state={
     basketProduct: [],
-    loading: false
+    loading: false,
+    token: '',
+    user: {}
   }
 
-  componentDidMount() {
-    
+  componentDidMount= async()=> {
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log(user.access_token)
+    this.setState({
+      token: user.access_token
+    })
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     console.log(this.props.basket.length)
     this.getBasket()
+    this.getUser(this.state.token)
     this.props.navigation.addListener ('willFocus', () =>
       {
         this.getBasket()
         this.props.basket.length === 0 && this.setState({
           basketProduct: []
         })
+        this.getUser(this.state.token)
       }
     );
 
@@ -38,7 +48,7 @@ class BasketScreen extends React.Component {
     const { basket } = this.props
     let money = 0
     basket.map(item=>{
-      money = money+ item.variations[0].price
+      money = money + item.variations[0].price * item.quantity
     })
     return money
   }
@@ -47,7 +57,7 @@ class BasketScreen extends React.Component {
     let api = 'http://truefood.chat-bots.kz/api/basket/mobile?'
     for(let i=0; i<basket.length; i++){
       const a = basket.length===i+1?'': '&'
-      api = api + `cart[${i}][product]=${basket[i].id}&cart[${i}][selected_variation]=${1}${a}`
+      api = api + `cart[${i}][product]=${basket[i].id}&cart[${i}][selected_variation]=${1}&cart[${i}][quantity]=${basket[i].quantity}${a}` //basket[i].quantity
     }
     console.log(api)
       var config = {
@@ -78,14 +88,35 @@ class BasketScreen extends React.Component {
       this.getBasket()
     }, 1000);
   }
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
+  }
 
   render() {
     const {navigation, dispatch, basket,langId} = this.props;
-    const { basketProduct, loading } = this.state
+    const { basketProduct, loading,user } = this.state
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation}/>
-        <ButtonUser />
+        <ButtonUser name={user.name} cashback={user.bill} />
         <Background>
          { loading?<ActivityIndicator />:
           <View style={{flex: 1, padding: 12.5}}>  
@@ -98,7 +129,7 @@ class BasketScreen extends React.Component {
                 ?
                 <Button
                 onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
-                title={`${Language[langId].basket.delivery} ${this.getAllMoney()} ₸`}
+                title={`${Language[langId].basket.delivery} ${this.getAllMoney() } ₸`}
               />: null}
               <Button
                 title={Language[langId].basket.add}

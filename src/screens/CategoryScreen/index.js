@@ -18,6 +18,7 @@ import {PopularCard} from '../../components/Card';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Language } from '../../constants/lang'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const {width, height} = Dimensions.get('window');
 
@@ -38,7 +39,9 @@ class CategoryScreen extends React.Component {
       error: null,
       items: []
     },
-    byPrice: 'asc'
+    byPrice: 'asc',
+    token: '',
+    user: {}
   };
   filter=(id)=>{
     this.setState({
@@ -96,7 +99,7 @@ class CategoryScreen extends React.Component {
       })
     })
   }
-  componentDidMount() {
+  componentDidMount=async()=> {
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
@@ -105,14 +108,48 @@ class CategoryScreen extends React.Component {
     }else
     {console.log(this.props.navigation.getParam('id').name)
     this.getProduct(this.props.navigation.getParam('id').id)}
+    let usr = await AsyncStorage.getItem('user')
+    let user = JSON.parse(usr)
+    console.log('user');
+    console.log(user)
+    this.setState({
+      token: user.access_token
+    })
+    this.getUser(this.state.token)
+    this.props.navigation.addListener ('willFocus', () =>
+      {
+        this.getUser(this.state.token)
+      }
+    );
+  }
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
   }
   render() {
     const {navigation,dispatch, langId} = this.props;
-    const {page,product} = this.state;
+    const {page,product,user} = this.state;
     return (
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
-        <ButtonUser />
+        <ButtonUser name={user.name} cashback={user.bill}/>
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
             <Text style={styles.title}>{navigation.getParam('id').name}</Text>

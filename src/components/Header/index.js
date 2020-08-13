@@ -30,6 +30,7 @@ class Header extends React.Component {
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     this.getChat(user.access_token)
+    
   }
   getChat=(token)=>{
     var config = {

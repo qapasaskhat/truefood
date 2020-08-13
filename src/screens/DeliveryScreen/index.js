@@ -33,7 +33,9 @@ class DeliveryScreen extends React.Component {
     otvet: '',
     basket: [],
     loading: false,
-    time: ''
+    time: '',
+    token: '',
+    user:{}
   };
 
   componentDidMount =async()=> {
@@ -54,7 +56,7 @@ class DeliveryScreen extends React.Component {
     this.setState({
       access_token: user.access_token
     })
-    //this.delivery()
+    this.getUser(user.access_token)
   }
   getPlace=()=>{
 
@@ -127,7 +129,7 @@ class DeliveryScreen extends React.Component {
     data.append('phone', numberPhone);
     for (let i=0; i<basket.length; i++){
       //console.log(basket[i].variations[0].product_variation_id)
-      data.append(`cart[${i}]`, `{"quantity":${1},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
+      data.append(`cart[${i}]`, `{"quantity":${basket[i].quantity},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
     }
    // data.append('delivery_type_id', '1')
     data.append('delivery_type', type)
@@ -165,6 +167,27 @@ class DeliveryScreen extends React.Component {
       this.setState({
         loading: false
       })
+    });
+  }
+  getUser =(token)=>{
+    var config = {
+      method: 'get',
+      url: 'http://truefood.chat-bots.kz/api/user',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    
+    axios(config)
+    .then( (response) => {
+      if(response.status === 200){
+        this.setState({
+          user: response.data
+        })
+      }
+    })
+    .catch( (error) => {
+      console.log(error);
     });
   }
 
@@ -268,10 +291,11 @@ class DeliveryScreen extends React.Component {
   };
   render() {
     const { langId } = this.props
+    const {user} = this.state
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={()=>this.props.navigation.openDrawer()}/>
-        <ButtonUser />
+        <ButtonUser name={user.name}  cashback={user.bill}/>
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
             <Text style={styles.h1}>{Language[langId].basket.title}</Text>

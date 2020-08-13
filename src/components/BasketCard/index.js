@@ -14,6 +14,7 @@ class BasketScreen extends React.Component {
     activeSections: [],
   };
   componentDidMount=()=>{
+    
     const { item } = this.props
     let newSize = [...item.variations]
       newSize.map((item) => {
@@ -24,6 +25,9 @@ class BasketScreen extends React.Component {
       }
     });
     this.setState({size: newSize});
+    this.setState({
+      count: parseInt(item.quantity)
+    })
   }
   _changeSize = (i) => {
     let newSize = [...this.state.size];

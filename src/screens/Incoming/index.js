@@ -189,34 +189,38 @@ class Incoming extends React.Component {
       </View>
     );
   }
+  getMessage=(message)=>{
+    
+    return message.reverse()
+  }
   render() {
     const {messages,user_id} = this.state;
     const { chat_id } = this.props
     const chat = (
       <GiftedChat
-        messages={messages}
+        messages={messages.reverse()}
         placeholder={'Напишите сообщение...'}
-        text={this.state.text}
-        onInputTextChanged={text=>this.setState({text})}
-        renderSend={(message)=>(
-          <TouchableOpacity onPress={()=>{
-            this.sendMessage(message.text)
-            this.setState({
-              text: ''
-            })
-          }} style={{
-            justifyContent:'center',
-            alignItems: 'center',
-            height: '100%',
-            marginRight: 6,
-          }}>
-            <Image source={send} style={{
-              width: 32,
-              height: 32,
-              resizeMode: 'contain'
-            }} />
-          </TouchableOpacity>
-        )}
+        //text={this.state.text}
+        //onInputTextChanged={text=>this.setState({text})}
+        // renderSend={(message)=>(
+        //   <TouchableOpacity onPress={()=>{
+        //     this.sendMessage(message.text)
+        //     this.setState({
+        //       text: ''
+        //     })
+        //   }} style={{
+        //     justifyContent:'center',
+        //     alignItems: 'center',
+        //     height: '100%',
+        //     marginRight: 6,
+        //   }}>
+        //     <Image source={send} style={{
+        //       width: 32,
+        //       height: 32,
+        //       resizeMode: 'contain'
+        //     }} />
+        //   </TouchableOpacity>
+        // )}
         onSend={(message)=>{
           console.log(message[0].text)
           this.sendMessage(message[0].text)

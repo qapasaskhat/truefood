@@ -14,6 +14,9 @@ import { icDown } from '../../assets'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 
+import ImagePicker from 'react-native-image-picker'
+import Axios from 'axios';
+
 const Input = ({item}) => (
   <View style={{marginTop: 10}}>
     <Text style={styles.h2}>{item.title}</Text>
@@ -34,29 +37,35 @@ class EditProifle extends React.Component {
     email: '',
     loading: false,
     access_token: '',
-    phone: ''
+    phone: '',
+    avatarSource: null
   };
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
-    console.log(user.access_token)
     this.getUser(user.access_token)
     this.setState({
       access_token: user.access_token
     })
-    console.log(this.state.access_token)
     
   }
   _editProfile=(access_token)=>{
-    const { name, first_name, last_name, email,phone } = this.state
+    const { name, first_name, last_name, email,phone, avatarSource } = this.state
     console.log(
-      access_token
+      avatarSource
     )
     var FormData = require('form-data');
+    //var fs = require('fs');
     var data = new FormData();
+    let file = {}
+    file.name = "photo.jpg";
+    file.type = 'image/jpeg';
+    file.uri = avatarSource;
+
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
+    data.append('avatar', file)
     data.append('_method','PUT')
 
     var config = {
@@ -64,10 +73,12 @@ class EditProifle extends React.Component {
       url: 'http://truefood.chat-bots.kz/api/user',
       headers: { 
         'Accept':'application/json',
-        'Authorization': `Bearer ${this.state.access_token}`, 
+        'Authorization': `Bearer ${this.state.access_token}`,
+        'Content-Type': 'multipart/form-data', 
       },
       data : data
     };
+    //Axios.post(config.url,file)
 
     axios(config)
     .then( (response)=> {
@@ -83,7 +94,7 @@ class EditProifle extends React.Component {
   getUser=(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -104,6 +115,28 @@ class EditProifle extends React.Component {
       console.log(error);
     });
   }
+  getPhoto = async ()=>{
+    console.log('camera');
+    
+    ImagePicker.showImagePicker({noData: true, mediaType: "photo"}, (response) => {
+        console.log('Response = ', response);
+      
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          // You can also display the image using data:
+          // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+      
+          this.setState({
+            avatarSource: response.uri ,
+          });
+        }
+      });
+}
   render() {
     this.list = [
       {
@@ -146,6 +179,14 @@ class EditProifle extends React.Component {
           {this.list.map((item) => (
             <Input item={item} />
           ))}
+          <View>
+            <Button 
+              title='Выбрать фото' 
+              styleBtn={{marginTop: 30, backgroundColor: '#eee'}}
+              styleText={{color: '#FE1935'}}
+              onPress={()=>{this.getPhoto()}}
+              />
+          </View>
           {/* <Text style={[styles.h2,{marginTop:10}]}>Введите дату рождения</Text>
           <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
             <View style={styles.calendar}>
@@ -167,6 +208,13 @@ class EditProifle extends React.Component {
               </TouchableOpacity>
             </View>
           </View> */}
+          <View style={{justifyContent: 'center', width: '100%', marginTop: 20}}>
+            {this.state.avatarSource && <Image source={{uri: this.state.avatarSource}} style={{
+              width: 100,
+              height: 100,
+              alignSelf: 'center'
+            }} />}
+          </View>
           <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} onPress={()=>{
             this._editProfile(this.state.access_token)
           }}/>

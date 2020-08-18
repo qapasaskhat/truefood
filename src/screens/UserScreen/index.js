@@ -51,7 +51,7 @@ class UserScreen extends React.Component {
   getUser=(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -147,15 +147,14 @@ class UserScreen extends React.Component {
         <Background source={icFrame} style={styles.bgContainer}>
           {loading?<ActivityIndicator />: <View style={[styles.view,{flexDirection: 'row'}]}>
             <View style={{
-              backgroundColor: '#eee',
+              backgroundColor: '#fff',
               height: 140,
               width: 140,
-              borderRadius: 10,
+              borderRadius: 100,
               justifyContent:'center',
               alignItems: 'center',
-              
             }}>
-              <Image source={icProfile} style={{height: 140, resizeMode: 'contain'}}/>
+              <Image source={{uri: user.avatar && user.avatar}} style={{height: 140, resizeMode: 'contain', width: 140}}/>
             </View>
             <View>
               <Text style={[styles.title,{

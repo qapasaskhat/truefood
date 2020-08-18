@@ -78,6 +78,12 @@ target 'TrueFood' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+  
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging', '~> 6.13.0'
+
+  #pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
 
   target 'TrueFoodTests' do
     inherit! :complete

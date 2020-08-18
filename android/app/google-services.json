@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "505981403016",
+    "firebase_url": "https://truefood-6e057.firebaseio.com",
+    "project_id": "truefood-6e057",
+    "storage_bucket": "truefood-6e057.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505981403016:android:156eb26f1c1fb0ddef843d",
+        "android_client_info": {
+          "package_name": "com.truefood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505981403016-353763m9f6lgo80dr2obj1bh8tf4c1lv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUNBxn7AvcOvtP_fC4DRubJSCfrFlUEgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505981403016-353763m9f6lgo80dr2obj1bh8tf4c1lv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "505981403016-4hti431i221ev62t8k6jv22o1uea96do.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.TrueFood"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

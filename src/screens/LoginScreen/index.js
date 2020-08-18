@@ -8,6 +8,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage'
 import {Language} from '../../constants/lang'
 import {connect} from 'react-redux'
+import { fcmService } from '../../notification'
+import firebase from 'react-native-firebase'
 const options = [
   {label: 'ENG', value: 0},
   {label: 'РУС', value: 1},
@@ -33,18 +35,55 @@ class LoginScreen extends React.Component {
     password: '',
     loading: false,
     error: null,
-    langId: 1
+    langId: 1,
+    device_token: ''
   };
   componentDidMount=()=>{
-    console.log(Language[this.props.langId])
+    fcmService.register(this.onRegister, this.onNotification, this.onOpenNotification)
+  }
+  onRegister=(token)=>{
+    console.log('device token ', token)
+    this.setState({
+      device_token: token
+    })
+
+  }
+  onNotification=(notify)=>{
+      console.log('onNotification ', notify)
+      const channelObj = {
+          channelId: 'trueFoodChannelId',
+          channelName: 'trueFoodChannelName',
+          channelDes: 'trueFoodChannelDes'
+      }
+      const channel = fcmService.buildChannel(channelObj)
+      const buildNotify = {
+          dataId: notify._notificationId,
+          title: notify._title,
+          content: notify._body,
+          sound: 'default',
+          channel: channel,
+          data: {},
+          color: '#007BED',
+          largeIcon: 'ic_launcher',
+          smallIcon: 'ic_launcher',
+          vibrate: true
+      }
+      const notification = fcmService.buildNotification(buildNotify)
+      //console.log(notification)
+      fcmService.displayNotify(notification)
+  }
+  onOpenNotification=(notify)=>{
+      console.log('onOpenNotification ', notify)
+      //alert(notify._body)
   }
 
   login=()=>{
-    const { email, password } = this.state
+    const { email, password,device_token } = this.state
     const { langId } = this.props
     const user = new FormData()
     user.append("email", email)
     user.append("password", password)
+    user.append("device_token", device_token)
 
     var config = {
       method: 'post',
@@ -89,7 +128,7 @@ class LoginScreen extends React.Component {
   }
 
   render() {
-    const {loading,error} = this.state
+    const {loading,error,device_token} = this.state
     const {langId} = this.props
     this.list = [
       {

@@ -17,7 +17,8 @@ class BasketScreen extends React.Component {
     basketProduct: [],
     loading: false,
     token: '',
-    user: {}
+    user: {},
+    price: 0
   }
 
   componentDidMount= async()=> {
@@ -40,17 +41,23 @@ class BasketScreen extends React.Component {
           basketProduct: []
         })
         this.getUser(this.state.token)
+        this.props.dispatch({type: 'TOTAL_PRICE'})
+
       }
     );
-
+    this.props.dispatch({type: 'TOTAL_PRICE'})
+    //this.getAllMoney()
   }
   getAllMoney=()=>{
-    const { basket } = this.props
+    const { basketItems } = this.props
     let money = 0
-    basket.map(item=>{
+    basketItems.map(item=>{
       money = money + item.variations[0].price * item.quantity
     })
-    return money
+    this.setState({
+      price: money
+    })
+
   }
   getBasket=()=>{
     const { basket } = this.props
@@ -70,6 +77,8 @@ class BasketScreen extends React.Component {
       axios(config)
       .then( (response) =>{
         console.log(response.data.cart);
+        this.props.dispatch({type: 'GET_BASKET', payload: response.data.cart})
+        this.props.dispatch({type: 'TOTAL_PRICE'})
         this.setState({basketProduct: response.data.cart})
       })
       .catch(function (error) {
@@ -109,10 +118,9 @@ class BasketScreen extends React.Component {
       console.log(error);
     });
   }
-
   render() {
-    const {navigation, dispatch, basket,langId} = this.props;
-    const { basketProduct, loading,user } = this.state
+    const {navigation, dispatch, basket, langId, basketItems, totalPrice} = this.props;
+    const { basketProduct, loading,user,price } = this.state
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation}/>
@@ -121,26 +129,21 @@ class BasketScreen extends React.Component {
          { loading?<ActivityIndicator />:
           <View style={{flex: 1, padding: 12.5}}>  
             <FlatList 
-            data={basketProduct}
+            data={basketItems}
             ListFooterComponent={
               <View>
-                {
-                  basket.length !== 0
-                ?
+                {basketItems.length !== 0?
                 <Button
                 onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
-                title={`${Language[langId].basket.delivery} ${this.getAllMoney() } ₸`}
-              />: null}
+                title={`${Language[langId].basket.delivery} ${totalPrice} ₸`}/>: null}
               <Button
                 title={Language[langId].basket.add}
                 styleBtn={styles.styleBtn}
                 styleText={styles.styleText}
                 onPress={()=>{
                   navigation.navigate('HomeScreen')
-                }}
-              />
-              </View>
-            }
+                }}/>
+              </View>}
             ListHeaderComponent={<Text style={styles.h1}>{Language[langId].basket.title}</Text>}
             renderItem={({item})=>(
               basket.length !==0 &&
@@ -176,7 +179,9 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
-  langId: state.appReducer.langId
+  langId: state.appReducer.langId,
+  basketItems: state.appReducer.basketItems,
+  totalPrice: state.appReducer.totalPrice
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatch,

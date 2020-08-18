@@ -35,7 +35,8 @@ class DeliveryScreen extends React.Component {
     loading: false,
     time: '',
     token: '',
-    user:{}
+    user: {},
+    bonus: 0
   };
 
   componentDidMount =async()=> {
@@ -45,14 +46,12 @@ class DeliveryScreen extends React.Component {
     this.setState({
       dateOrder: `Сегодня, в ${moment(this.state.date)}`
     })
-    console.log(this.props.navigation.getParam('basket').items)
     this.getPlace()
     this.setState({
       basket: this.props.navigation.getParam('basket').items
     })
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
-    console.log(user.access_token)
     this.setState({
       access_token: user.access_token
     })
@@ -76,7 +75,7 @@ class DeliveryScreen extends React.Component {
     })
   }
   pickup=()=>{
-    const {number, numberPhone, time,comment, basket} = this.state
+    const {number, numberPhone, time,comment, basket,bonus} = this.state
 
     var FormData = require('form-data');
     var data = new FormData();
@@ -90,6 +89,8 @@ class DeliveryScreen extends React.Component {
     data.append('comment', comment);
     data.append('delivery_type_id', '2')
     data.append('cabinet_number', number);
+    data.append('bonuses',bonus)
+
     var config = {
       method: 'post',
       url: 'http://truefood.chat-bots.kz/api/orders/pickup',
@@ -110,7 +111,8 @@ class DeliveryScreen extends React.Component {
       })
 
       alert(this.state.otvet)
-      this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+      this.props.dispatch({type: 'CLEAR_BASKET', payload: []})
+      this.props.dispatch({type: 'TOTAL_RESET',})
       this.props.navigation.goBack()
     })
     .catch( (error) =>{
@@ -122,7 +124,7 @@ class DeliveryScreen extends React.Component {
     });
   }
   delivery=(type)=>{
-    const { number, numberPhone, place_id,comment, basket,time } = this.state
+    const { number, numberPhone, place_id,comment, basket,time, bonus } = this.state
 
     var FormData = require('form-data');
     var data = new FormData();
@@ -138,6 +140,7 @@ class DeliveryScreen extends React.Component {
     data.append('cabinet_number', number);
     data.append('pick_up_at', time);
     data.append('message', `${comment}`);
+    data.append('bonuses',bonus)
     console.log(data)
     var config = {
       method: 'post',
@@ -159,6 +162,7 @@ class DeliveryScreen extends React.Component {
       })
       alert(this.state.otvet)
       this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+      this.props.dispatch({type: 'TOTAL_RESET',} )
       this.props.navigation.goBack()
     })
     .catch( (error)=> {
@@ -196,9 +200,7 @@ class DeliveryScreen extends React.Component {
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
-          {this.state.locations.map((item) => (
-            <RadioButton item={item} radioBtn={()=>{this._radioBtn(item.id)}}/>
-          ))}
+          <Text style={styles.h2} >Блок Geneva</Text>
         </View>
         <View key={'phone'} style={{marginTop: 10}}>
         <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
@@ -312,11 +314,18 @@ class DeliveryScreen extends React.Component {
               ]}
               initial={0}
               onPress={(value) => {
-
                 this.setState({type: value})
               }}
             />
             {this.state.type ? this._renderWith() : this._renderWithout()}
+          </View>
+          <View style={[styles.view,{marginHorizontal: 12.5}]}>
+            <Text style={styles.h2}>Потратить бонусы</Text>
+            <TextInput 
+              placeholder='2000'
+              value={this.state.bonus}
+              onChangeText={(text)=>this.setState({bonus:text})}
+               />
           </View>
           <Button
             onPress={() => {
@@ -363,7 +372,8 @@ const styles = StyleSheet.create({
   text: {
     textTransform: 'uppercase',
     fontFamily: 'OpenSans-SemiBold',
-    fontWeight: '600',
+    fontWeight: '500',
+    letterSpacing: 1
   },
   h2: {
     fontSize: 14,
@@ -384,7 +394,8 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,
-  langId: state.appReducer.langId
+  langId: state.appReducer.langId,
+  totalPrice: state.appReducer.totalPrice,
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatch,

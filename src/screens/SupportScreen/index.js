@@ -34,7 +34,6 @@ class Support extends Component {
     var FormData = require('form-data');
     var data = new FormData();
     data.append('message', message);
-    //data.append('chat_id','11')
     
     var config = {
       method: 'post',

@@ -186,7 +186,7 @@ class CardScreen extends React.Component {
           <Slider imgItems={items.slider_images} />
           {this._renderBody(items)}
           <View key={'bottom'} style={{padding: 10}}>
-            <View key={'size'}>
+            {/* <View key={'size'}>
               <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
                 Размер порции
               </Text>
@@ -212,7 +212,7 @@ class CardScreen extends React.Component {
                   </TouchableOpacity>
                 ))}
               </View>
-            </View>
+            </View> */}
             <View key={'count'} style={{marginTop: 10}}>
               <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
                 Количество порций

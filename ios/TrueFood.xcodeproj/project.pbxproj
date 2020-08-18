@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* TrueFoodTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TrueFoodTests.m */; };
+		03A6F1FF3A1846EE89FC4DDC /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B647BEF768D046108B2E9300 /* OpenSans-Bold.ttf */; };
 		0B009487F3D86429355D7AEC /* libPods-TrueFood-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3345CA6B623FA6C382EDA72 /* libPods-TrueFood-tvOSTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
@@ -18,18 +19,18 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* TrueFoodTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TrueFoodTests.m */; };
-		440B847A1939B1146279D8B0 /* libPods-TrueFood-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97BAEF4B8EA236FFDC36E42C /* libPods-TrueFood-tvOS.a */; };
-		F0A06A1696750E67A489D7F1 /* libPods-TrueFood.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81CB4F870852BC4BCD294070 /* libPods-TrueFood.a */; };
-		03A6F1FF3A1846EE89FC4DDC /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B647BEF768D046108B2E9300 /* OpenSans-Bold.ttf */; };
-		5480C7A5AAAD451CAE5DA506 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29704A718B354167954E5787 /* OpenSans-BoldItalic.ttf */; };
-		F980F78DC9A847C5B11D73DB /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9505B9AEAEA743FE9D6B9399 /* OpenSans-ExtraBold.ttf */; };
-		8DC21370E5CB4A0A84DF57A1 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A947A75E520F482B8AE61337 /* OpenSans-ExtraBoldItalic.ttf */; };
-		B0D110665BF94FFEA70C056F /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EA475EB0A1244CB8A5F21D8 /* OpenSans-Italic.ttf */; };
 		3BCABB6935E04C70AF6057BA /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09C78CE63324462396BB3452 /* OpenSans-Light.ttf */; };
-		CA5F604609F849DC858EBC5C /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F228B054B4B046F4A77A9DFA /* OpenSans-LightItalic.ttf */; };
-		8B63F540411F43228F730E57 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05616B1568084DFA81AF8D80 /* OpenSans-Regular.ttf */; };
-		8ED9894BCA604D6C8D9F3479 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9A9686C673841A7B945846C /* OpenSans-SemiBold.ttf */; };
+		440B847A1939B1146279D8B0 /* libPods-TrueFood-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97BAEF4B8EA236FFDC36E42C /* libPods-TrueFood-tvOS.a */; };
+		5480C7A5AAAD451CAE5DA506 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29704A718B354167954E5787 /* OpenSans-BoldItalic.ttf */; };
 		5E492CB07F204F1DA97FFC50 /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 525FABDD563842F588419353 /* OpenSans-SemiBoldItalic.ttf */; };
+		8B63F540411F43228F730E57 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05616B1568084DFA81AF8D80 /* OpenSans-Regular.ttf */; };
+		8DC21370E5CB4A0A84DF57A1 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A947A75E520F482B8AE61337 /* OpenSans-ExtraBoldItalic.ttf */; };
+		8ED9894BCA604D6C8D9F3479 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9A9686C673841A7B945846C /* OpenSans-SemiBold.ttf */; };
+		B0D110665BF94FFEA70C056F /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EA475EB0A1244CB8A5F21D8 /* OpenSans-Italic.ttf */; };
+		C9F68B1024E56105002F0D38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C9F68B0F24E56105002F0D38 /* GoogleService-Info.plist */; };
+		CA5F604609F849DC858EBC5C /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F228B054B4B046F4A77A9DFA /* OpenSans-LightItalic.ttf */; };
+		F0A06A1696750E67A489D7F1 /* libPods-TrueFood.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81CB4F870852BC4BCD294070 /* libPods-TrueFood.a */; };
+		F980F78DC9A847C5B11D73DB /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9505B9AEAEA743FE9D6B9399 /* OpenSans-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		00E356EE1AD99517003FC87E /* TrueFoodTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrueFoodTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TrueFoodTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrueFoodTests.m; sourceTree = "<group>"; };
+		05616B1568084DFA81AF8D80 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		09C78CE63324462396BB3452 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TrueFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrueFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TrueFood/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = TrueFood/AppDelegate.m; sourceTree = "<group>"; };
@@ -62,31 +65,30 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TrueFood/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TrueFood/main.m; sourceTree = "<group>"; };
 		1A7F7A0CE306BEC6F605D802 /* Pods-TrueFood-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-TrueFood-tvOSTests/Pods-TrueFood-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		29704A718B354167954E5787 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-BoldItalic.ttf"; path = "../assets/fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* TrueFood-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TrueFood-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* TrueFood-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TrueFood-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EA475EB0A1244CB8A5F21D8 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Italic.ttf"; path = "../assets/fonts/OpenSans-Italic.ttf"; sourceTree = "<group>"; };
+		525FABDD563842F588419353 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../assets/fonts/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		63CB6117493BAEF5E971E9A2 /* Pods-TrueFood-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TrueFood-tvOS/Pods-TrueFood-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		699894D0D34F284B5EC97CF9 /* Pods-TrueFood.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood.debug.xcconfig"; path = "Target Support Files/Pods-TrueFood/Pods-TrueFood.debug.xcconfig"; sourceTree = "<group>"; };
 		81CB4F870852BC4BCD294070 /* libPods-TrueFood.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrueFood.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85986583A64A5B7AD2E36031 /* Pods-TrueFood-TrueFoodTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-TrueFoodTests.debug.xcconfig"; path = "Target Support Files/Pods-TrueFood-TrueFoodTests/Pods-TrueFood-TrueFoodTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9505B9AEAEA743FE9D6B9399 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		97BAEF4B8EA236FFDC36E42C /* libPods-TrueFood-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrueFood-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5811C39ED37A4C043DE5462 /* Pods-TrueFood-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-TrueFood-tvOSTests/Pods-TrueFood-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		A947A75E520F482B8AE61337 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../assets/fonts/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		B647BEF768D046108B2E9300 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BD42E27A949C52537DEA0707 /* Pods-TrueFood.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood.release.xcconfig"; path = "Target Support Files/Pods-TrueFood/Pods-TrueFood.release.xcconfig"; sourceTree = "<group>"; };
+		C9A9686C673841A7B945846C /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBold.ttf"; path = "../assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		C9F68B0F24E56105002F0D38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D41437B10A5C3820AA4D8F7C /* libPods-TrueFood-TrueFoodTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrueFood-TrueFoodTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3345CA6B623FA6C382EDA72 /* libPods-TrueFood-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrueFood-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F1DF1FCED79F8CFA283F9A8B /* Pods-TrueFood-TrueFoodTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-TrueFoodTests.release.xcconfig"; path = "Target Support Files/Pods-TrueFood-TrueFoodTests/Pods-TrueFood-TrueFoodTests.release.xcconfig"; sourceTree = "<group>"; };
+		F228B054B4B046F4A77A9DFA /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-LightItalic.ttf"; path = "../assets/fonts/OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
 		FDD8AD5C7F97B87A6A300E0E /* Pods-TrueFood-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrueFood-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TrueFood-tvOS/Pods-TrueFood-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		B647BEF768D046108B2E9300 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		29704A718B354167954E5787 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; name = "OpenSans-BoldItalic.ttf"; path = "../assets/fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9505B9AEAEA743FE9D6B9399 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A947A75E520F482B8AE61337 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../assets/fonts/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4EA475EB0A1244CB8A5F21D8 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; name = "OpenSans-Italic.ttf"; path = "../assets/fonts/OpenSans-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		09C78CE63324462396BB3452 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F228B054B4B046F4A77A9DFA /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; name = "OpenSans-LightItalic.ttf"; path = "../assets/fonts/OpenSans-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		05616B1568084DFA81AF8D80 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C9A9686C673841A7B945846C /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBold.ttf"; path = "../assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		525FABDD563842F588419353 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBoldItalic.ttf"; path = "../assets/fonts/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 		13B07FAE1A68108700A75B9A /* TrueFood */ = {
 			isa = PBXGroup;
 			children = (
+				C9F68B0F24E56105002F0D38 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -181,7 +184,6 @@
 				1A7F7A0CE306BEC6F605D802 /* Pods-TrueFood-tvOSTests.debug.xcconfig */,
 				A5811C39ED37A4C043DE5462 /* Pods-TrueFood-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -220,7 +222,7 @@
 			sourceTree = "<group>";
 		};
 		D74F1B2EAE3B40B79FAEC917 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				B647BEF768D046108B2E9300 /* OpenSans-Bold.ttf */,
 				29704A718B354167954E5787 /* OpenSans-BoldItalic.ttf */,
@@ -235,7 +237,6 @@
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -377,6 +378,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9F68B1024E56105002F0D38 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				03A6F1FF3A1846EE89FC4DDC /* OpenSans-Bold.ttf in Resources */,

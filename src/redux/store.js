@@ -13,7 +13,7 @@ const config = {
   key: 'primary',
   storage: AsyncStorage,
   transform: [saveSubsetBlacklistFilter],
-  blacklist: ['appReducer'],
+  //blacklist: ['appReducer'],
   timeout: 0,
 };
 

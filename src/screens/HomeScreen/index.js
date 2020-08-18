@@ -44,7 +44,7 @@ class HomeScreen extends React.Component {
   }
 
   getPopularProduct=()=>{
-    const api = 'http://truefood.chat-bots.kz/api/products?popular=1'
+    const api = 'http://truefood.kz/api/products?popular=1'
     this.setState({
       popularProduct: {
         ...this.state.popularProduct, loading: true
@@ -66,7 +66,7 @@ class HomeScreen extends React.Component {
     })
   }
   getCategory=()=>{
-    const api = 'http://truefood.chat-bots.kz/api/categories'
+    const api = 'http://truefood.kz/api/categories'
     this.setState({
       category: {
         ...this.state.category, loading: true
@@ -80,6 +80,8 @@ class HomeScreen extends React.Component {
           loading: false}
       })
     }).catch(err=>{
+      console.log('err')
+      console.log(err)
       this.setState({
         category:{
           error: err,
@@ -112,7 +114,7 @@ class HomeScreen extends React.Component {
   getUser =(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -158,13 +160,14 @@ class HomeScreen extends React.Component {
     const {navigation, dispatch, langId } = this.props;
     const { popularProduct, topList, category, user } = this.state
     return (
+      category.error ? <Text>eeerrr</Text> :
       <View style={styles.container}>
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation} />
         <ButtonUser name = {user.name } cashback={user.cashback}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}>
-          <Categories category={category.category.categories} navigation={navigation} dispatch={dispatch} />
+          <Categories category={category.category['Категорий']} navigation={navigation} dispatch={dispatch} />
           <PopularList 
             loading={popularProduct.loading} 
             items={popularProduct.products} 

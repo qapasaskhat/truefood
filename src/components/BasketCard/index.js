@@ -6,6 +6,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import CalendarButton from '../../components/Button/CalendarButton';
 import DownButton from '../../components/Button/DownButton';
 import { Language } from '../../constants/lang'
+import {connect} from 'react-redux'
 
 class BasketScreen extends React.Component {
   state = {
@@ -43,11 +44,16 @@ class BasketScreen extends React.Component {
 
   _changeCount = (type) => {
     const {count} = this.state;
+    const { item } = this.props
     if (type === 'add') {
-      this.setState({count: count + 1});
+      this.props.dispatch({type: 'CHANGE_QUANTITY_ADD', payload: item.product.id})
+      this.props.dispatch({type: 'TOTAL_PRICE'})
+      //this.setState({count: count + 1});
     } else {
-      if (count !== 1) {
-        this.setState({count: count - 1});
+      if (item.quantity !== 1) {
+        this.props.dispatch({type: 'CHANGE_QUANTITY', payload: item.product.id})
+        this.props.dispatch({type: 'TOTAL_PRICE'})
+       // this.setState({count: count - 1});
       }
     }
   };
@@ -120,7 +126,7 @@ class BasketScreen extends React.Component {
   };
 
   _renderCount = () => {
-    const { langId } = this.props
+    const { langId,item } = this.props
     return (
       <View key={'count'} style={{marginTop: 10}}>
         <Text style={{fontSize: 12, fontFamily: 'OpenSans-SemiBold'}}>
@@ -136,7 +142,7 @@ class BasketScreen extends React.Component {
             />
           </TouchableOpacity>
           <Text style={{fontFamily: 'OpenSans-Regular', fontSize: 16}}>
-            {this.state.count}
+            {item.quantity}
           </Text>
           <TouchableOpacity
             onPress={() => this._changeCount('add')}
@@ -156,7 +162,7 @@ class BasketScreen extends React.Component {
       <View
         key={'bottom'}
         style={{padding: 10, paddingLeft: 20, paddingRight: 20}}>
-        {this._renderSize(item)}
+        {/* {this._renderSize(item)} */}
         {this._renderCount()}
       </View>
     );
@@ -371,4 +377,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BasketScreen;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId,
+  basketItems: state.appReducer.basketItems
+});
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps)(BasketScreen);

@@ -4,6 +4,9 @@ export default {
     basket: [],
     langId: 1,
     chat_id: 0,
-    chat_messages: [] 
+    chat_messages: [],
+    basket_item_count: 1,
+    basketItems: [],
+    totalPrice: 0
   },
 };

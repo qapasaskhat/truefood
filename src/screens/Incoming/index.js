@@ -28,7 +28,9 @@ class Incoming extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [],
+      messages: [
+        
+      ],
       message: {},
       token: '',
       user_id: 1,
@@ -46,6 +48,7 @@ class Incoming extends React.Component {
     })
     const {chat_id,chat_messages} = this.props
     this.getUser(user.access_token)
+    this.getAllMessage(user.access_token)
     this.setState({
       messages: chat_messages
     })
@@ -81,6 +84,7 @@ class Incoming extends React.Component {
             name: ''
           }
         }
+        this.props.dispatch({type: 'GET_MESSAGE', payload: obj} )
         const messages = [...this.state.messages, obj]
         return {
           messages,
@@ -113,7 +117,38 @@ class Incoming extends React.Component {
     });
   }
   componentWillUnmount=()=>{
-    this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )
+    //this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )
+  }
+  getAllMessage=(token)=>{
+    const { chat_id } = this.props
+    var config = {
+      method: 'get',
+      url: `http://truefood.chat-bots.kz/api/chat/all?chat=${chat_id}`,
+      headers: { 
+        'Authorization': `Bearer ${token}`, 
+      },
+    };
+    axios(config)
+    .then( (response) => {
+      console.log(JSON.stringify(response.data));
+      let array = []
+      response.data.messages.map(item=>{
+        let obj = {
+          _id: item.id,
+          text: item.message,
+          createdAt: item.updated_at,
+          user: {
+            _id: item.user_id,
+            name: ''
+          }
+        }
+        array.push(obj)
+      })
+      this.props.dispatch({type: 'MESS', payload: array})
+    })
+    .catch( (error) => {
+      console.log(error);
+    });
   }
   sendMessage=(message)=>{
     const {chat_id} = this.props
@@ -190,15 +225,14 @@ class Incoming extends React.Component {
     );
   }
   getMessage=(message)=>{
-    
     return message.reverse()
   }
   render() {
     const {messages,user_id} = this.state;
-    const { chat_id } = this.props
+    const { chat_id,chat_messages } = this.props
     const chat = (
       <GiftedChat
-        messages={messages.reverse()}
+        messages={chat_messages.reverse()}
         placeholder={'Напишите сообщение...'}
         //text={this.state.text}
         //onInputTextChanged={text=>this.setState({text})}
@@ -242,12 +276,12 @@ class Incoming extends React.Component {
             this.props.navigation.goBack();
           }}
         />
-        { chat_id===0? 
-        
+        { 
+        chat_id===0? 
         <Text style={{textAlign: 'center',marginTop:'30%',fontSize: 16,}}>
           Чтобы начать чат переходите в меню {'\n'}<Text style={{fontWeight: 'bold',}}>Обратная связь или помощь</Text>
-        </Text>
-        :chat}
+        </Text>:
+        chat}
         {/* <Header
           title={'Входящие'}
           type={'close'}

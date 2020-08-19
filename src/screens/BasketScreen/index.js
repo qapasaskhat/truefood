@@ -37,16 +37,14 @@ class BasketScreen extends React.Component {
     this.props.navigation.addListener ('willFocus', () =>
       {
         this.getBasket()
+        this.props.dispatch({type: 'TOTAL_PRICE'})
         this.props.basket.length === 0 && this.setState({
           basketProduct: []
         })
         this.getUser(this.state.token)
-        this.props.dispatch({type: 'TOTAL_PRICE'})
-
       }
     );
     this.props.dispatch({type: 'TOTAL_PRICE'})
-    //this.getAllMoney()
   }
   getAllMoney=()=>{
     const { basketItems } = this.props
@@ -57,7 +55,6 @@ class BasketScreen extends React.Component {
     this.setState({
       price: money
     })
-
   }
   getBasket=()=>{
     const { basket } = this.props
@@ -87,6 +84,7 @@ class BasketScreen extends React.Component {
   }
   deleteBAsketItem=(id)=>{
     this.props.dispatch({type: 'DELETE_BASKET_ITEM', payload: id} )
+    this.props.dispatch({type: 'TOTAL_PRICE'})
     this.setState(state => {
       const basketProduct = this.state.basketProduct.filter(item=>item.id !== id)
       return {
@@ -132,7 +130,7 @@ class BasketScreen extends React.Component {
             data={basketItems}
             ListFooterComponent={
               <View>
-                {basketItems.length !== 0?
+                {totalPrice !== 0?
                 <Button
                 onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
                 title={`${Language[langId].basket.delivery} ${totalPrice} ₸`}/>: null}

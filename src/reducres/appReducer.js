@@ -93,7 +93,9 @@ export const appReducer = (state = initialState.app, action) => {
       case 'TOTAL_RESET':
         return{ 
           ...state,
-          totalPrice: 0
+          totalPrice: 0,
+          basketItems: [],
+          basket: []
         }
       case 'MESS':
         return{

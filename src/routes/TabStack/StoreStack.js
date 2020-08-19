@@ -5,7 +5,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import React, {Component} from 'react';
 import {Animated, Easing, Dimensions} from 'react-native';
 
-import {BasketScreen, DeliveryScreen, PayScreen} from '../../screens';
+import {BasketScreen, DeliveryScreen, PayScreen, Payment} from '../../screens';
 import CustomComponent from '../../components/CustomComponent'
 
 const {width} = Dimensions.get('window');
@@ -18,6 +18,7 @@ const StoreStack = createAppContainer(
         BasketScreen,
         DeliveryScreen,
         PayScreen,
+        Payment
       },
       {
         initialRouteName: 'BasketScreen',

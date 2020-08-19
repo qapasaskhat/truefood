@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Platform
 } from 'react-native';
 import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
@@ -50,7 +51,7 @@ class EditProifle extends React.Component {
     
   }
   _editProfile=(access_token)=>{
-    const { name, first_name, last_name, email,phone, avatarSource } = this.state
+    const { name, email,phone, avatarSource } = this.state
     console.log(
       avatarSource
     )
@@ -58,14 +59,14 @@ class EditProifle extends React.Component {
     //var fs = require('fs');
     var data = new FormData();
     let file = {}
-    file.name = "photo.jpg";
+    file.name = "photo_123_1231232_324-903i4.jpg";
     file.type = 'image/jpeg';
     file.uri = avatarSource;
 
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
-    data.append('avatar', file)
+    avatarSource && data.append('avatar', file)
     data.append('_method','PUT')
 
     var config = {
@@ -74,7 +75,7 @@ class EditProifle extends React.Component {
       headers: { 
         'Accept':'application/json',
         'Authorization': `Bearer ${this.state.access_token}`,
-        'Content-Type': 'multipart/form-data', 
+        'Content-Type': 'application/x-www-form-urlencoded', 
       },
       data : data
     };
@@ -117,9 +118,16 @@ class EditProifle extends React.Component {
   }
   getPhoto = async ()=>{
     console.log('camera');
+    const options = {
+      title: 'Выбрать аватар',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
     
-    ImagePicker.showImagePicker({noData: true, mediaType: "photo"}, (response) => {
-        console.log('Response = ', response);
+    ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response.uri);
       
         if (response.didCancel) {
           console.log('User cancelled image picker');
@@ -132,7 +140,7 @@ class EditProifle extends React.Component {
           // const source = { uri: 'data:image/jpeg;base64,' + response.data };
       
           this.setState({
-            avatarSource: response.uri ,
+            avatarSource: Platform.OS==='android'? 'file://'+response.uri :response.uri,
           });
         }
       });

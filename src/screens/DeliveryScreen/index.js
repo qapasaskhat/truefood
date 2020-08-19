@@ -36,7 +36,8 @@ class DeliveryScreen extends React.Component {
     time: '',
     token: '',
     user: {},
-    bonus: 0
+    bonus: 0,
+    payment_url: null
   };
 
   componentDidMount =async()=> {
@@ -56,6 +57,7 @@ class DeliveryScreen extends React.Component {
       access_token: user.access_token
     })
     this.getUser(user.access_token)
+    
   }
   getPlace=()=>{
 
@@ -135,16 +137,16 @@ class DeliveryScreen extends React.Component {
     }
    // data.append('delivery_type_id', '1')
     data.append('delivery_type', type)
-    data.append('payment_type_id', '2');
+    data.append('payment_type_id', '1');
     data.append('delievery_place_id', `${place_id}`);
     data.append('cabinet_number', number);
-    data.append('pick_up_at', time);
+    data.append('pick_up_at', 12);
     data.append('message', `${comment}`);
     data.append('bonuses',bonus)
     console.log(data)
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
+      url: 'http://truefood.kz/api/orders/pickup',
       headers: { 
         'Authorization': `Bearer ${this.state.access_token}`, 
       },
@@ -155,19 +157,25 @@ class DeliveryScreen extends React.Component {
     })
     axios(config)
     .then( (response)=> {
-      console.log(JSON.stringify(response.data));
-      this.setState({
-        otvet: response.data.message,
-        loading: false
-      })
-      alert(this.state.otvet)
-      this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
-      this.props.dispatch({type: 'TOTAL_RESET',} )
-      this.props.navigation.goBack()
+      console.log(JSON.stringify(response));
+      if (response.status === 201){
+        this.setState({
+          payment_url: response.data.payment_url,
+          otvet: response.data.message,
+        })
+        alert(this.state.otvet)
+        this.props.navigation.replace('Payment',{payment_url: this.state.payment_url})
+        this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+        this.props.dispatch({type: 'TOTAL_RESET'})
+      }else{
+        alert('Ошибка попробуйте еще раз')
+      }
+
+      
     })
     .catch( (error)=> {
       console.log(error);
-      alert(error.message)
+      alert('Ошибка попробуйте еще раз')
       this.setState({
         loading: false
       })
@@ -329,8 +337,7 @@ class DeliveryScreen extends React.Component {
           </View>
           <Button
             onPress={() => {
-              this.state.type?this.delivery(2):
-              this.delivery(1)
+              this.state.type?this.delivery(2):this.delivery(1)
               //this.props.navigation.navigate('PayScreen')
             }}
             loading={this.state.loading}

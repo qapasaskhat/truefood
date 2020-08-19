@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator,Image} from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage'
+import {icLogo} from '../../assets/index'
 
 class AuthLoading extends Component {
   constructor(props) {
@@ -29,7 +30,10 @@ class AuthLoading extends Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-          <ActivityIndicator />
+          <Image source={icLogo} style={{
+            width: '50%',
+            resizeMode: 'contain'
+          }} />
         </View>
     );
   }

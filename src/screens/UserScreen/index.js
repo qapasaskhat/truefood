@@ -160,7 +160,8 @@ class UserScreen extends React.Component {
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
-                marginVertical:5
+                marginVertical:5,
+                
               }]}>Имя: {'\n'}  {user.name}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,

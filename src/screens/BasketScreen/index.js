@@ -124,7 +124,7 @@ class BasketScreen extends React.Component {
         <Header openDrawer={() => navigation.openDrawer()} navigation={navigation}/>
         <ButtonUser name={user.name} cashback={user.bill} />
         <Background>
-         { loading?<ActivityIndicator />:
+         { loading? <ActivityIndicator />:
           <View style={{flex: 1, padding: 12.5}}>  
             <FlatList 
             data={basketItems}
@@ -144,7 +144,7 @@ class BasketScreen extends React.Component {
               </View>}
             ListHeaderComponent={<Text style={styles.h1}>{Language[langId].basket.title}</Text>}
             renderItem={({item})=>(
-              basket.length !==0 &&
+              //basket.length !==0 &&
               <BasketCard langId={langId} item={item} onPress={()=>this.deleteBAsketItem(item.product.id)}/>
             )}
             ListEmptyComponent={

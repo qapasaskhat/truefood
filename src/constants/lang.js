@@ -131,7 +131,7 @@ export const Language = [
     basket: {
       title: 'Корзина',
       empty: 'Пусто',
-      add: 'Добавить еще блюда',
+      add: 'Добавить блюда',
       delivery: 'Оформить за'
     },
     cart:{

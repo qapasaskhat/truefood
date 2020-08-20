@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 
-import {icCalendar} from '../../../assets';
+import {time} from '../../../assets';
 
 class Button extends React.Component {
   render() {
@@ -18,7 +18,7 @@ class Button extends React.Component {
             resizeMode: 'contain',
             marginRight: 5,
           }}
-          source={icCalendar}
+          source={time}
         />
       </TouchableOpacity>
     );

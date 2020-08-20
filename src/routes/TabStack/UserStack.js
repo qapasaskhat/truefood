@@ -7,6 +7,7 @@ import {
   HistoryOrder,
   Incoming,
   OrderScreen,
+  Cards
 } from '../../screens';
 import React, {Component} from 'react';
 import {Animated, Easing, Dimensions} from 'react-native';
@@ -23,6 +24,7 @@ createStackNavigator(
         HistoryOrder:HistoryOrder,
         Incoming:Incoming,
         OrderScreen:OrderScreen,
+        Cards: Cards
       },
       {
         initialRouteName: 'UserScreen',

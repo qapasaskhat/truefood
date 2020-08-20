@@ -80,20 +80,16 @@ class UserScreen extends React.Component {
     const menu = [
       {
         title: Language[langId].menu.historyOrder,
-        // renderCenter: () => (
-        //   <TouchableOpacity
-        //     onPress={() => this.props.navigation.navigate('Incoming')}
-        //     style={styles.push}>
-        //     <Text style={{color: 'white', fontFamily: 'OpenSans-Bold'}}>
-        //       +1
-        //     </Text>
-        //   </TouchableOpacity>
-        // ),
         onPress: () => {
           this.props.navigation.navigate('HistoryOrder');
         },
       },
-      
+      {
+        title: 'Оплата',
+        onPress: () => {
+          this.props.navigation.navigate('Cards');
+        },
+      },
     ];
 
     return (
@@ -118,7 +114,7 @@ class UserScreen extends React.Component {
   logout=async()=>{
 
     await AsyncStorage.removeItem('user');
-    
+    this.props.dispatch({type: 'RESET_ALL'})
     console.log(this.props.navigation)
     setTimeout(() => {
         const resetAction = StackActions.reset({
@@ -142,8 +138,7 @@ class UserScreen extends React.Component {
           onPressUser={() => {
             console.log('fewewf');
             this.props.navigation.navigate('EditProifle');
-          }}
-        />
+          }}/>
         <Background source={icFrame} style={styles.bgContainer}>
           {loading?<ActivityIndicator />: <View style={[styles.view,{flexDirection: 'row'}]}>
             <View style={{
@@ -161,7 +156,6 @@ class UserScreen extends React.Component {
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
-                
               }]}>Имя: {'\n'}  {user.name}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
@@ -248,8 +242,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps,mapDispatchToProps) (UserScreen);
-
-// export default withNavigation(connect(
-//   mapStateToProps, 
-//   mapDispatchToProps
-// )(UserScreen))

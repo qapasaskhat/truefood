@@ -16,6 +16,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import { Language } from '../../constants/lang'
 import { connect } from 'react-redux'
+import localization from 'moment/locale/ru';
 
 
 class DeliveryScreen extends React.Component {
@@ -37,7 +38,12 @@ class DeliveryScreen extends React.Component {
     token: '',
     user: {},
     bonus: 0,
-    payment_url: null
+    payment_url: null,
+    payment_type_id: '1',
+    show: false,
+    showTime: '10:00',
+    sendTime: null,
+    dayType: 0
   };
 
   componentDidMount =async()=> {
@@ -77,7 +83,7 @@ class DeliveryScreen extends React.Component {
     })
   }
   pickup=()=>{
-    const {number, numberPhone, time,comment, basket,bonus} = this.state
+    const {number, numberPhone, time,comment, basket,bonus,payment_type_id, sendTime} = this.state
 
     var FormData = require('form-data');
     var data = new FormData();
@@ -86,8 +92,8 @@ class DeliveryScreen extends React.Component {
       //console.log(basket[i].variations[0].product_variation_id)
       data.append(`cart[${i}]`, `{"quantity":${1},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
     }
-    data.append('payment_type_id', '2');
-    data.append('pick_up_at', time);
+    data.append('payment_type_id', `${payment_type_id}`);
+    data.append('pick_up_at', sendTime);
     data.append('comment', comment);
     data.append('delivery_type_id', '2')
     data.append('cabinet_number', number);
@@ -126,7 +132,7 @@ class DeliveryScreen extends React.Component {
     });
   }
   delivery=(type)=>{
-    const { number, numberPhone, place_id,comment, basket,time, bonus } = this.state
+    const { number, numberPhone, place_id,comment, basket,time, bonus, payment_type_id } = this.state
 
     var FormData = require('form-data');
     var data = new FormData();
@@ -135,12 +141,12 @@ class DeliveryScreen extends React.Component {
       //console.log(basket[i].variations[0].product_variation_id)
       data.append(`cart[${i}]`, `{"quantity":${basket[i].quantity},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
     }
-   // data.append('delivery_type_id', '1')
+    data.append('delivery_type_id', '1')
     data.append('delivery_type', type)
-    data.append('payment_type_id', '1');
+    data.append('payment_type_id', `${payment_type_id}`);
     data.append('delievery_place_id', `${place_id}`);
     data.append('cabinet_number', number);
-    data.append('pick_up_at', 12);
+    //data.append('pick_up_at', 12);
     data.append('message', `${comment}`);
     data.append('bonuses',bonus)
     console.log(data)
@@ -167,15 +173,19 @@ class DeliveryScreen extends React.Component {
         this.props.navigation.replace('Payment',{payment_url: this.state.payment_url})
         this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
         this.props.dispatch({type: 'TOTAL_RESET'})
-      }else{
-        alert('Ошибка попробуйте еще раз')
-      }
-
-      
+      }else if(response.status === 200){
+        this.setState({
+          otvet: response.data.message,
+        })
+        alert(this.state.otvet)
+        this.props.navigation.goBack()
+        this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+        this.props.dispatch({type: 'TOTAL_RESET'})
+      }      
     })
     .catch( (error)=> {
       console.log(error);
-      alert('Ошибка попробуйте еще раз')
+      alert(error.message)
       this.setState({
         loading: false
       })
@@ -202,14 +212,67 @@ class DeliveryScreen extends React.Component {
       console.log(error);
     });
   }
+  onChange=(time)=>{
+
+  }
+  setDateIos = (event, selectedDate) => {
+    const {dayType} = this.state
+    const currentDate = selectedDate || date;
+    console.log(event.timeStamp)
+    this.setState({
+      showTime: moment(currentDate)
+        .locale('ru', localization)
+        .add(dayType, 'days').calendar(),
+      sendTime: event.timeStamp,
+      show: false
+    });
+  };
 
   _renderWith = () => {
     const { langId } = this.props
+    const { show, showTime } = this.state
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
           <Text style={styles.h2} >Блок Geneva</Text>
         </View>
+        <View style={{
+          marginVertical: 5
+        }}>
+        <SwitchSelector
+              borderColor={'#FE1935'}
+              buttonColor={'#FE1935'}
+              style={{borderColor: '#FE1935'}}
+              textStyle={styles.text}
+              selectedTextStyle={styles.text}
+              height={30}
+              options={[
+                {label: 'сегодня', value: 0},
+                {label: 'завтра', value: 1},
+              ]}
+              initial={0}
+              onPress={(value) => {
+                this.setState({dayType: value})
+              }}
+            />
+            </View>
+            <Text style={styles.h2}>Выберите время</Text>
+            <CalendarButton title={showTime} onPress={()=>{
+              this.setState({
+                show: true
+              })
+            }}/>
+            {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={new Date()}
+              mode={'time'}
+              locale={'ru'}
+              is24Hour={true}
+              display="default"
+              onChange={this.setDateIos}
+            />
+          )}
         <View key={'phone'} style={{marginTop: 10}}>
         <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
@@ -280,6 +343,7 @@ class DeliveryScreen extends React.Component {
           <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
             value={this.state.numberPhone}
+            placeholder={'Номер телефона'}
             onChangeText={(text) => {
               this.setState({numberPhone: text});
             }}
@@ -325,6 +389,25 @@ class DeliveryScreen extends React.Component {
                 this.setState({type: value})
               }}
             />
+            <View style={{
+              marginVertical: 10
+            }}>
+            <SwitchSelector
+              borderColor={'#FE1935'}
+              buttonColor={'#FE1935'}
+              style={{borderColor: '#FE1935'}}
+              textStyle={styles.text}
+              selectedTextStyle={styles.text}
+              height={40}
+              options={[
+                {label: 'онлайн', value: '1'},
+                {label: 'наличными', value: '2'},
+              ]}
+              initial={0}
+              onPress={(value) => {
+                this.setState({payment_type_id: value})
+              }}
+            /></View>
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <View style={[styles.view,{marginHorizontal: 12.5}]}>

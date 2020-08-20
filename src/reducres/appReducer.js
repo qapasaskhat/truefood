@@ -102,6 +102,17 @@ export const appReducer = (state = initialState.app, action) => {
           ...state,
           chat_messages: action.payload
         }
+      case 'RESET_ALL':
+        return{
+          ...state,
+          basket: [],
+          langId: 1,
+          chat_id: null,
+          chat_messages: [],
+          basket_item_count: 1,
+          basketItems: [],
+          totalPrice: 0
+        }
     default:
       return state;
   }

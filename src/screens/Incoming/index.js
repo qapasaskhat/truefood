@@ -277,25 +277,11 @@ class Incoming extends React.Component {
           }}
         />
         { 
-        chat_id===0? 
+        chat_id ===0 ? 
         <Text style={{textAlign: 'center',marginTop:'30%',fontSize: 16,}}>
           Чтобы начать чат переходите в меню {'\n'}<Text style={{fontWeight: 'bold',}}>Обратная связь или помощь</Text>
         </Text>:
         chat}
-        {/* <Header
-          title={'Входящие'}
-          type={'close'}
-          onPressUser={() => {
-            console.log('fewewf');
-          }}
-          close={()=>{
-            this.props.navigation.goBack();
-          }}
-        />
-        <Background source={icFrame2} style={[styles.bgContainer]}>
-        
-          {this.renderBody()}
-        </Background> */}
       </View>
     );
   }

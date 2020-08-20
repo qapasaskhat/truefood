@@ -22,6 +22,7 @@ class Support extends Component {
     };
   }
   componentDidMount=async()=>{
+    this.props.chat_id && this.props.navigation.replace('Incoming')
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log(user.access_token)
@@ -185,7 +186,8 @@ class Support extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  langId: state.appReducer.langId
+  langId: state.appReducer.langId,
+  chat_id: state.appReducer.chat_id,
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatch,

@@ -39,7 +39,8 @@ class EditProifle extends React.Component {
     loading: false,
     access_token: '',
     phone: '',
-    avatarSource: null
+    avatarSource: null,
+    dataImg: null,
   };
   componentDidMount=async()=>{
     let usr = await AsyncStorage.getItem('user')
@@ -51,12 +52,11 @@ class EditProifle extends React.Component {
     
   }
   _editProfile=(access_token)=>{
-    const { name, email,phone, avatarSource } = this.state
+    const { name, email,phone, avatarSource,dataImg } = this.state
     console.log(
       avatarSource
     )
     var FormData = require('form-data');
-    //var fs = require('fs');
     var data = new FormData();
     let file = {}
     file.name = "photo_123_1231232_324-903i4.jpg";
@@ -66,7 +66,7 @@ class EditProifle extends React.Component {
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
-    avatarSource && data.append('avatar', file)
+    dataImg && data.append('avatar', dataImg)
     data.append('_method','PUT')
 
     var config = {
@@ -84,7 +84,6 @@ class EditProifle extends React.Component {
     axios(config)
     .then( (response)=> {
       console.log(JSON.stringify(response.data))
-      
       this.props.navigation.goBack()
     })
     .catch(function (error) {
@@ -116,6 +115,42 @@ class EditProifle extends React.Component {
       console.log(error);
     });
   }
+  selectImage = () => {
+    console.log('ergs');
+    const options = {
+      title: 'select a image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    const ResponseObj = ImagePicker.launchImageLibrary(options, (response) => {
+      //console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {
+          uri: Platform.OS==='ios'? response.uri : 'file://'+response.path,
+          name: 'picture.jpg',
+          type: response.type,
+        };
+        const isVertical = response.isVertical;
+        console.log('Image picker, ', source);
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          dataImg: source,
+          //isVerticalImage: isVertical,
+        });
+      }
+    });
+  };
+
   getPhoto = async ()=>{
     console.log('camera');
     const options = {
@@ -126,7 +161,7 @@ class EditProifle extends React.Component {
       },
     };
     
-    ImagePicker.showImagePicker(options, (response) => {
+    const ResponseImage =  ImagePicker.launchImageLibrary(options, (response) => {
         console.log('Response = ', response.uri);
       
         if (response.didCancel) {
@@ -138,9 +173,8 @@ class EditProifle extends React.Component {
         } else {
           // You can also display the image using data:
           // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-      
           this.setState({
-            avatarSource: Platform.OS==='android'? 'file://'+response.uri :response.uri,
+            avatarSource: Platform.OS==='android'?+`file:/${response.path}` : response.uri,
           });
         }
       });
@@ -192,7 +226,7 @@ class EditProifle extends React.Component {
               title='Выбрать фото' 
               styleBtn={{marginTop: 30, backgroundColor: '#eee'}}
               styleText={{color: '#FE1935'}}
-              onPress={()=>{this.getPhoto()}}
+              onPress={()=>{this.selectImage()}}
               />
           </View>
           {/* <Text style={[styles.h2,{marginTop:10}]}>Введите дату рождения</Text>
@@ -217,7 +251,8 @@ class EditProifle extends React.Component {
             </View>
           </View> */}
           <View style={{justifyContent: 'center', width: '100%', marginTop: 20}}>
-            {this.state.avatarSource && <Image source={{uri: this.state.avatarSource}} style={{
+            {this.state.dataImg && <Image source={{uri: this.state.dataImg.uri}} 
+            style={{
               width: 100,
               height: 100,
               alignSelf: 'center'

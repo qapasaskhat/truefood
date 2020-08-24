@@ -11,7 +11,7 @@ import moment from 'moment'
 
 class OrderScreen extends React.Component {
   state={
-    orders: {}
+    orders: {},
   }
   componentDidMount = async() =>{
     this.props.navigation.setParams({
@@ -89,6 +89,13 @@ class OrderScreen extends React.Component {
             {/* <Button title={'Повторить заказ'} styleBtn={{marginTop: 10}} /> */}
           </View>
         </Background>
+        <View style={{
+          position: 'absolute',
+          width: '100%',
+          bottom: 10
+        }}>
+          <Button title='Повторить заказ' onPress={()=>{ this.props.navigation.navigate('HistoryDelivery',{items: orders})}} />
+        </View>
       </View>
     );
   }

@@ -69,3 +69,6 @@ export const img003 = require('./003.png')
 export const entypo_edit = require('./entypo_edit.png')
 export const send = require('./send.png')
 export const time = require('./time.png')
+
+export const visa = require('./visa.png')
+export const mastercard = require('./mastercard.png')

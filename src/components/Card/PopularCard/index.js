@@ -34,7 +34,7 @@ class PopularCard extends React.Component {
               onPress={() =>{
                 onPress()
                 this.props.dispatch({type: 'ADD_BASKET', payload: {item,quantity:1}})
-                this.props.dispatch({type: 'BASKET'} )
+                this.props.dispatch({type: 'BASKET'})
               }
               }
               style={styles.btnView}>

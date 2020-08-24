@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
 
   imgStyle: {
-    resizeMode: 'repeat',
+    //resizeMode: 'repeat',
     overflow: 'visible',
     backfaceVisibility: 'visible',
     flex: 1,

@@ -35,7 +35,7 @@ class TopCard extends React.Component {
             <Text style={styles.price}>{item.variations && item.variations[0].price} ₸</Text>
             <TouchableOpacity style={styles.btnView} onPress={()=>{
               //console.log(item)
-              this.props.dispatch({type: 'ADD_BASKET', payload: item})
+              this.props.dispatch({type: 'ADD_BASKET', payload: {item, quantity: 1}})
               this.props.dispatch({type: 'BASKET'} )
             }}>
               <Image

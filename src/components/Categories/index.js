@@ -26,9 +26,9 @@ class Categories extends React.Component {
             onPress={() => this.props.navigation.navigate('CategoryScreen',{id: {id: item.id,name: item.name}})}
             style={styles.btn}>
             <View />
-            <Image source={{
+            {<Image source={{
               uri: item.thumbnail
-            }} style={styles.img} />
+            }} style={styles.img} />}
             <Text style={styles.name}>{item.name}</Text>
           </TouchableOpacity>
         ))}

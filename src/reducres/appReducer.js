@@ -24,9 +24,12 @@ export const appReducer = (state = initialState.app, action) => {
     case 'BASKET':
       return{
         ...state,
-        basket: state.basket.filter((item,index)=>{
-          return state.basket.indexOf(item)===index
-        })
+        basket: state.basket.sort(function(a,b){return a.id < b.id ? -1 : 1;}).reduce(function(arr, el){
+          if(!arr.length || arr[arr.length - 1].id != el.id) {
+              arr.push(el);
+          }
+          return arr;
+      }, [])
       }
     case 'CHANGE_LANG':
       return {
@@ -68,7 +71,13 @@ export const appReducer = (state = initialState.app, action) => {
           item.product.id === action.payload?
           { ...item, quantity: parseInt(item.quantity )+ 1 }:
           item
-        )
+        ),
+        basket: state.basket.map(item=>
+          item.id === action.payload?
+          {
+            ...item, quantity: item.quantity + 1
+          }:item
+          )
       }
       case 'CHANGE_QUANTITY':
       console.log('llloooogggg')
@@ -80,7 +89,13 @@ export const appReducer = (state = initialState.app, action) => {
           {
             ...item, quantity: parseInt(item.quantity )- 1 
           }:item
-        )
+        ),
+        basket: state.basket.map(item=>
+          item.id === action.payload?
+          {
+            ...item, quantity: item.quantity + 1
+          }:item
+          )
       }
       case 'TOTAL_PRICE':
         return{

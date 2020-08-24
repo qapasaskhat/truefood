@@ -37,7 +37,8 @@ class LoginScreen extends React.Component {
     password: '',
     password_r: '',
     loading: false,
-    langId: 1
+    langId: 1,
+    device_token :''
   };
   changeLang=(value)=>{
     this.props.dispatch({type: 'CHANGE_LANG', payload: value} )
@@ -49,20 +50,22 @@ validateEmail(email) {
 }
 
   register =()=>{
-    const {first_name, email, password, password_r} = this.state
-    console.log( this.validateEmail(email))
+    const {first_name, email, password, password_r,device_token} = this.state
     this.setState({
       loading: true
     })
     if(this.validateEmail(email)){
       if(password===password_r)
-      {  var FormData = require('form-data');
+      {
+        if(password.length>=8)  
+        {var FormData = require('form-data');
         var data = new FormData();
         data.append('name', first_name);
         data.append('email', email);
         data.append('password', password);
         data.append('password_confirmation', password_r);
-
+        //user.append("device_token", device_token)
+       console.log(data)
         var config = {
           method: 'post',
           url: 'http://truefood.chat-bots.kz/api/register',
@@ -80,12 +83,27 @@ validateEmail(email) {
         })
         .catch( (error)=> {
           console.log(error);
-        });}
+          this.setState({
+            loading: false
+          })
+        })}else{
+          alert('Пароль должен быть минимум 8 символов')
+          this.setState({
+            loading: false
+          })
+        }
+      }
         else{
           alert('password error')
+          this.setState({
+            loading: false
+          })
         }
     }else{
       alert('email error')
+      this.setState({
+        loading: false
+      })
     }
   }
   getAsync=async(data)=>{

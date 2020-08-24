@@ -66,7 +66,6 @@ class DeliveryScreen extends React.Component {
     
   }
   getPlace=()=>{
-
     axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
       console.log(response.data.locations)
       this.setState({
@@ -211,9 +210,6 @@ class DeliveryScreen extends React.Component {
     .catch( (error) => {
       console.log(error);
     });
-  }
-  onChange=(time)=>{
-
   }
   setDateIos = (event, selectedDate) => {
     const {dayType} = this.state

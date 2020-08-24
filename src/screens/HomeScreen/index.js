@@ -18,8 +18,9 @@ import PopularList from './PopularList';
 import TopList from './TopList';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage'
-class HomeScreen extends React.Component {
+import moment from 'moment'
 
+class HomeScreen extends React.Component {
   state={
     popularProduct: {
       loading: false,
@@ -136,6 +137,9 @@ class HomeScreen extends React.Component {
     });
   }
   componentDidMount=async()=> {
+    if (new Date(Date.now()).getHours()<8 && new Date(Date.now()).getHours()>21 ){
+      alert('Наш ресторан работает с 8:00 утра до 21:00 вечера')
+    }
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
@@ -145,7 +149,7 @@ class HomeScreen extends React.Component {
     let usr = await AsyncStorage.getItem('user')
     let user = JSON.parse(usr)
     console.log('user');
-    console.log(user)
+    //console.log(user)
     this.setState({
       token: user.access_token
     })
@@ -153,6 +157,12 @@ class HomeScreen extends React.Component {
     this.props.navigation.addListener ('willFocus', () =>
       {
         this.getUser(this.state.token)
+      }
+    );
+    this.props.navigation.addListener ('didFocus', () =>
+      {
+        console.log('didfocus')
+        this.props.navigation.closeDrawer()
       }
     );
   }

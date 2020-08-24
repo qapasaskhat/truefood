@@ -379,7 +379,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   langId: state.appReducer.langId,
-  basketItems: state.appReducer.basketItems
+  basketItems: state.appReducer.basketItems,
+  basket: state.appReducer.basket,
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatch,

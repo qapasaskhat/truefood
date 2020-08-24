@@ -19,7 +19,6 @@ import {icProfile} from '../../assets/index'
 import {icFrame, icRight} from '../../assets';
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
-import { withNavigation } from 'react-navigation';
 
 class UserScreen extends React.Component {
   state={
@@ -44,6 +43,12 @@ class UserScreen extends React.Component {
     this.props.navigation.addListener ('willFocus', () =>
       {
         this.getUser(this.state.token)
+      }
+    );
+    this.props.navigation.addListener ('didFocus', () =>
+      {
+        console.log('didfocus')
+        this.props.navigation.closeDrawer()
       }
     );
   }
@@ -140,32 +145,36 @@ class UserScreen extends React.Component {
             this.props.navigation.navigate('EditProifle');
           }}/>
         <Background source={icFrame} style={styles.bgContainer}>
-          {loading?<ActivityIndicator />: <View style={[styles.view,{flexDirection: 'row'}]}>
+          {loading?<ActivityIndicator />: <View style={[styles.view,{flexDirection: 'row',justifyContent:'flex-start'}]}>
             <View style={{
               backgroundColor: '#fff',
-              height: 140,
-              width: 140,
+              height: 120,
+              width: 120,
               borderRadius: 100,
               justifyContent:'center',
               alignItems: 'center',
             }}>
-              <Image source={{uri: user.avatar && user.avatar}} style={{height: 140, resizeMode: 'contain', width: 140}}/>
+              <Image source={{uri: user.avatar && user.avatar}} style={{height: 120, resizeMode: 'cover', width: 120}}/>
             </View>
             <View>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
+                fontSize: 12,
               }]}>Имя: {'\n'}  {user.name}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
-                marginVertical:5
+                marginVertical:5,
+                fontSize: 12,
               }]}>Email: {'\n'}  {user.email}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
-                marginVertical:5
+                marginVertical:5,
+                fontSize: 12,
+
               }]}>Телефон: {'\n'}  {user.phone}</Text>
             </View>
           </View>}

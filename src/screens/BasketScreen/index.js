@@ -37,11 +37,18 @@ class BasketScreen extends React.Component {
     this.props.navigation.addListener ('willFocus', () =>
       {
         this.getBasket()
+        console.log(this.props.basket)
         this.props.dispatch({type: 'TOTAL_PRICE'})
         this.props.basket.length === 0 && this.setState({
           basketProduct: []
         })
         this.getUser(this.state.token)
+      }
+    );
+    this.props.navigation.addListener ('didFocus', () =>
+      {
+        console.log('didfocus')
+        this.props.navigation.closeDrawer()
       }
     );
     this.props.dispatch({type: 'TOTAL_PRICE'})

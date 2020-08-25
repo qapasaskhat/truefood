@@ -162,20 +162,20 @@ class UserScreen extends React.Component {
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
-              }]}>Имя: {'\n'}  {user.name}</Text>
+              }]}>Имя: {user.name}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
-              }]}>Email: {'\n'}  {user.email}</Text>
+              }]}>Email: {user.email}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
 
-              }]}>Телефон: {'\n'}  {user.phone}</Text>
+              }]}>Телефон: {user.phone}</Text>
             </View>
           </View>}
           {this.renderBody()}

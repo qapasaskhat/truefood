@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
@@ -87,7 +88,8 @@ class EditProifle extends React.Component {
       this.props.navigation.goBack()
     })
     .catch(function (error) {
-      alert(error.message)
+      Alert.alert("Ошибка","Необходимо заполнить все поля",[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
+      //alert(error.message)
       console.log(error);
     });
   }
@@ -189,14 +191,6 @@ class EditProifle extends React.Component {
           this.setState({name: text});
         },
       },
-      // {
-      //   title: 'Введите фамилию',
-      //   placeholder: 'Каримов',
-      //   value: this.state.first_name,
-      //   onChangeText: (text) => {
-      //     this.setState({first_name: text});
-      //   },
-      // },
       {
         title: 'Введите номер телефона',
         placeholder: '',

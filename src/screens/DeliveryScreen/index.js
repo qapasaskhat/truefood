@@ -43,7 +43,8 @@ class DeliveryScreen extends React.Component {
     show: false,
     showTime: '10:00',
     sendTime: null,
-    dayType: 0
+    dayType: 0,
+    useBonus: false
   };
 
   componentDidMount =async()=> {
@@ -67,7 +68,7 @@ class DeliveryScreen extends React.Component {
   }
   getPlace=()=>{
     axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
-      console.log(response.data.locations)
+      console.log('places', response.data.locations)
       this.setState({
         locations: response.data.locations
       })
@@ -202,8 +203,10 @@ class DeliveryScreen extends React.Component {
     axios(config)
     .then( (response) => {
       if(response.status === 200){
+        console.log('get user',response.data)
         this.setState({
-          user: response.data
+          user: response.data,
+          numberPhone: response.data.phone
         })
       }
     })
@@ -318,6 +321,7 @@ class DeliveryScreen extends React.Component {
   }
   _renderWithout = () => {
     const { langId } = this.props
+    const { show, showTime } = this.state
     return (
       <View style={styles.view}>
         <View key={'radioView'} style={styles.radioView}>
@@ -335,6 +339,43 @@ class DeliveryScreen extends React.Component {
             }}
              />
         </View>
+        <View style={{
+          marginVertical: 5
+        }}>
+        <SwitchSelector
+              borderColor={'#FE1935'}
+              buttonColor={'#FE1935'}
+              style={{borderColor: '#FE1935'}}
+              textStyle={styles.text}
+              selectedTextStyle={styles.text}
+              height={30}
+              options={[
+                {label: 'сегодня', value: 0},
+                {label: 'завтра', value: 1},
+              ]}
+              initial={0}
+              onPress={(value) => {
+                this.setState({dayType: value})
+              }}
+            />
+            </View>
+            <Text style={styles.h2}>Выберите время</Text>
+            <CalendarButton title={showTime} onPress={()=>{
+              this.setState({
+                show: true
+              })
+            }}/>
+            {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={new Date()}
+              mode={'time'}
+              locale={'ru'}
+              is24Hour={true}
+              display="default"
+              onChange={this.setDateIos}
+            />
+          )}
         <View key={'phone'} style={{marginTop: 10}}>
           <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
@@ -361,7 +402,7 @@ class DeliveryScreen extends React.Component {
   };
   render() {
     const { langId } = this.props
-    const {user} = this.state
+    const {user,useBonus} = this.state
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={()=>this.props.navigation.openDrawer()}/>
@@ -382,7 +423,7 @@ class DeliveryScreen extends React.Component {
               ]}
               initial={0}
               onPress={(value) => {
-                this.setState({type: value})
+                this.setState({type: value,show: false})
               }}
             />
             <View style={{
@@ -407,12 +448,42 @@ class DeliveryScreen extends React.Component {
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <View style={[styles.view,{marginHorizontal: 12.5}]}>
-            <Text style={styles.h2}>Потратить бонусы</Text>
+            <View style={{flexDirection: 'row',alignItems:'center'}}>
+              <View style={{
+                width:20,
+                height:20,
+                backgroundColor: '#fff',
+                borderRadius: 3,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.23,
+                shadowRadius: 2.62,
+                elevation: 4,
+                justifyContent:'center',
+                alignItems:'center'
+              }}>
+                <TouchableOpacity onPress={()=>{
+                  this.setState({
+                    useBonus: !this.state.useBonus
+                  })
+                }} style={{
+                  width: 13,
+                  height: 13,
+                  backgroundColor: useBonus?'red':'#fff',
+                  borderRadius: 3
+                }}/>
+              </View>
+              <Text style={styles.h2}>Потратить бонусы</Text>
+            </View>
+            {useBonus?
             <TextInput 
               placeholder='2000'
               value={this.state.bonus}
               onChangeText={(text)=>this.setState({bonus:text})}
-               />
+               />:<View/>}
           </View>
           <Button
             onPress={() => {

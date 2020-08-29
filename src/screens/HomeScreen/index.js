@@ -91,7 +91,7 @@ class HomeScreen extends React.Component {
     })
   }
   getTopList=()=>{
-    const api = 'http://truefood.chat-bots.kz/api/products?dishOfTheWeek=1'
+    const api = 'http://truefood.kz/api/products?dishOfTheWeek=1'
     this.setState({
       topList: {
         ...this.state.topList, loading: true

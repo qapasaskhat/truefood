@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image , Alert} from 'react-native';
 import Header from '../../components/Header'
 import { chat, media } from '../../assets/index'
 import Background from '../../components/Background'
@@ -65,7 +65,7 @@ class Support extends Component {
               messages,
             };
           });
-            alert('Отправлено')
+            Alert.alert("Cпасибо",'Ваше сообщение отправлено',[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
             this.props.navigation.goBack()
             this.props.dispatch({type: 'GET_CHAT_ID', payload: response.data.chat.id} )
             this.props.dispatch({type: 'GET_MESSAGE', payload: this.state.messages} )

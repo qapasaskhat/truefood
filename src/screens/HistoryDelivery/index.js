@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image,Alert} from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -101,7 +101,7 @@ class HistoryDelivery extends Component {
         this.setState({
           otvet: response.data.message,
         })
-        alert(this.state.otvet)
+        Alert.alert("Cпасибо",this.state.otvet,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
         this.props.navigation.goBack()
       }      
     })

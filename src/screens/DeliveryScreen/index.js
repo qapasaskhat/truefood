@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, Alert} from 'react-native';
 
 
 import Background from '../../components/Background';
@@ -117,8 +117,7 @@ class DeliveryScreen extends React.Component {
         otvet: response.data.message,
         loading: false
       })
-
-      alert(this.state.otvet)
+      Alert.alert("Cпасибо",this.state.otvet,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
       this.props.dispatch({type: 'CLEAR_BASKET', payload: []})
       this.props.dispatch({type: 'TOTAL_RESET',})
       this.props.navigation.goBack()
@@ -169,7 +168,7 @@ class DeliveryScreen extends React.Component {
           payment_url: response.data.payment_url,
           otvet: response.data.message,
         })
-        alert(this.state.otvet)
+        Alert.alert("Cпасибо",this.state.otvet,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
         this.props.navigation.replace('Payment',{payment_url: this.state.payment_url})
         this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
         this.props.dispatch({type: 'TOTAL_RESET'})
@@ -246,8 +245,8 @@ class DeliveryScreen extends React.Component {
               selectedTextStyle={styles.text}
               height={30}
               options={[
-                {label: 'сегодня', value: 0},
-                {label: 'завтра', value: 1},
+                {label: Language[langId].delivery.today, value: 0},
+                {label: Language[langId].delivery.tomorrow, value: 1},
               ]}
               initial={0}
               onPress={(value) => {
@@ -255,7 +254,7 @@ class DeliveryScreen extends React.Component {
               }}
             />
             </View>
-            <Text style={styles.h2}>Выберите время</Text>
+            <Text style={styles.h2}>{Language[langId].delivery.time}</Text>
             <CalendarButton title={showTime} onPress={()=>{
               this.setState({
                 show: true
@@ -350,8 +349,8 @@ class DeliveryScreen extends React.Component {
               selectedTextStyle={styles.text}
               height={30}
               options={[
-                {label: 'сегодня', value: 0},
-                {label: 'завтра', value: 1},
+                {label: Language[langId].delivery.today, value: 0},
+                {label: Language[langId].delivery.tomorrow, value: 1},
               ]}
               initial={0}
               onPress={(value) => {
@@ -359,7 +358,7 @@ class DeliveryScreen extends React.Component {
               }}
             />
             </View>
-            <Text style={styles.h2}>Выберите время</Text>
+            <Text style={styles.h2}>{Language[langId].delivery.time}</Text>
             <CalendarButton title={showTime} onPress={()=>{
               this.setState({
                 show: true
@@ -437,8 +436,8 @@ class DeliveryScreen extends React.Component {
               selectedTextStyle={styles.text}
               height={40}
               options={[
-                {label: 'онлайн', value: '1'},
-                {label: 'наличными', value: '2'},
+                {label: Language[langId].delivery.online, value: '1'},
+                {label: Language[langId].delivery.nal, value: '2'},
               ]}
               initial={0}
               onPress={(value) => {
@@ -476,7 +475,7 @@ class DeliveryScreen extends React.Component {
                   borderRadius: 3
                 }}/>
               </View>
-              <Text style={styles.h2}>Потратить бонусы</Text>
+              <Text style={styles.h2}>{Language[langId].delivery.bonus}</Text>
             </View>
             {useBonus?
             <TextInput 

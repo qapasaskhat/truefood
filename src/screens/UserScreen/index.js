@@ -90,7 +90,7 @@ class UserScreen extends React.Component {
         },
       },
       {
-        title: 'Оплата',
+        title: Language[langId].user.card,
         onPress: () => {
           this.props.navigation.navigate('Cards');
         },
@@ -135,6 +135,7 @@ class UserScreen extends React.Component {
   }
   render() {
     const { name,email,phone,user ,loading} = this.state
+    const { langId } = this.props
     return (
       <View style={styles.container}>
         <Header
@@ -162,20 +163,20 @@ class UserScreen extends React.Component {
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
-              }]}>Имя: {user.name}</Text>
+              }]}>{Language[langId].user.name}: {user.name}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
-              }]}>Email: {user.email}</Text>
+              }]}>{Language[langId].user.email}: {user.email}</Text>
               <Text style={[styles.title,{
                 marginLeft: 24,
                 marginHorizontal: 5,
                 marginVertical:5,
                 fontSize: 12,
 
-              }]}>Телефон: {user.phone}</Text>
+              }]}>{Language[langId].user.phone}: {user.phone}</Text>
             </View>
           </View>}
           {this.renderBody()}

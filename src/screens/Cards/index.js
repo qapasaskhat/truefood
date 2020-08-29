@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image , ScrollView, Platform} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image , ScrollView, Platform, Alert} from 'react-native';
 import Header from '../../components/Header';
 import {shtih,visa,mastercard} from '../../assets'
 import { TextInputMask } from 'react-native-masked-text'
 import { CardIOModule, CardIOUtilities } from 'react-native-awesome-card-io';
+import { connect } from 'react-redux'
 
 const CardItem =({ 
   number,
-  type
+  type,
+  longPress
 })=>(
   <TouchableOpacity 
-  onLongPress={()=>alert('delete')}
+  onLongPress={longPress}
   style={[styles.card,{
     alignItems: 'center',
     flexDirection: 'row',
@@ -36,13 +38,15 @@ class Cards extends Component {
       cvvCode: null,
       date: null,
       name: '',
-      cards: []
+      cards: [],
+      card: {}
     };
   }
   componentDidMount=()=>{
     if (Platform.OS === 'ios') {
       CardIOUtilities.preload();
     }
+    console.log(this.props.userCards)
   }
   scanCard() {
     CardIOModule
@@ -50,17 +54,19 @@ class Cards extends Component {
       .then(card => {
         console.log(card)
         this.setState({
-          cards: [
-            ...this.state.cards, {
-              id: 1,
-              number: card.cardNumber,
-              cardType: card.cardType,
-              month: card.expiryMonth,
-              year: card.expiryYear,
-              redacted: card.redactedCardNumber
-            }
-          ]
+          card: {
+            id: Math.random(),
+            number: card.cardNumber,
+            cardType: card.cardType,
+            month: card.expiryMonth,
+            year: card.expiryYear,
+            redacted: card.redactedCardNumber
+          }
         })
+        setTimeout(() => {
+          console.log('card',this.state.card)
+          this.props.dispatch({type: 'ADD_NEW_CARD', payload: this.state.card } )
+        }, 500);
       })
       .catch(() => {
         // the user cancelled
@@ -68,21 +74,24 @@ class Cards extends Component {
   }
   add=(numberCard,cvvCode,date,name)=>{
     this.setState({
-      cards: [
-        ...this.state.cards, {
-          id: 1,
-          number: numberCard,
-          cardType: numberCard[0]===4?'Visa':'MasterCard',
-          month: date,
-          year: date,
-          redacted: '•••• •••• •••• '+numberCard[14]+numberCard[15]+numberCard[16]+numberCard[17]
-        }
-      ],
+      card: {
+        id: Math.random(),
+        number: numberCard,
+        cardType: numberCard[0]===4?'Visa':'MasterCard',
+        month: date,
+        year: date,
+        redacted: '•••• •••• •••• '+numberCard[14]+numberCard[15]+numberCard[16]+numberCard[17]
+      },
       numberCard: null,
       cvvCode: null,
       date: null,
       name: '',
     })
+
+    setTimeout(() => {
+      console.log('card',this.state.card)
+      this.props.dispatch({type: 'ADD_NEW_CARD', payload: this.state.card } )
+    }, 500);
   }
   card = () => (
     <View key={'card'}>
@@ -186,9 +195,17 @@ class Cards extends Component {
       </TouchableOpacity>
     </View>
   );
-  
+  delete=(id)=>{
+    Alert.alert(
+      "Удалить",
+      ''
+      ,[
+        { text: "Отмена",style: "cancel" ,onPress: () => console.log("OK Pressed") },
+        { text: "OK",style: "cancel" ,onPress: () => this.props.dispatch({type: 'REMOVE_CARD', payload: id } ) }
+      ],{cancelable: false})
+  }
   render() {
-    const {navigation} = this.props;
+    const {navigation, userCards} = this.props;
     const {visible} = this.state
     return (
       <ScrollView style={styles.container}>
@@ -213,7 +230,9 @@ class Cards extends Component {
           {visible?this.card():null}
         </View>
         <View key={'my cards'}>
-          { this.state.cards.map(item=> <CardItem number={item.redacted} type={item.cardType} />) }
+          { userCards.map(item=> <CardItem longPress={()=>{
+            this.delete(item.id)
+          }} number={item.redacted} type={item.cardType} />) }
         </View>
       </ScrollView>
     );
@@ -257,5 +276,11 @@ const styles = StyleSheet.create({
     elevation: 3,
   }
 })
+const mapStateToProps = (state) => ({
+  userCards: state.appReducer.userCards,
+});
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
 
-export default Cards;
+export default connect(mapStateToProps,mapDispatchToProps) (Cards);

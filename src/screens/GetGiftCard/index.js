@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import Header from '../../components/Header'
 import Button from '../../components/Button'
 import Background from '../../components/Background'
@@ -46,10 +46,12 @@ class GetGiftCard extends Component {
     axios(config)
     .then( (response)=> {
       console.log(JSON.stringify(response.data));
-      alert('success')
+      this.props.navigation.replace('HomeScreen')
+      this.props.navigation.navigate('Payment',{payment_url:response.data.payment_url})
+      Alert.alert("Успешно",response.data.message,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
     })
     .catch( (error)=> {
-      alert(error.message)
+      Alert.alert("Ошибка",'Повторите позже',[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
       console.log(error);
     });
   }

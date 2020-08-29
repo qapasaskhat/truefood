@@ -41,7 +41,8 @@ class CategoryScreen extends React.Component {
     },
     byPrice: 'asc',
     token: '',
-    user: {}
+    user: {},
+    byRating: 0
   };
   filter=(id)=>{
     this.setState({
@@ -49,11 +50,16 @@ class CategoryScreen extends React.Component {
     })
     if(id === 1){
       this.getProduct(this.props.navigation.getParam('id').id,true, this.state.byPrice)
+    }else if(id === 0 ){
+      this.setState({
+        byRating: this.state.byRating===0? 1:0
+      })
+      this.getProduct(this.props.navigation.getParam('id').id,false)
     }
   }
   getProduct=(categoryId, byPrice, value)=>{
     const api =`http://truefood.chat-bots.kz/api/products?category[]=${categoryId}`
-    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category[]=${categoryId}&byPrice=${value}`
+    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category[]=${categoryId}&byPrice=${value}&byRating=${0}`
     this.setState({
       product: {
         ...this.state.product, loading: true
@@ -125,7 +131,7 @@ class CategoryScreen extends React.Component {
   getUser =(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }

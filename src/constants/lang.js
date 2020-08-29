@@ -31,8 +31,11 @@ export const Language = [
     },
     user:{
       address: 'Delivery addresses',
-      card: 'Cards and payment',
-      singout: 'Sign out'
+      card: 'Payment',
+      singout: 'Sign out',
+      name: 'Name',
+      email: 'Email',
+      phone: 'Phone number'
     },
     basket: {
       title: 'Basket',
@@ -53,7 +56,13 @@ export const Language = [
       wish: 'Wishes for the whole order',
       checkout: 'Checkout',
       enter: 'Write your wishes for the order',
-      pickuptext: 'I will pick up the order in'
+      pickuptext: 'I will pick up the order in',
+      online:'Online',
+      nal: 'In cash',
+      today: 'Today',
+      tomorrow: 'Tomorrow',
+      time: 'Choose time',
+      bonus: 'Spend bonuses'
     },
     about:{
       aboutUs: 'About us',
@@ -125,8 +134,11 @@ export const Language = [
     },
     user:{
       address: 'Адреса доставки',
-      card: 'Карты и оплата',
-      singout: 'Выйти'
+      card: 'Оплата',
+      singout: 'Выйти',
+      name: 'Имя',
+      email: 'Email',
+      phone: 'Телефон'
     },
     basket: {
       title: 'Корзина',
@@ -147,7 +159,14 @@ export const Language = [
       wish: 'Пожелания ко всему заказу',
       checkout: 'Oформить заказ',
       enter: 'Напишите свои пожеланияк заказу',
-      pickuptext: 'Заберу заказ в'
+      pickuptext: 'Заберу заказ в',
+      online:'Онлайн',
+      nal: 'Наличными',
+      today: 'Сегодня',
+      tomorrow: 'Завтра',
+      time: 'Выберите время',
+      bonus: 'Потратить бонусы'
+
     },
     about:{
       aboutUs: 'О нас',

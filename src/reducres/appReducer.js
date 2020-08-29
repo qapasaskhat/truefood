@@ -126,7 +126,20 @@ export const appReducer = (state = initialState.app, action) => {
           chat_messages: [],
           basket_item_count: 1,
           basketItems: [],
-          totalPrice: 0
+          totalPrice: 0,
+          userCards: []
+        }
+      case 'ADD_NEW_CARD':
+        return{
+          ...state,
+          userCards: [
+            ...state.userCards, action.payload
+          ]
+        }
+      case 'REMOVE_CARD':
+        return{
+          ...state,
+          userCards: state.userCards.filter(item=>item.id !== action.payload)
         }
     default:
       return state;

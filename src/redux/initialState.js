@@ -7,6 +7,7 @@ export default {
     chat_messages: [],
     basket_item_count: 1,
     basketItems: [],
-    totalPrice: 0
+    totalPrice: 0,
+    userCards: []
   },
 };

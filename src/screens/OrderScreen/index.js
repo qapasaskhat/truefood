@@ -26,7 +26,7 @@ class OrderScreen extends React.Component {
   getOrder=(token,id)=>{
     var config = {
       method: 'get',
-      url: `http://truefood.chat-bots.kz/api/user/orders/${id}`,
+      url: `http://truefood.kz/api/user/orders/${id}`,
       headers: { 
         'Authorization': `Bearer ${token}`
       }

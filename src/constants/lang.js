@@ -62,7 +62,8 @@ export const Language = [
       today: 'Today',
       tomorrow: 'Tomorrow',
       time: 'Choose time',
-      bonus: 'Spend bonuses'
+      bonus: 'Spend bonuses',
+      repeat_order: 'Repeat order'
     },
     about:{
       aboutUs: 'About us',
@@ -165,8 +166,8 @@ export const Language = [
       today: 'Сегодня',
       tomorrow: 'Завтра',
       time: 'Выберите время',
-      bonus: 'Потратить бонусы'
-
+      bonus: 'Потратить бонусы',
+      repeat_order: 'Повторить заказ'
     },
     about:{
       aboutUs: 'О нас',

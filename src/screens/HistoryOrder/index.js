@@ -45,10 +45,10 @@ class UserScreen extends React.Component {
     );
   }
   getOrders=(access_token)=>{
-    const api = 'http://truefood.chat-bots.kz/api/user/orders'
+    const api = 'http://truefood.kz/api/user/orders'
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user/orders',
+      url: 'http://truefood.kz/api/user/orders',
       headers: { 
         'Authorization': `Bearer ${access_token}`
       }

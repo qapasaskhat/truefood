@@ -38,7 +38,7 @@ class Support extends Component {
     
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/chat',
+      url: 'http://truefood.kz/api/chat',
       headers: { 
         'Authorization': `Bearer ${this.state.token}`, 
       },

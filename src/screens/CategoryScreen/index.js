@@ -58,8 +58,8 @@ class CategoryScreen extends React.Component {
     }
   }
   getProduct=(categoryId, byPrice, value)=>{
-    const api =`http://truefood.chat-bots.kz/api/products?category[]=${categoryId}`
-    const apiByPrice = `http://truefood.chat-bots.kz/api/products?category[]=${categoryId}&byPrice=${value}&byRating=${0}`
+    const api =`http://truefood.kz/api/products?category[]=${categoryId}`
+    const apiByPrice = `http://truefood.kz/api/products?category[]=${categoryId}&byPrice=${value}&byRating=${0}`
     this.setState({
       product: {
         ...this.state.product, loading: true
@@ -82,8 +82,8 @@ class CategoryScreen extends React.Component {
     })
   }
   getAllProduct=(categoryId, byPrice, value)=>{
-    const api =`http://truefood.chat-bots.kz/api/products`
-    const apiByPrice = `http://truefood.chat-bots.kz/api/products`
+    const api =`http://truefood.kz/api/products`
+    const apiByPrice = `http://truefood.kz/api/products`
     this.setState({
       product: {
         ...this.state.product, loading: true
@@ -181,14 +181,12 @@ class CategoryScreen extends React.Component {
                   imgUrl={item.thumbnail}
                   price= {item.variations && item.variations[0].price } 
                   desc={item.description} 
-                  discount={item.variations && item.variations[0].discount}
+                  discount={item.variations && item.variations[0].cashback}
                   navigation={navigation}
                   text={Language[langId].home.basket}
                   dispatch={dispatch} 
                   coinVisible={true}
-                  onPress={()=>{
-                    //this.addBasket(item)
-                  }} 
+                  onPress={()=>{}} 
                   key={index}/>
               )}
               ListEmptyComponent={

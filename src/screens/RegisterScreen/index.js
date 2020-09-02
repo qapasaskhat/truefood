@@ -68,7 +68,7 @@ validateEmail(email) {
        console.log(data)
         var config = {
           method: 'post',
-          url: 'http://truefood.chat-bots.kz/api/register',
+          url: 'http://truefood.kz/api/register',
           data : data
         };
 

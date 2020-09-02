@@ -57,7 +57,7 @@ class Incoming extends React.Component {
     Pusher.logToConsole = true;
     console.log('date');
     this.pusher = new Pusher(pusherConfig.key, {
-      authEndpoint: 'http://truefood.chat-bots.kz/api/chat',
+      authEndpoint: 'http://truefood.kz/api/chat',
       cluster: 'ap2',
       encrypted: true,
       secret: '3ceee9abe02b2c2fafd9',
@@ -97,7 +97,7 @@ class Incoming extends React.Component {
   getUser=(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -123,7 +123,7 @@ class Incoming extends React.Component {
     const { chat_id } = this.props
     var config = {
       method: 'get',
-      url: `http://truefood.chat-bots.kz/api/chat/all?chat=${chat_id}`,
+      url: `http://truefood.kz/api/chat/all?chat=${chat_id}`,
       headers: { 
         'Authorization': `Bearer ${token}`, 
       },
@@ -159,7 +159,7 @@ class Incoming extends React.Component {
     console.log(chat_id)
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/chat',
+      url: 'http://truefood.kz/api/chat',
       headers: { 
         'Authorization': `Bearer ${this.state.token}`, 
       },

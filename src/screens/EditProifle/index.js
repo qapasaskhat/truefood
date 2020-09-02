@@ -72,7 +72,7 @@ class EditProifle extends React.Component {
 
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Accept':'application/json',
         'Authorization': `Bearer ${this.state.access_token}`,

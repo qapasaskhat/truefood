@@ -37,7 +37,10 @@ class HistoryDelivery extends Component {
     bonus: 0,
     place_id: 1,
     otvet: '',
-    details: []
+    details: [],
+    showTime: '10:00',
+    useBonus: false,
+    cardPay: 0,
     };
   }
   componentDidMount = async () => {
@@ -58,6 +61,26 @@ class HistoryDelivery extends Component {
     this.getPlace()
 
   };
+  getBonus=()=>{
+    let bonus = this.state.user.bill
+    let totalPrice = this.state.details[0] && this.state.details[0].unit_price
+    if (totalPrice>bonus){
+      this.setState({
+        bonus: bonus,
+        cardPay: totalPrice - bonus,
+      })
+    } else if(totalPrice===bonus){
+      this.setState({
+        bonus: totalPrice,
+        cardPay: 0
+      })
+    } else if(totalPrice<bonus){
+      this.setState({
+        bonus: totalPrice,
+        cardPay: 0
+      })
+    }
+  }
   delivery=(type)=>{
     const { number, numberPhone, place_id,comment, basket, bonus, payment_type_id, orders ,details} = this.state
     var FormData = require('form-data');
@@ -126,8 +149,8 @@ class HistoryDelivery extends Component {
     });
   };
   getPlace=()=>{
-    axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
-      console.log(response.data.locations)
+    axios.get('http://truefood.kz/api/places').then(response=>{
+      console.log(response.data)
       this.setState({
         locations: response.data.locations
       })
@@ -144,7 +167,7 @@ class HistoryDelivery extends Component {
   getUser = (token) => {
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -191,7 +214,7 @@ class HistoryDelivery extends Component {
             }}
           />
         </View>
-        <Text style={styles.h2}>Выберите время</Text>
+          <Text style={styles.h2}>{Language[langId].delivery.time}</Text>
         <CalendarButton
           title={showTime}
           onPress={() => {
@@ -282,6 +305,43 @@ class HistoryDelivery extends Component {
             }}
           />
         </View>
+        <View style={{
+          marginVertical: 5
+        }}>
+        <SwitchSelector
+              borderColor={'#FE1935'}
+              buttonColor={'#FE1935'}
+              style={{borderColor: '#FE1935'}}
+              textStyle={styles.text}
+              selectedTextStyle={styles.text}
+              height={30}
+              options={[
+                {label: Language[langId].delivery.today, value: 0},
+                {label: Language[langId].delivery.tomorrow, value: 1},
+              ]}
+              initial={0}
+              onPress={(value) => {
+                this.setState({dayType: value})
+              }}
+            />
+            </View>
+            <Text style={styles.h2}>{Language[langId].delivery.time}</Text>
+            <CalendarButton title={this.state.showTime} onPress={()=>{
+              this.setState({
+                show: true
+              })
+            }}/>
+            {this.state.show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={new Date()}
+              mode={'time'}
+              locale={'ru'}
+              is24Hour={true}
+              display="default"
+              onChange={this.setDateIos}
+            />
+          )}
         <View key={'phone'} style={{marginTop: 10}}>
           <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
@@ -308,14 +368,14 @@ class HistoryDelivery extends Component {
   };
   render() {
     const {navigation, langId} = this.props;
-    const {user, type} = this.state;
+    const {user, type,useBonus} = this.state;
     return (
       <View style={{flex: 1}}>
         <Header openDrawer={() => navigation.openDrawer()} />
         <ButtonUser name={user.name} cashback={user.bill} />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
-            <Text style={styles.h1}>Повторить заказ</Text>
+            <Text style={styles.h1}>{Language[langId].delivery.repeat_order}</Text>
             <SwitchSelector
               borderColor={'#FE1935'}
               buttonColor={'#FE1935'}
@@ -329,7 +389,7 @@ class HistoryDelivery extends Component {
               ]}
               initial={0}
               onPress={(value) => {
-                this.setState({type: value});
+                this.setState({type: value,show: false});
               }}
             />
             <View
@@ -344,8 +404,8 @@ class HistoryDelivery extends Component {
                 selectedTextStyle={styles.text}
                 height={40}
                 options={[
-                  {label: 'онлайн', value: '1'},
-                  {label: 'наличными', value: '2'},
+                  {label: Language[langId].delivery.online, value: '1'},
+                  {label: Language[langId].delivery.nal, value: '2'},
                 ]}
                 initial={0}
                 onPress={(value) => {
@@ -356,12 +416,56 @@ class HistoryDelivery extends Component {
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <View style={[styles.view,{marginHorizontal: 12.5}]}>
-            <Text style={styles.h2}>Потратить бонусы</Text>
-            <TextInput 
+            <View style={{flexDirection: 'row',alignItems: 'center'}}>
+            <View style={{
+                width:20,
+                height:20,
+                backgroundColor: '#fff',
+                borderRadius: 3,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.23,
+                shadowRadius: 2.62,
+                elevation: 4,
+                justifyContent:'center',
+                alignItems:'center'
+              }}>
+                <TouchableOpacity onPress={()=>{
+                  this.getBonus()
+                  this.setState({
+                    useBonus: !this.state.useBonus
+                  })
+                }} style={{
+                  width: 13,
+                  height: 13,
+                  backgroundColor: useBonus?'#FE1935':'#fff',
+                  borderRadius: 3
+                }}/>
+              </View>
+              <Text style={styles.h2}>{Language[langId].delivery.bonus}</Text>
+            </View>
+            {
+              useBonus?<View style={{flexDirection: 'row', justifyContent:'space-around'}}>
+                <View style={styles.viewCard}>
+                <Text style={{textAlign: 'center'}}>
+                  {this.state.cardPay}{'\n'} С карты
+                </Text>
+              </View>
+              <View style={styles.viewBonus}>
+                <Text style={{textAlign: 'center', color: '#fff'}}>
+                {this.state.bonus}{'\n'} бонусы
+                </Text>
+              </View>
+              </View>:<View/>
+            }
+            {/* <TextInput 
               placeholder='2000'
               value={this.state.bonus}
               onChangeText={(text)=>this.setState({bonus:text})}
-               />
+               /> */}
           </View>
           <Button
             onPress={() => {
@@ -426,6 +530,31 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingBottom: 20,
   },
+  viewCard:{
+    height: 64,
+    width:'45%', 
+    borderRadius: 11,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  viewBonus:{
+    height: 64,
+    width:'45%', 
+    borderRadius: 11,
+    backgroundColor: '#FE1935',
+    justifyContent:'center',
+    alignItems: 'center'
+  }
 });
 const mapStateToProps = (state) => ({
   langId: state.appReducer.langId,

@@ -44,7 +44,8 @@ class DeliveryScreen extends React.Component {
     showTime: '10:00',
     sendTime: null,
     dayType: 0,
-    useBonus: false
+    useBonus: false,
+    cardPay: 0
   };
 
   componentDidMount =async()=> {
@@ -64,11 +65,40 @@ class DeliveryScreen extends React.Component {
       access_token: user.access_token
     })
     this.getUser(user.access_token)
-    
+    this.getBonus()
+  }
+  getBonus=()=>{
+    let bonus = this.state.user.bill
+    let totalPrire = this.props.totalPrice
+    if (totalPrire>bonus){
+      this.setState({
+        bonus: bonus,
+        cardPay: totalPrire - bonus,
+      })
+    } else if(totalPrire===bonus){
+      this.setState({
+        bonus: totalPrire,
+        cardPay: 0
+      })
+    } else if(totalPrire<bonus){
+      this.setState({
+        bonus: totalPrire,
+        cardPay: 0
+      })
+    }
   }
   getPlace=()=>{
-    axios.get('http://truefood.chat-bots.kz/api/places').then(response=>{
-      console.log('places', response.data.locations)
+    var config = {
+      method: 'get',
+      url: 'http://truefood.kz/api/places',
+      headers: { 
+        'Accept': 'application/json'
+      }
+    };
+
+    axios(config)
+    .then( (response) => {
+      console.log(response.data.locations);
       this.setState({
         locations: response.data.locations
       })
@@ -78,9 +108,10 @@ class DeliveryScreen extends React.Component {
           {...i, active: false}:i);
           return {locations}
       })
-    }).catch(err=>{
-      console.log(err)
     })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
   pickup=()=>{
     const {number, numberPhone, time,comment, basket,bonus,payment_type_id, sendTime} = this.state
@@ -101,7 +132,7 @@ class DeliveryScreen extends React.Component {
 
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/orders/pickup',
+      url: 'http://truefood.kz/api/orders/pickup',
       headers: { 
         'Authorization': `Bearer ${this.state.access_token}`, 
       },
@@ -132,68 +163,73 @@ class DeliveryScreen extends React.Component {
   }
   delivery=(type)=>{
     const { number, numberPhone, place_id,comment, basket,time, bonus, payment_type_id } = this.state
-
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('phone', numberPhone);
-    for (let i=0; i<basket.length; i++){
-      //console.log(basket[i].variations[0].product_variation_id)
-      data.append(`cart[${i}]`, `{"quantity":${basket[i].quantity},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
-    }
-    data.append('delivery_type_id', '1')
-    data.append('delivery_type', type)
-    data.append('payment_type_id', `${payment_type_id}`);
-    data.append('delievery_place_id', `${place_id}`);
-    data.append('cabinet_number', number);
-    //data.append('pick_up_at', 12);
-    data.append('message', `${comment}`);
-    data.append('bonuses',bonus)
-    console.log(data)
-    var config = {
-      method: 'post',
-      url: 'http://truefood.kz/api/orders/pickup',
-      headers: { 
-        'Authorization': `Bearer ${this.state.access_token}`, 
-      },
-      data : data
-    };
-    this.setState({
-      loading: true
-    })
-    axios(config)
-    .then( (response)=> {
-      console.log(JSON.stringify(response));
-      if (response.status === 201){
-        this.setState({
-          payment_url: response.data.payment_url,
-          otvet: response.data.message,
-        })
-        Alert.alert("Cпасибо",this.state.otvet,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
-        this.props.navigation.replace('Payment',{payment_url: this.state.payment_url})
-        this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
-        this.props.dispatch({type: 'TOTAL_RESET'})
-      }else if(response.status === 200){
-        this.setState({
-          otvet: response.data.message,
-        })
-        alert(this.state.otvet)
-        this.props.navigation.goBack()
-        this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
-        this.props.dispatch({type: 'TOTAL_RESET'})
-      }      
-    })
-    .catch( (error)=> {
-      console.log(error);
-      alert(error.message)
+    if ( comment.length>1 )
+    {  var FormData = require('form-data');
+      var data = new FormData();
+      data.append('phone', numberPhone);
+      for (let i=0; i<basket.length; i++){
+        data.append(`cart[${i}]`, `{"quantity":${basket[i].quantity},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
+      }
+      data.append('delivery_type_id', '1')
+      data.append('delivery_type', type)
+      data.append('payment_type_id', `${payment_type_id}`);
+      data.append('delievery_place_id', `${place_id}`);
+      data.append('cabinet_number', number);
+      //data.append('pick_up_at', 12);
+      data.append('message', `${comment}`);
+      data.append('bonuses',bonus)
+      console.log(data)
+      var config = {
+        method: 'post',
+        url: 'http://truefood.kz/api/orders/pickup',
+        headers: { 
+          'Authorization': `Bearer ${this.state.access_token}`, 
+        },
+        data : data
+      };
       this.setState({
-        loading: false
+        loading: true
       })
-    });
+      axios(config)
+      .then( (response)=> {
+        console.log(JSON.stringify(response));
+        if (response.status === 201){
+          this.setState({
+            payment_url: response.data.payment_url,
+            otvet: response.data.message,
+          })
+          Alert.alert("Cпасибо",this.state.otvet,[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
+          this.props.navigation.replace('Payment',{payment_url: this.state.payment_url})
+          this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+          this.props.dispatch({type: 'TOTAL_RESET'})
+        }else if(response.status === 200){
+          this.setState({
+            otvet: response.data.message,
+          })
+          alert(this.state.otvet)
+          this.props.navigation.goBack()
+          this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
+          this.props.dispatch({type: 'TOTAL_RESET'})
+        }      
+      })
+      .catch( (error)=> {
+        console.log(error);
+        alert(error.message)
+        this.setState({
+          loading: false
+        })
+      });}
+      else{
+        Alert.alert(
+          '',
+          'Поле не должен быть пустым',{}
+        )
+      }
   }
   getUser =(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -292,7 +328,6 @@ class DeliveryScreen extends React.Component {
       </View>
     );
   }
-
   _radioBtn=(id)=>{
     this.setState(state=>{
       const locations = state.locations.map(i=>
@@ -310,7 +345,6 @@ class DeliveryScreen extends React.Component {
       place_id: id
     })
   }
-
   onChange=(date)=>{
     console.log(moment(date.nativeEvent.timestamp).format('lll'));
     this.setState({
@@ -465,24 +499,40 @@ class DeliveryScreen extends React.Component {
                 alignItems:'center'
               }}>
                 <TouchableOpacity onPress={()=>{
+                  this.getBonus()
                   this.setState({
                     useBonus: !this.state.useBonus
                   })
                 }} style={{
                   width: 13,
                   height: 13,
-                  backgroundColor: useBonus?'red':'#fff',
+                  backgroundColor: useBonus?'#FE1935':'#fff',
                   borderRadius: 3
                 }}/>
               </View>
-              <Text style={styles.h2}>{Language[langId].delivery.bonus}</Text>
+              <Text style={styles.h2}>
+                {Language[langId].delivery.bonus}<Text style={{color: '#000',opacity: 0.4}}> ({user.bill})</Text>
+                </Text>
             </View>
             {useBonus?
-            <TextInput 
-              placeholder='2000'
-              value={this.state.bonus}
-              onChangeText={(text)=>this.setState({bonus:text})}
-               />:<View/>}
+            <View style={{flexDirection: 'row', justifyContent:'space-around'}}> 
+              <View style={styles.viewCard}>
+                <Text style={{textAlign: 'center'}}>
+                  {this.state.cardPay}{'\n'} С карты
+                </Text>
+              </View>
+              <View style={styles.viewBonus}>
+                <Text style={{textAlign: 'center', color: '#fff'}}>
+                {this.state.bonus}{'\n'} бонусы
+                </Text>
+              </View>
+            </View>
+            // <TextInput 
+            //   placeholder='2000'
+            //   value={this.state.bonus}
+            //   onChangeText={(text)=>this.setState({bonus:text})}
+            //    />
+               :<View/>}
           </View>
           <Button
             onPress={() => {
@@ -547,6 +597,31 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingBottom: 20,
   },
+  viewCard:{
+    height: 64,
+    width:'45%', 
+    borderRadius: 11,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  viewBonus:{
+    height: 64,
+    width:'45%', 
+    borderRadius: 11,
+    backgroundColor: '#FE1935',
+    justifyContent:'center',
+    alignItems: 'center'
+  }
 });
 const mapStateToProps = (state) => ({
   basket: state.appReducer.basket,

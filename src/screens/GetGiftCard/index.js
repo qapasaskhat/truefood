@@ -35,7 +35,7 @@ class GetGiftCard extends Component {
     
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/orders/gift-card',
+      url: 'http://truefood.kz/api/orders/gift-card',
       headers: { 
         'Accept': 'application/json', 
         'Authorization': `Bearer ${this.state.token}`, 

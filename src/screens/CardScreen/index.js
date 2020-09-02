@@ -77,7 +77,7 @@ class CardScreen extends React.Component {
   getUser =(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }
@@ -97,7 +97,7 @@ class CardScreen extends React.Component {
   }
 
   getProduct=(id)=>{
-    const api = `http://truefood.chat-bots.kz/api/products/${id}`
+    const api = `http://truefood.kz/api/products/${id}`
     this.setState({
       loading: true
     })

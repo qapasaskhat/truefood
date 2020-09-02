@@ -4,7 +4,7 @@ export const pusherConfig =  {
     "secret":"3ceee9abe02b2c2fafd9",
     "cluster":"ap2",
     "encrypted":true,
-    "authEndpoint":"http://truefood.chat-bots.kz/api/chat",
+    "authEndpoint":"http://truefood.kz/api/chat",
     "auth": {
         headers: {
             'Accept': 'application/json',

@@ -10,6 +10,7 @@ import {Language} from '../../constants/lang'
 import {connect} from 'react-redux'
 import { fcmService } from '../../notification'
 import firebase from 'react-native-firebase'
+
 const options = [
   {label: 'ENG', value: 0},
   {label: 'РУС', value: 1},
@@ -87,7 +88,7 @@ class LoginScreen extends React.Component {
 
     var config = {
       method: 'post',
-      url: 'http://truefood.chat-bots.kz/api/login',
+      url: 'http://truefood.kz/api/login',
       headers: { 
       },
       data : user

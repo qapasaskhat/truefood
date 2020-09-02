@@ -65,7 +65,7 @@ class BasketScreen extends React.Component {
   }
   getBasket=()=>{
     const { basket } = this.props
-    let api = 'http://truefood.chat-bots.kz/api/basket/mobile?'
+    let api = 'http://truefood.kz/api/basket/mobile?'
     for(let i=0; i<basket.length; i++){
       const a = basket.length===i+1?'': '&'
       api = api + `cart[${i}][product]=${basket[i].id}&cart[${i}][selected_variation]=${1}&cart[${i}][quantity]=${basket[i].quantity}${a}` //basket[i].quantity
@@ -105,7 +105,7 @@ class BasketScreen extends React.Component {
   getUser =(token)=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.chat-bots.kz/api/user',
+      url: 'http://truefood.kz/api/user',
       headers: { 
         'Authorization': `Bearer ${token}`
       }

@@ -9,6 +9,11 @@ export const Language = [
       register: 'Register now',
       error: 'Error'
     },
+    order:{
+      title: 'Order from ',
+      total: 'Total',
+      count: 'Servings'
+    },
     register:{
         title:'Registration',
         name: 'Enter your name',
@@ -29,13 +34,23 @@ export const Language = [
         about: 'About us / Contacts',
         support: 'Support',
     },
+    edit:{
+      title:'Edit profile',
+      enterName: 'Enter your name',
+      enterPhone: 'Enter your phone number',
+      enterEmail: 'Enter your e-mail',
+      photo: 'Select photo',
+      save: 'Save data'
+    },
     user:{
       address: 'Delivery addresses',
       card: 'Payment',
       singout: 'Sign out',
       name: 'Name',
       email: 'Email',
-      phone: 'Phone number'
+      phone: 'Phone number',
+      profile: 'Profile',
+      isEmpty: 'Is empty'
     },
     basket: {
       title: 'Basket',
@@ -112,6 +127,11 @@ export const Language = [
       register: 'Зарегистрироваться',
       error: 'Ошибка входа'
     },
+    order:{
+      title: 'Заказ от ',
+      total: 'Итоги',
+      count: 'Количество порций'
+    },
     register:{
         title:'Регистрация',
         name: 'Введите имя',
@@ -125,7 +145,6 @@ export const Language = [
         basket: 'В корзину',
         byPopular: 'по популярности',
         byPrice: 'по цене',
-
     },
     menu: {
         settings: 'Настройки',
@@ -133,13 +152,23 @@ export const Language = [
         about: 'О нас / Контакты',
         support: 'Обратная связь или помощь',
     },
+    edit:{
+      title:'Редактировать профиль',
+      enterName: 'Введите имя',
+      enterPhone: 'Введите номер телефона',
+      enterEmail: 'Введите e-mail',
+      photo: 'Выбрать фото',
+      save: 'Сохранить данные'
+    },
     user:{
       address: 'Адреса доставки',
       card: 'Оплата',
       singout: 'Выйти',
       name: 'Имя',
       email: 'Email',
-      phone: 'Телефон'
+      phone: 'Телефон',
+      profile: 'Профиль',
+      isEmpty: 'Пусто'
     },
     basket: {
       title: 'Корзина',

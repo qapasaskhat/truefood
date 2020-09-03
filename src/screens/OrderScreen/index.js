@@ -8,6 +8,8 @@ import Button from '../../components/Button';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment'
+import { Language } from '../../constants/lang'
+import { connect } from 'react-redux';
 
 class OrderScreen extends React.Component {
   state={
@@ -67,16 +69,16 @@ class OrderScreen extends React.Component {
           navigation={this.props.navigation}
           goBack={()=>this.props.navigation.goBack()}
           type={'back'}
-          title={`Заказ от ${moment(orders.created_at).format('ll')}`}
+          title={`${Language[this.props.langId].order.title} ${moment(orders.created_at).format('l')}`}
         />
         <Background>
           <View style={{flex: 1, padding: 12.5}}>
             {orders.details &&  orders.details.map((item) => (
-              <OrderCard item={item}  />
+              <OrderCard text={Language[this.props.langId].order.count} item={item}  />
             ))}
             <View style={styles.view}>
               <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 18}}>
-                Итого:
+                {Language[this.props.langId].order.total}:
               </Text>
               <View style={styles.horizontal}>
                 <Image source={icMoney} style={styles.icMoney} />
@@ -94,7 +96,7 @@ class OrderScreen extends React.Component {
           width: '100%',
           bottom: 10
         }}>
-          <Button title='Повторить заказ' onPress={()=>{ this.props.navigation.navigate('HistoryDelivery',{items: orders})}} />
+          <Button title={Language[this.props.langId].delivery.repeat_order} onPress={()=>{ this.props.navigation.navigate('HistoryDelivery',{items: orders})}} />
         </View>
       </View>
     );
@@ -122,5 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default OrderScreen;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+export default connect(mapStateToProps)(OrderScreen);

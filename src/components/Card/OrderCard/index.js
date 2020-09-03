@@ -5,7 +5,7 @@ import {icMoney, icDinner, icVilka} from '../../../assets';
 
 class OrderCard extends React.Component {
   render() {
-    const { item } = this.props
+    const { item,text } = this.props
     return (
       <View
         style={{
@@ -27,7 +27,7 @@ class OrderCard extends React.Component {
             style={styles.foodImg}
             source={{
               uri:
-              `http://truefood.chat-bots.kz/storage/${item.entity && item.entity.product.thumbnail}`
+              `http://truefood.kz/storage/${item.entity && item.entity.product.thumbnail}`
             }}
           />
           <View style={styles.body}>
@@ -71,7 +71,7 @@ class OrderCard extends React.Component {
             </View>
           </View> */}
           <View style={{padding: 10, paddingLeft: 15}}>
-            <Text style={styles.razner}>Количество порций</Text>
+        <Text style={styles.razner}>{text}</Text>
             <View
               style={{
                 flexDirection: 'row',

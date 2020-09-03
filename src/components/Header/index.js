@@ -58,7 +58,7 @@ class Header extends React.Component {
       return (
         <View style={styles.profileContainer}>
           <View>
-            <Text style={styles.textProfile}>Профиль</Text>
+        <Text style={styles.textProfile}>{this.props.profile}</Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={[styles.horizontal, {marginRight: 30}]}>

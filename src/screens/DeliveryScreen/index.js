@@ -90,7 +90,7 @@ class DeliveryScreen extends React.Component {
   getPlace=()=>{
     var config = {
       method: 'get',
-      url: 'http://truefood.kz/api/places',
+      url: 'http://truefood.kz/api/places?local=en',
       headers: { 
         'Accept': 'application/json'
       }

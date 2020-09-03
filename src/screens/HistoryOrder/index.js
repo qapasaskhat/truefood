@@ -14,6 +14,8 @@ import axios from 'axios'
 import moment from 'moment'
 import {icFrame2, icRight, icMoney} from '../../assets';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Language } from '../../constants/lang';
+import { connect } from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 const ratio_1 = width / 1500;
@@ -70,13 +72,12 @@ class UserScreen extends React.Component {
     });
 
   }
-
   renderBody = () => {
     const { orderItems,load } = this.state
     return (
       <View style={styles.view}>
         {load ? <ActivityIndicator /> : orderItems.length===0? 
-        <Text style={{textAlign: 'center',marginVertical:6}}>История заказов пуст</Text> 
+        <Text style={{textAlign: 'center',marginVertical:6}}>{Language[this.props.langId].user.isEmpty}</Text> 
         : orderItems.map((item) => (
           <TouchableOpacity
             onPress={() => {
@@ -104,7 +105,7 @@ class UserScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Header
-          title={'История заказов'}
+          title={Language[this.props.langId].menu.historyOrder}
           type={'close'}
           onPressUser={() => {
             console.log('fewewf');
@@ -198,5 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-export default UserScreen;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId
+});
+export default connect(mapStateToProps)(UserScreen);

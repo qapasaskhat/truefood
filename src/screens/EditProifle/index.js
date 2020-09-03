@@ -15,9 +15,9 @@ import Button from '../../components/Button';
 import { icDown } from '../../assets'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
-
+import {connect} from 'react-redux'
 import ImagePicker from 'react-native-image-picker'
-import Axios from 'axios';
+import {Language} from '../../constants/lang'
 
 const Input = ({item}) => (
   <View style={{marginTop: 10}}>
@@ -182,9 +182,10 @@ class EditProifle extends React.Component {
       });
 }
   render() {
+    const {langId} = this.props
     this.list = [
       {
-        title: 'Введите имя',
+        title: Language[langId].edit.enterName,
         placeholder: 'Малик',
         value: this.state.name,
         onChangeText: (text) => {
@@ -192,7 +193,7 @@ class EditProifle extends React.Component {
         },
       },
       {
-        title: 'Введите номер телефона',
+        title: Language[langId].edit.enterPhone,
         placeholder: '',
         value: this.state.phone,
         onChangeText: (text) => {
@@ -200,7 +201,7 @@ class EditProifle extends React.Component {
         },
       },
       {
-        title: 'Введите e-mail',
+        title: Language[langId].edit.enterEmail,
         placeholder: '',
         value: this.state.email,
         onChangeText: (text) => {
@@ -210,14 +211,14 @@ class EditProifle extends React.Component {
     ];
     return (
       <View style={styles.container}>
-        <Header type={'close'} title={'Редактировать профиль'} close={()=>{this.props.navigation.goBack()}} />
+        <Header type={'close'} title={Language[langId].edit.title} close={()=>{this.props.navigation.goBack()}} />
         <View style={{padding: 12.5, backgroundColor: 'white'}}>
           {this.list.map((item) => (
             <Input item={item} />
           ))}
           <View>
             <Button 
-              title='Выбрать фото' 
+              title={Language[langId].edit.photo} 
               styleBtn={{marginTop: 30, backgroundColor: '#eee'}}
               styleText={{color: '#FE1935'}}
               onPress={()=>{this.selectImage()}}
@@ -252,7 +253,7 @@ class EditProifle extends React.Component {
               alignSelf: 'center'
             }} />}
           </View>
-          <Button title={'сохранить данные'} styleBtn={{marginTop: 30}} onPress={()=>{
+          <Button title={Language[langId].edit.save} styleBtn={{marginTop: 30}} onPress={()=>{
             this._editProfile(this.state.access_token)
           }}/>
         </View>
@@ -309,5 +310,7 @@ const styles = StyleSheet.create({
     marginRight: 16
   }
 });
-
-export default EditProifle;
+const mapStateToProps = (state) => ({
+  langId: state.appReducer.langId,
+});
+export default connect(mapStateToProps)(EditProifle)

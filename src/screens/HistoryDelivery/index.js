@@ -52,14 +52,13 @@ class HistoryDelivery extends Component {
           details: this.props.navigation.getParam('items').details,
       })
       console.log(this.props.navigation.getParam('items'))
-    let usr = await AsyncStorage.getItem('user');
-    let user = JSON.parse(usr);
-    this.setState({
-      access_token: user.access_token,
-    });
-    this.getUser(user.access_token);
-    this.getPlace()
-
+      let usr = await AsyncStorage.getItem('user');
+      let user = JSON.parse(usr);
+      this.setState({
+        access_token: user.access_token,
+      });
+      this.getUser(user.access_token);
+      this.getPlace()
   };
   getBonus=()=>{
     let bonus = this.state.user.bill
@@ -149,7 +148,7 @@ class HistoryDelivery extends Component {
     });
   };
   getPlace=()=>{
-    axios.get('http://truefood.kz/api/places').then(response=>{
+    axios.get('http://truefood.kz/api/places?local=en').then(response=>{
       console.log(response.data)
       this.setState({
         locations: response.data.locations

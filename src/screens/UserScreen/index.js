@@ -140,6 +140,7 @@ class UserScreen extends React.Component {
       <View style={styles.container}>
         <Header
           type={'profile'}
+          profile={Language[langId].user.profile}
           cash={user.bill}
           onPressUser={() => {
             console.log('fewewf');

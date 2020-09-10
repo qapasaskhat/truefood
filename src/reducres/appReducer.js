@@ -11,7 +11,6 @@ export const appReducer = (state = initialState.app, action) => {
       return {
         ...state,
       };
-
     case `${APPLICATION}_FAILURE`:
       return {
         ...state,
@@ -24,9 +23,23 @@ export const appReducer = (state = initialState.app, action) => {
     case 'BASKET':
       return{
         ...state,
-        basket: state.basket.sort(function(a,b){return a.id < b.id ? -1 : 1;}).reduce(function(arr, el){
+        basket: state.basket
+        .sort(function(a,b){
+          return a.id < b.id ? -1 : 1;
+        })
+        .reduce(function(arr, el){
+          arr.map(item=>{
+            if(item.id === el.id){
+              if(item.quantity>el.quantity){
+                item.quantity = item.quantity+el.quantity
+              }else{
+                console.log('item.quantity')
+                item.quantity = el.quantity+item.quantity
+              }
+            }
+          })
           if(!arr.length || arr[arr.length - 1].id != el.id) {
-              arr.push(el);
+            arr.push(el);
           }
           return arr;
       }, [])

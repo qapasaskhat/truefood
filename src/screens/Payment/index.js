@@ -14,11 +14,17 @@ class Payment extends Component {
       this.setState({
         payment_url: this.props.navigation.getParam('payment_url')
       })
+      this.props.navigation.addListener ('didFocus', () =>
+      { console.log('didfocus')
+        this.props.navigation.goBack()
+      });
   }
-  _onChange=(url)=>{
-      console.log(url)
-      if(url.startsWith('http://truefood.kz/success/order?')){
-          this.props.navigation.goBack()
+  _onChange=(text)=>{
+      console.log(text)
+      if(text.title === 'True Food' )//('http://truefood.kz/success/order?')
+      {
+          console.log('history')
+          this.props.navigation.navigate('HistoryOrder')
       }
   }
 
@@ -30,7 +36,7 @@ class Payment extends Component {
         </View>:
       <WebView 
         source={{uri: payment_url}}
-        onNavigationStateChange={(text)=>{this._onChange(text.url)}}
+        onNavigationStateChange={(text)=>{this._onChange(text)}}
         />
     );
   }

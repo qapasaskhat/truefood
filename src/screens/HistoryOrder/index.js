@@ -61,7 +61,7 @@ class UserScreen extends React.Component {
     
     axios(config)
     .then( (response) =>{
-      console.log(JSON.stringify(response.data));
+      console.log(response.data)
       this.setState({
         orderItems: response.data,
         load: false

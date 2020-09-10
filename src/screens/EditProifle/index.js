@@ -50,7 +50,6 @@ class EditProifle extends React.Component {
     this.setState({
       access_token: user.access_token
     })
-    
   }
   _editProfile=(access_token)=>{
     const { name, email,phone, avatarSource,dataImg } = this.state
@@ -60,10 +59,9 @@ class EditProifle extends React.Component {
     var FormData = require('form-data');
     var data = new FormData();
     let file = {}
-    file.name = "photo_123_1231232_324-903i4.jpg";
-    file.type = 'image/jpeg';
-    file.uri = avatarSource;
-
+      file.name = "photo_123_1231232_324-903i4.jpg";
+      file.type = 'image/jpeg';
+      file.uri = avatarSource;
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
@@ -89,7 +87,6 @@ class EditProifle extends React.Component {
     })
     .catch(function (error) {
       Alert.alert("Ошибка","Необходимо заполнить все поля",[{ text: "OK",style: "cancel" ,onPress: () => console.log("OK Pressed") }],{cancelable: false})
-      //alert(error.message)
       console.log(error);
     });
   }
@@ -213,9 +210,7 @@ class EditProifle extends React.Component {
       <View style={styles.container}>
         <Header type={'close'} title={Language[langId].edit.title} close={()=>{this.props.navigation.goBack()}} />
         <View style={{padding: 12.5, backgroundColor: 'white'}}>
-          {this.list.map((item) => (
-            <Input item={item} />
-          ))}
+          {this.list.map((item) => (<Input item={item} />))}
           <View>
             <Button 
               title={Language[langId].edit.photo} 
@@ -247,15 +242,10 @@ class EditProifle extends React.Component {
           </View> */}
           <View style={{justifyContent: 'center', width: '100%', marginTop: 20}}>
             {this.state.dataImg && <Image source={{uri: this.state.dataImg.uri}} 
-            style={{
-              width: 100,
-              height: 100,
-              alignSelf: 'center'
-            }} />}
+            style={{ width: 100,height: 100,alignSelf: 'center'}} />}
           </View>
           <Button title={Language[langId].edit.save} styleBtn={{marginTop: 30}} onPress={()=>{
-            this._editProfile(this.state.access_token)
-          }}/>
+            this._editProfile(this.state.access_token)}}/>
         </View>
       </View>
     );

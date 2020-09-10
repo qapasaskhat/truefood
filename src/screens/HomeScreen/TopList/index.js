@@ -48,7 +48,7 @@ class TopList extends React.Component {
             }}>Пусто</Text>
           }
           renderItem={({item})=> {return(
-            <TopCard navigation={navigation} dispatch={dispatch} key={`${item}`} item={item}  />
+            <TopCard text={Language[langId].home.basket} langId={langId} navigation={navigation} dispatch={dispatch} key={`${item}`} item={item}  />
           )}}
            />
         </ScrollView>}

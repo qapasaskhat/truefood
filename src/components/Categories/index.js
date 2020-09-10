@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {img1, img2, img3} from '../../assets';
 const {width} = Dimensions.get('window');
 
 class Categories extends React.Component {
@@ -36,30 +35,6 @@ class Categories extends React.Component {
     );
   }
 }
-
-const categories = [
-  {
-    name: 'Напитики',
-    url: img3,
-  },
-  {
-    name: 'Салаты',
-    url: img2,
-  },
-  {
-    name: 'Бургеры',
-
-    url: img1,
-  },
-  {
-    name: 'Сэндвич',
-    url: img1,
-  },
-  {
-    name: 'KFC',
-    url: img3
-  }
-];
 
 const styles = StyleSheet.create({
   container: {

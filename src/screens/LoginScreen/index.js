@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, Alert} from 'react-native';
 import {icLogo} from '../../assets';
 import SwitchSelector from 'react-native-switch-selector';
 import TextInput from '../../components/TextInput';
@@ -23,7 +23,7 @@ const Input = ({item}) => (
       onChangeText={(text) => item.onChangeText(text)}
       value={item.value}
       placeholder={item.placeholder}
-      placeholderTextColor={'#08050B'}
+      placeholderTextColor={'#d1d1d1'}
       style={styles.niput}
       secureTextEntry={item.password}
     />
@@ -47,7 +47,6 @@ class LoginScreen extends React.Component {
     this.setState({
       device_token: token
     })
-
   }
   onNotification=(notify)=>{
       console.log('onNotification ', notify)
@@ -80,6 +79,16 @@ class LoginScreen extends React.Component {
 
   login=()=>{
     const { email, password,device_token } = this.state
+    if(email===''){
+      Alert.alert('Введите email')
+      this.setState({loading: false})
+      return
+    }
+    if(password ===''){
+      Alert.alert('Введите пароль')
+      this.setState({loading: false})
+      return
+    }
     const { langId } = this.props
     const user = new FormData()
     user.append("email", email)

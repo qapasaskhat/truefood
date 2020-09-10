@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image, View, Text, TouchableOpacity, Alert, Platform} from 'react-native';
 import {icMoney} from '../../../assets';
+import { Language } from '../../../constants/lang';
 
 class PopularCard extends React.Component {
   render() {
-    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress, discount,text} = this.props;
+    const {key,item, navigation,imgUrl, coinVisible, image, name, price,desc, id, onPress, discount,text, langId} = this.props;
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardScreen',{param: id})}
@@ -32,9 +33,23 @@ class PopularCard extends React.Component {
             )}
             <TouchableOpacity
               onPress={() =>{
-                onPress()
                 this.props.dispatch({type: 'ADD_BASKET', payload: {item,quantity:1}})
                 this.props.dispatch({type: 'BASKET'})
+                Alert.alert(
+                  Language[langId].basket.success,'',
+                  [{
+                      text: Language[langId].basket.go_to_basket,
+                      onPress: () => this.props.navigation.navigate('Store'),
+                    },
+                    Platform.OS ==='ios'?
+                    {
+                      text: "Ок",
+                      onPress: () => console.log('ok'),
+                      style: 'cancel'
+                    } :{},
+                    { cancelable: false }
+                  ]
+                )
               }
               }
               style={styles.btnView}>

@@ -177,6 +177,7 @@ class CategoryScreen extends React.Component {
                 <PopularCard 
                   name={item.name} 
                   id={item.id}
+                  langId={langId}
                   item={item}
                   imgUrl={item.thumbnail}
                   price= {item.variations && item.variations[0].price } 

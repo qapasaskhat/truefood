@@ -16,7 +16,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import { Language } from '../../constants/lang'
 import { connect } from 'react-redux'
-import localization from 'moment/locale/ru';
+import localization_en from 'moment/locale/en-gb';
+import localization_ru from 'moment/locale/ru'
 
 
 class DeliveryScreen extends React.Component {
@@ -26,7 +27,7 @@ class DeliveryScreen extends React.Component {
     calendarActive: false,
     dateOrder: 'Сегодня, в 14:30',
     date: new Date(Date.now()),
-    number: '',
+    number: 0,
     locations: [],
     access_token: '',
     place_id: '',
@@ -163,6 +164,12 @@ class DeliveryScreen extends React.Component {
   }
   delivery=(type)=>{
     const { number, numberPhone, place_id,comment, basket,time, bonus, payment_type_id } = this.state
+    console.log(comment.length)
+    console.log(this.state.type)
+    if ( this.state.type===false && place_id==''){
+      Alert.alert('Выберите место доставки')
+      return;
+    }
     if ( comment.length>1 )
     {  var FormData = require('form-data');
       var data = new FormData();
@@ -171,11 +178,11 @@ class DeliveryScreen extends React.Component {
         data.append(`cart[${i}]`, `{"quantity":${basket[i].quantity},"variation_id":${basket[i].variations[0].product_variation_id},"product_id": ${basket[i].product.id}}`);
       }
       data.append('delivery_type_id', '1')
-      data.append('delivery_type', type)
+      data.append('delivery_type', `${type}`)
       data.append('payment_type_id', `${payment_type_id}`);
       data.append('delievery_place_id', `${place_id}`);
       data.append('cabinet_number', number);
-      //data.append('pick_up_at', 12);
+      data.append('pick_up_at', `${moment(this.state.date)}`);
       data.append('message', `${comment}`);
       data.append('bonuses',bonus)
       console.log(data)
@@ -187,9 +194,7 @@ class DeliveryScreen extends React.Component {
         },
         data : data
       };
-      this.setState({
-        loading: true
-      })
+      this.setState({ loading: true })
       axios(config)
       .then( (response)=> {
         console.log(JSON.stringify(response));
@@ -203,28 +208,19 @@ class DeliveryScreen extends React.Component {
           this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
           this.props.dispatch({type: 'TOTAL_RESET'})
         }else if(response.status === 200){
-          this.setState({
-            otvet: response.data.message,
-          })
+          this.setState({ otvet: response.data.message })
           alert(this.state.otvet)
-          this.props.navigation.goBack()
           this.props.dispatch({type: 'CLEAR_BASKET', payload: []} )
           this.props.dispatch({type: 'TOTAL_RESET'})
+          this.props.navigation.goBack()
         }      
       })
       .catch( (error)=> {
         console.log(error);
-        alert(error.message)
-        this.setState({
-          loading: false
-        })
+        Alert.alert('Ошибка. Повторите попытку позже',error.message)
+        this.setState({ loading: false  })
       });}
-      else{
-        Alert.alert(
-          '',
-          'Поле не должен быть пустым',{}
-        )
-      }
+      else{ Alert.alert('Поле не должен быть пустым') }
   }
   getUser =(token)=>{
     var config = {
@@ -253,11 +249,12 @@ class DeliveryScreen extends React.Component {
     const {dayType} = this.state
     const currentDate = selectedDate || date;
     console.log(event.timeStamp)
+    
     this.setState({
       showTime: moment(currentDate)
-        .locale('ru', localization)
+        .locale( this.props.langId===1 ? 'ru' : 'en-gb',this.props.langId===1? localization_ru:localization_en)
         .add(dayType, 'days').calendar(),
-      sendTime: event.timeStamp,
+      sendTime: currentDate,
       show: false
     });
   };
@@ -311,15 +308,15 @@ class DeliveryScreen extends React.Component {
         <Text style={styles.h2}>{Language[langId].delivery.phone}</Text>
           <TextInput
             value={this.state.numberPhone}
-            onChangeText={(text) => {
-              this.setState({numberPhone: text});
-            }}
+            onChangeText={(text) => { this.setState({numberPhone: text}) }}
           />
         </View>
         <View key={'description'} style={{marginTop: 10}}>
           <Text style={styles.h2}>{Language[langId].delivery.wish}</Text>
           <TextInput
             placeholder={Language[langId].delivery.enter}
+            value={this.state.comment}
+            onChangeText={(comment)=>{  this.setState({comment})} }
             placeholderTextColor={''}
             style={{height: 150, borderRadius: 20}}
             multiline={true}
@@ -455,13 +452,8 @@ class DeliveryScreen extends React.Component {
                 {label: Language[langId].delivery.pickup, value: true},
               ]}
               initial={0}
-              onPress={(value) => {
-                this.setState({type: value,show: false})
-              }}
-            />
-            <View style={{
-              marginVertical: 10
-            }}>
+              onPress={(value) => { this.setState({ type: value,  show: false })  }} />
+            <View style={{  marginVertical: 10  }}>
             <SwitchSelector
               borderColor={'#FE1935'}
               buttonColor={'#FE1935'}
@@ -474,24 +466,20 @@ class DeliveryScreen extends React.Component {
                 {label: Language[langId].delivery.nal, value: '2'},
               ]}
               initial={0}
-              onPress={(value) => {
-                this.setState({payment_type_id: value})
-              }}
-            /></View>
+              onPress={(value) => { this.setState({payment_type_id: value}) }}  />
+            </View>
             {this.state.type ? this._renderWith() : this._renderWithout()}
           </View>
           <View style={[styles.view,{marginHorizontal: 12.5}]}>
             <View style={{flexDirection: 'row',alignItems:'center'}}>
-              <View style={{
+              <View 
+              style={{
                 width:20,
                 height:20,
                 backgroundColor: '#fff',
                 borderRadius: 3,
                 shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
+                shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.23,
                 shadowRadius: 2.62,
                 elevation: 4,
@@ -500,9 +488,7 @@ class DeliveryScreen extends React.Component {
               }}>
                 <TouchableOpacity onPress={()=>{
                   this.getBonus()
-                  this.setState({
-                    useBonus: !this.state.useBonus
-                  })
+                  this.setState({ useBonus: !this.state.useBonus  })
                 }} style={{
                   width: 13,
                   height: 13,
@@ -526,23 +512,18 @@ class DeliveryScreen extends React.Component {
                 {this.state.bonus}{'\n'} бонусы
                 </Text>
               </View>
-            </View>
-            // <TextInput 
-            //   placeholder='2000'
-            //   value={this.state.bonus}
-            //   onChangeText={(text)=>this.setState({bonus:text})}
-            //    />
-               :<View/>}
+            </View>:<View/>}
           </View>
           <Button
-            onPress={() => {
-              this.state.type?this.delivery(2):this.delivery(1)
-              //this.props.navigation.navigate('PayScreen')
+            onPress={() => { 
+              let time = new Date(this.state.sendTime).getHours()
+              time < 21 && time > 9 
+              ?this.state.type?this.delivery(2):this.delivery(1) 
+              :Alert.alert(Language[langId].delivery.working_time)
             }}
             loading={this.state.loading}
             title={Language[langId].delivery.checkout}
-            styleBtn={{margin: 10}}
-          />
+            styleBtn={{margin: 10}} />
         </Background>
       </View>
     );

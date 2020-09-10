@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image, ScrollView } from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, ScrollView, Alert } from 'react-native';
 import {icLogo} from '../../assets';
 import SwitchSelector from 'react-native-switch-selector';
 import TextInput from '../../components/TextInput'
@@ -23,7 +23,7 @@ const Input = ({item}) => (
       onChangeText={(text) => item.onChangeText(text)}
       value={item.value}
       placeholder={item.placeholder}
-      placeholderTextColor={'#08050B'}
+      placeholderTextColor={'#d1d1d1'}
       style={styles.niput}
       secureTextEntry ={item.password}
     />
@@ -54,6 +54,13 @@ validateEmail(email) {
     this.setState({
       loading: true
     })
+    if(first_name===''){
+      Alert.alert('Введите имя')
+      this.setState({
+        loading: false
+      })
+      return;
+    }
     if(this.validateEmail(email)){
       if(password===password_r)
       {
@@ -83,24 +90,25 @@ validateEmail(email) {
         })
         .catch( (error)=> {
           console.log(error);
+          Alert.alert('Ошибка сервера повторите позже', error.message)
           this.setState({
             loading: false
           })
         })}else{
-          alert('Пароль должен быть минимум 8 символов')
+          Alert.alert('Пароль должен быть минимум 8 символов')
           this.setState({
             loading: false
           })
         }
       }
         else{
-          alert('password error')
+          Alert.alert('Пароль и подтверждение пароля не совпадают')
           this.setState({
             loading: false
           })
         }
     }else{
-      alert('email error')
+      Alert.alert('Введите корректный адрес электронной почты')
       this.setState({
         loading: false
       })

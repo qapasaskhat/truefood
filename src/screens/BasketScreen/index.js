@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image, FlatList, ActivityIndicator} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, FlatList, ActivityIndicator, Alert} from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import ButtonUser from '../../components/ButtonUser';
@@ -110,7 +110,6 @@ class BasketScreen extends React.Component {
         'Authorization': `Bearer ${token}`
       }
     };
-    
     axios(config)
     .then( (response) => {
       if(response.status === 200){
@@ -139,7 +138,12 @@ class BasketScreen extends React.Component {
               <View>
                 {totalPrice !== 0?
                 <Button
-                onPress={() => this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})}
+                onPress={() =>{ 
+                  (new Date(Date.now())).getHours() < 20 
+                  && (new Date(Date.now())).getHours()> 9
+                  ? this.props.navigation.navigate('DeliveryScreen',{basket: {name: 'basket', items: basketProduct}})
+                  : Alert.alert(Language[langId].delivery.working_time)
+                }}
                 title={`${Language[langId].basket.delivery} ${totalPrice} ₸`}/>: null}
               <Button
                 title={Language[langId].basket.add}
@@ -155,7 +159,7 @@ class BasketScreen extends React.Component {
               <BasketCard langId={langId} item={item} onPress={()=>this.deleteBAsketItem(item.product.id)}/>
             )}
             ListEmptyComponent={
-            <Text style={styles.h1}>{Language[langId].basket.empty}</Text>
+            <Text style={[styles.h1,{color:'#000',opacity: 0.5,fontSize: 14,textAlign:'center'}]}>{Language[langId].basket.empty}</Text>
             }
              />
           </View>}

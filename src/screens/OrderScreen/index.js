@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text, Image, Alert} from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import OrderCard from '../../components/Card/OrderCard';
@@ -88,7 +88,6 @@ class OrderScreen extends React.Component {
                 {this.getPrice()} ₸
               </Text>
             </View>
-            {/* <Button title={'Повторить заказ'} styleBtn={{marginTop: 10}} /> */}
           </View>
         </Background>
         <View style={{
@@ -96,7 +95,34 @@ class OrderScreen extends React.Component {
           width: '100%',
           bottom: 10
         }}>
-          <Button title={Language[this.props.langId].delivery.repeat_order} onPress={()=>{ this.props.navigation.navigate('HistoryDelivery',{items: orders})}} />
+          <Button  title={Language[this.props.langId].delivery.repeat_order} 
+            onPress={()=>{ 
+              orders && 
+              orders.details &&
+              orders.details.map(item=>{
+                //console.log(item.unit_quantity)
+                this.props.dispatch({type: 'ADD_BASKET', payload: {item: item.entity && item.entity.product, quantity: item.unit_quantity}})
+                this.props.dispatch({type: 'BASKET'})
+                Alert.alert(
+                  Language[this.props.langId].basket.success,
+                  '',
+                  [
+                    {
+                      text: Language[this.props.langId].basket.go_to_basket,
+                      onPress: () => this.props.navigation.navigate('Store'),
+                      style: 'cancel'
+                    },
+                    {
+                      text: "Ок",
+                      onPress: () => this.props.navigation.goBack(),
+                      
+                    },
+                    { cancelable: false }
+                  ]
+                )
+              })
+              //this.props.navigation.navigate('HistoryDelivery',{items: orders})
+              }} />
         </View>
       </View>
     );
@@ -127,4 +153,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   langId: state.appReducer.langId
 });
-export default connect(mapStateToProps)(OrderScreen);
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(OrderScreen);

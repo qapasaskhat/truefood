@@ -137,34 +137,30 @@ class HomeScreen extends React.Component {
     });
   }
   componentDidMount=async()=> {
-    if (new Date(Date.now()).getHours()<8 && new Date(Date.now()).getHours()>21 ){
-      alert('Наш ресторан работает с 8:00 утра до 21:00 вечера')
-    }
+    
     this.props.navigation.setParams({
       openDrawer: () => this.props.navigation.openDrawer(),
     });
     this.getPopularProduct()
     this.getTopList()
+    setTimeout(async() => {
+      let usr = await AsyncStorage.getItem('user')
+      let user = JSON.parse(usr)
+      this.getUser(user.access_token)
+    }, 1000);
     this.getCategory()
-    let usr = await AsyncStorage.getItem('user')
-    let user = JSON.parse(usr)
     console.log('user');
     //console.log(user)
     this.setState({
       token: user.access_token
     })
-    this.getUser(user.access_token)
+    
     this.props.navigation.addListener ('willFocus', () =>
-      {
-        this.getUser(this.state.token)
-      }
-    );
+      { this.getUser(this.state.token)});
     this.props.navigation.addListener ('didFocus', () =>
-      {
-        console.log('didfocus')
+      { console.log('didfocus')
         this.props.navigation.closeDrawer()
-      }
-    );
+      });
   }
   render() {
     const {navigation, dispatch, langId } = this.props;

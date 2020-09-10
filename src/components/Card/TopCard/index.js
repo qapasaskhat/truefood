@@ -6,13 +6,16 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  Alert,
+  Platform
 } from 'react-native';
+import { Language } from '../../../constants/lang'
 
 const {width, height} = Dimensions.get('window');
 import {icAdd} from '../../../assets';
 class TopCard extends React.Component {
   render() {
-    const {item,name,navigation} = this.props
+    const {item,name,navigation,langId,text} = this.props
     return (
       <TouchableOpacity
         onPress={() => {
@@ -37,11 +40,28 @@ class TopCard extends React.Component {
               //console.log(item)
               this.props.dispatch({type: 'ADD_BASKET', payload: {item, quantity: 1}})
               this.props.dispatch({type: 'BASKET'} )
+              Alert.alert(
+                Language[langId].basket.success,'',
+                [{
+                    text: Language[langId].basket.go_to_basket,
+                    onPress: () => this.props.navigation.navigate('Store'),
+                    style: 'cancel'
+                  },
+                  Platform.OS ==='ios'?
+                    {
+                      text: "Ок",
+                      onPress: () => console.log('ok'),
+                      style: 'cancel'
+                    } :{},
+                  { cancelable: false }
+                ]
+              )
             }}>
-              <Image
+              <Text style={styles.btnText}>{text}</Text>
+              {/* <Image
                 source={icAdd}
                 style={{width: 20, height: 20, resizeMode: 'contain'}}
-              />
+              /> */}
             </TouchableOpacity>
           </View>
         </View>
@@ -78,16 +98,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    padding: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 4,
+    padding: 10,
+    paddingLeft: 13,
+    paddingRight: 13,
   },
   btnText: {
     textTransform: 'uppercase',

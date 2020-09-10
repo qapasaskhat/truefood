@@ -8,6 +8,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
+  Platform
 } from 'react-native';
 
 import axios from 'axios'
@@ -21,6 +23,7 @@ import Slider from '../../components/Slider';
 import TagList from './TagList';
 import Button from '../../components/Button';
 import {icLeft, icMoney, icAdd, icRemove} from '../../assets';
+import { Language } from '../../constants/lang';
 
 const BackButton = ({onBack}) => {
   return (
@@ -126,8 +129,6 @@ class CardScreen extends React.Component {
       })
     })
   }
-  
-
   _changeSize = (i) => {
     let newSize = [...this.state.size];
     newSize.map((item) => {
@@ -162,10 +163,10 @@ class CardScreen extends React.Component {
           {product.slug}
         </Text>
         <View style={styles.bottom}>
-          <Text style={styles.price}>{product.variations && product.variations[0].price} ₸</Text>
+          <Text style={styles.price}>{product.variations && product.variations[0].price && product.variations[0].price} ₸</Text>
           <View style={styles.money}>
             <Image source={icMoney} style={styles.icMoney} />
-            <Text style={styles.count}>{product.variations && product.variations[0].cashback}</Text>
+            <Text style={styles.count}>{product.variations && product.variations[0].cashback && product.variations[0].cashback}</Text>
           </View>
         </View>
         <TagList />
@@ -173,7 +174,7 @@ class CardScreen extends React.Component {
     );
   };
   render() {
-    const {navigation} = this.props;
+    const {navigation,langId} = this.props;
     const {product,items, loading,user} = this.state
     return (
       <View style={styles.container}>
@@ -183,7 +184,7 @@ class CardScreen extends React.Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, paddingTop: 10}}>
           <BackButton onBack={() => navigation.goBack()} />
-          <Slider imgItems={items.slider_images} />
+          <Slider imgItems={items.slider_images && items.slider_images } />
           {this._renderBody(items)}
           <View key={'bottom'} style={{padding: 10}}>
             {/* <View key={'size'}>
@@ -234,14 +235,30 @@ class CardScreen extends React.Component {
                   style={[styles.circle, styles.activeBtn]}>
                   <Image
                     source={icAdd}
-                    style={{width: 25, height: 25, tintColor: '#FE1935'}}
-                  />
+                    style={{width: 25, height: 25, tintColor: '#FE1935'}}/>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           <Button title='В Корзину' styleBtn={{margin: 10}} onPress={()=>{
             this.props.dispatch({type: 'ADD_BASKET', payload: {item: items, quantity: this.state.count}})
+            this.props.dispatch({type: 'BASKET'})
+            Alert.alert(
+              Language[langId].basket.success,'',
+              [{
+                  text: Language[langId].basket.go_to_basket,
+                  onPress: () => this.props.navigation.navigate('Store'),
+                  style: 'cancel'
+                },
+                Platform.OS ==='ios'?
+                    {
+                      text: "Ок",
+                      onPress: () => console.log('ok'),
+                      style: 'cancel'
+                    } :{},
+                { cancelable: false }
+              ]
+            )
           }} />
         </ScrollView>}
       </View>

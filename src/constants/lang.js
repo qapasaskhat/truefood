@@ -54,9 +54,11 @@ export const Language = [
     },
     basket: {
       title: 'Basket',
-      empty: 'Пусто',
+      empty: 'Empty',
       add: 'Add more dishes',
-      delivery: 'Checkout for'
+      delivery: 'Checkout for',
+      success: 'Added to cart successfully',
+      go_to_basket: 'Go to Cart'
     },
     cart:{
       add: 'Add a wish to a dish',
@@ -78,7 +80,8 @@ export const Language = [
       tomorrow: 'Tomorrow',
       time: 'Choose time',
       bonus: 'Spend bonuses',
-      repeat_order: 'Repeat order'
+      repeat_order: 'Repeat order',
+      working_time: 'Our institution is open from 9:00 to 20:00'
     },
     about:{
       aboutUs: 'About us',
@@ -174,7 +177,9 @@ export const Language = [
       title: 'Корзина',
       empty: 'Пусто',
       add: 'Добавить блюда',
-      delivery: 'Оформить за'
+      delivery: 'Оформить за',
+      success: 'Успешно добавлено в корзину',
+      go_to_basket: 'В корзину'
     },
     cart:{
       add: 'Добавить пожелание к блюду',
@@ -196,7 +201,8 @@ export const Language = [
       tomorrow: 'Завтра',
       time: 'Выберите время',
       bonus: 'Потратить бонусы',
-      repeat_order: 'Повторить заказ'
+      repeat_order: 'Повторить заказ',
+      working_time: 'Наше заведение работает с 9:00 до 20:00'
     },
     about:{
       aboutUs: 'О нас',

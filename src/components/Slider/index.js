@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Image, View, Dimensions,Text} from 'react-native';
+import {StyleSheet, Image, View, Dimensions,Text, ActivityIndicator} from 'react-native';
 
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 const {width, height} = Dimensions.get('window');
@@ -25,7 +25,7 @@ class Slider extends React.Component {
           style={styles.img}
           source={{
             uri:   
-              `http://truefood.chat-bots.kz/storage/${item}`//+item,
+              `http://truefood.kz/storage/${item}`//+item,
           }}
         />
       </View>
@@ -35,15 +35,17 @@ get pagination() {
     const {activeSlide,slider_images} = this.state;
     return (
       <View>
-        <Pagination
-          dotsLength={slider_images.length}
+        <ActivityIndicator style={{position: 'absolute',alignSelf:'center',top: 100}}/>
+        {slider_images && slider_images.length ?
+          <Pagination
+          dotsLength={slider_images && slider_images.length && slider_images.length}
           activeDotIndex={activeSlide}
           containerStyle={styles.conStyle}
           dotStyle={styles.dot}
           inactiveDotStyle={styles.inActive}
           inactiveDotOpacity={1}
           inactiveDotScale={0.8}
-        />
+        />: <Text style={{color:'#d1d1d1'}}>Ошибка загрузки фото</Text>}
       </View>
     );
   }
